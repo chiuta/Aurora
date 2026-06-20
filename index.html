@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<!--
+  Aurora — Chakra Sound Sanctuary / Sanctuar de sunete vindecatoare
+  Single-file · offline · zero dependencies · zero telemetry · RO / EN
+  Inspired by sound-healing practice (e.g. Centrul AmaneSer, amaneser.ro).
+  Every tone, the gong and the binaural beats are synthesised live with the
+  Web Audio API — no audio files. A contemplative / relaxation tool, not medicine.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<!-- Offline guarantee: no network of any kind is permitted (no fetch/XHR/WebSocket, no remote scripts/styles/fonts/images). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<title>Aurora · Healing Sounds & Chakra Meditation</title>
+<style>
+  :root{
+    --void:#070410;
+    --void2:#0d0820;
+    --panel:rgba(24,14,44,0.55);
+    --panel2:rgba(30,18,54,0.72);
+    --line:rgba(244,200,160,0.13);
+    --line2:rgba(244,200,160,0.22);
+    --text:#ece6f5;
+    --dim:#a99bc4;
+    --dim2:#7d6f9e;
+    --dawn:#f4c8a0;
+    --gold:#e9b36e;
+    --accent:#36c06a;
+    --accent-soft:rgba(54,192,106,0.16);
+    --accent-glow:rgba(54,192,106,0.42);
+    --radius:16px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,'Book Antiqua','Hoefler Text',Georgia,serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--sans);
+    color:var(--text);
+    background:var(--void);
+    overflow-x:hidden;
+    overflow-y:auto;
+    -webkit-font-smoothing:antialiased;
+    min-height:100%;
+    line-height:1.55;
+  }
+  #bg{position:fixed;inset:0;z-index:-3;display:block}
+  #atmos{position:fixed;inset:0;z-index:-2;
+    background:
+      radial-gradient(70% 55% at 50% 26%, var(--accent-soft), transparent 72%),
+      radial-gradient(120% 80% at 50% 120%, rgba(8,4,18,0.0), var(--void) 70%),
+      linear-gradient(180deg, var(--void2), var(--void));
+    transition:background 1.1s ease;
+  }
+  .blob{position:fixed;z-index:-2;border-radius:50%;filter:blur(70px);opacity:.30;pointer-events:none;mix-blend-mode:screen}
+  .blob.a{width:46vmax;height:46vmax;left:-10vmax;top:-12vmax;background:radial-gradient(circle,var(--accent),transparent 62%);transition:background 1.1s ease}
+  .blob.b{width:34vmax;height:34vmax;right:-8vmax;top:20vh;background:radial-gradient(circle,var(--gold),transparent 62%);opacity:.16}
+  .blob.c{width:40vmax;height:40vmax;left:18vw;bottom:-18vmax;background:radial-gradient(circle,#5b54d6,transparent 64%);opacity:.14}
+  @media (prefers-reduced-motion:no-preference){
+    .blob.a{animation:drift1 34s ease-in-out infinite}
+    .blob.b{animation:drift2 42s ease-in-out infinite}
+    .blob.c{animation:drift3 50s ease-in-out infinite}
+  }
+  @keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(6vw,4vh)}}
+  @keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-5vw,3vh)}}
+  @keyframes drift3{0%,100%{transform:translate(0,0)}50%{transform:translate(4vw,-5vh)}}
+
+  .app{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:22px clamp(14px,3vw,34px) 40px;
+    min-height:100vh;display:flex;flex-direction:column;gap:18px}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .brand{display:flex;flex-direction:column;line-height:1}
+  .brand h1{font-family:var(--serif);font-weight:500;font-size:clamp(26px,4vw,34px);letter-spacing:.14em;
+    background:linear-gradient(90deg,var(--dawn),var(--gold),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .brand .tag{font-size:12.5px;color:var(--dim);letter-spacing:.04em;margin-top:7px;max-width:42ch}
+  .head-ctl{display:flex;align-items:center;gap:8px}
+  .iconbtn{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--text);
+    border-radius:11px;padding:9px 13px;font-size:13px;font-family:var(--sans);cursor:pointer;
+    backdrop-filter:blur(8px);transition:border-color .2s,background .2s,transform .15s}
+  .iconbtn:hover{border-color:var(--line2);background:var(--panel2)}
+  .iconbtn:active{transform:translateY(1px)}
+  .iconbtn.lang{font-weight:500;letter-spacing:.06em;min-width:46px}
+
+  .stage{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(280px,330px);gap:clamp(14px,2.4vw,30px);align-items:start;flex:1}
+
+  /* Chakra column */
+  .column{display:flex;flex-direction:column;gap:7px;padding:6px;border-radius:var(--radius);
+    background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(8px)}
+  .ckbtn{appearance:none;border:1px solid transparent;background:transparent;cursor:pointer;
+    display:flex;align-items:center;gap:10px;padding:8px 12px 8px 8px;border-radius:11px;
+    color:var(--dim);font-family:var(--sans);font-size:13px;text-align:left;transition:all .22s;width:100%}
+  .ckbtn .dot{width:15px;height:15px;border-radius:50%;flex:none;box-shadow:0 0 0 0 transparent;transition:box-shadow .25s,transform .25s}
+  .ckbtn .lab{display:flex;flex-direction:column;line-height:1.15;white-space:nowrap}
+  .ckbtn .lab b{font-weight:500;color:var(--text);font-size:13px}
+  .ckbtn .lab span{font-size:10.5px;color:var(--dim2)}
+  .ckbtn:hover{background:rgba(255,255,255,0.04);color:var(--text)}
+  .ckbtn[aria-pressed="true"]{background:rgba(255,255,255,0.06);border-color:var(--line2)}
+  .ckbtn[aria-pressed="true"] .dot{box-shadow:0 0 14px 2px currentColor;transform:scale(1.12)}
+
+  /* Center */
+  .center{display:flex;flex-direction:column;align-items:center;gap:14px;min-width:0}
+  .mandala-wrap{position:relative;width:100%;max-width:460px;aspect-ratio:1/1}
+  #mandala{position:absolute;inset:0;width:100%;height:100%}
+  .breath{min-height:30px;text-align:center;font-family:var(--serif);font-size:19px;letter-spacing:.12em;
+    color:var(--dawn);opacity:0;transition:opacity .4s}
+  .breath.on{opacity:.92}
+  .breath small{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.18em;color:var(--dim2);text-transform:uppercase;margin-top:2px}
+  .affirm{font-family:var(--serif);font-style:italic;font-size:clamp(16px,2.3vw,20px);text-align:center;
+    color:var(--text);max-width:34ch;line-height:1.5;position:relative;padding:0 14px;transition:opacity .5s}
+  .affirm::before{content:"\201C";color:var(--accent);opacity:.55;margin-right:.1em}
+  .affirm::after{content:"\201D";color:var(--accent);opacity:.55;margin-left:.06em}
+
+  /* Panels */
+  .rail{display:flex;flex-direction:column;gap:16px;min-width:0}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px 16px 18px;backdrop-filter:blur(10px)}
+  .panel h2{font-family:var(--serif);font-weight:500;font-size:13px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--dim);margin-bottom:13px;display:flex;align-items:center;gap:8px}
+  .panel h2::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .ck-name{font-family:var(--serif);font-size:24px;font-weight:500;color:var(--text);line-height:1.05}
+  .ck-sk{font-size:12.5px;color:var(--accent);letter-spacing:.05em;margin-top:3px}
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 16px}
+  .meta .cell{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:11px;padding:9px 11px}
+  .meta .k{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim2)}
+  .meta .v{font-size:16px;color:var(--text);margin-top:3px;font-variant-numeric:tabular-nums}
+  .meta .v.mantra{font-family:var(--serif);letter-spacing:.14em}
+
+  .primary{appearance:none;width:100%;border:none;cursor:pointer;font-family:var(--sans);font-weight:500;
+    font-size:15px;letter-spacing:.02em;color:#0c0616;border-radius:12px;padding:13px;
+    background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 78%, #000));
+    box-shadow:0 6px 22px -8px var(--accent-glow);transition:transform .15s,filter .2s;display:flex;
+    align-items:center;justify-content:center;gap:9px}
+  .primary:hover{filter:brightness(1.07)}
+  .primary:active{transform:translateY(1px)}
+  .primary.ghost{background:rgba(255,255,255,0.05);color:var(--text);box-shadow:none;border:1px solid var(--line2)}
+  .row{display:flex;gap:10px;margin-top:10px}
+  .row .primary{flex:1}
+  .ico{width:16px;height:16px;flex:none}
+
+  .field{margin-top:14px}
+  .field>label{display:block;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim2);margin-bottom:7px}
+  .chips{display:flex;gap:7px;flex-wrap:wrap}
+  .chip{appearance:none;border:1px solid var(--line);background:transparent;color:var(--dim);cursor:pointer;
+    font-family:var(--sans);font-size:13px;padding:7px 13px;border-radius:9px;transition:all .18s}
+  .chip:hover{border-color:var(--line2);color:var(--text)}
+  .chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--text)}
+  select,input[type=range]{font-family:var(--sans)}
+  select{width:100%;appearance:none;background:rgba(255,255,255,0.04);border:1px solid var(--line);
+    color:var(--text);border-radius:9px;padding:9px 11px;font-size:13.5px;cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a99bc4' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 11px center}
+  select option{background:#160c28;color:var(--text)}
+  .toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;user-select:none;padding:2px 0}
+  .toggle .tl{display:flex;flex-direction:column}
+  .toggle .tl b{font-weight:500;font-size:14px;color:var(--text)}
+  .toggle .tl small{font-size:11.5px;color:var(--dim2)}
+  .sw{position:relative;width:42px;height:24px;border-radius:13px;background:rgba(255,255,255,0.12);flex:none;transition:background .2s}
+  .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
+  .toggle input{position:absolute;opacity:0;width:0;height:0}
+  .toggle input:checked+.sw{background:var(--accent)}
+  .toggle input:checked+.sw::after{transform:translateX(18px)}
+  input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:4px;
+    background:linear-gradient(90deg,var(--accent) var(--p,50%),rgba(255,255,255,0.13) var(--p,50%));outline:none;margin-top:4px}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+    background:#fff;cursor:pointer;box-shadow:0 0 10px var(--accent-glow)}
+  input[type=range]::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:#fff;cursor:pointer}
+
+  .prog{margin-top:14px;display:none}
+  .prog.on{display:block}
+  .prog .bar{height:5px;border-radius:5px;background:rgba(255,255,255,0.10);overflow:hidden}
+  .prog .fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--dawn));transition:width .4s linear}
+  .prog .lbl{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);margin-top:7px;font-variant-numeric:tabular-nums}
+
+  .sub{display:none}
+  .sub.on{display:block}
+
+  /* About */
+  .scrim{position:fixed;inset:0;z-index:50;background:rgba(4,2,10,0.7);backdrop-filter:blur(5px);
+    display:none;align-items:center;justify-content:center;padding:20px}
+  .scrim.on{display:flex}
+  .modal{max-width:560px;width:100%;max-height:86vh;overflow:auto;background:#140b26;border:1px solid var(--line2);
+    border-radius:20px;padding:26px 26px 28px}
+  .modal h3{font-family:var(--serif);font-weight:500;font-size:24px;margin-bottom:4px;
+    background:linear-gradient(90deg,var(--dawn),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .modal p{font-size:14px;color:var(--dim);margin-top:12px;line-height:1.65}
+  .modal .note{font-size:13px;color:var(--text);background:var(--accent-soft);border:1px solid var(--line);
+    border-radius:11px;padding:12px 14px;margin-top:16px}
+  .modal h4{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim2);margin-top:20px;margin-bottom:9px}
+  .keys{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:13px;align-items:center}
+  kbd{font-family:var(--sans);font-size:11.5px;background:rgba(255,255,255,0.06);border:1px solid var(--line2);
+    border-bottom-width:2px;border-radius:6px;padding:3px 8px;color:var(--text);justify-self:start}
+  .modal a{color:var(--gold)}
+  .modal .close{margin-top:22px;width:100%}
+
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+  .toggle input:focus-visible+.sw{outline:2px solid var(--accent);outline-offset:2px}
+  select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+  @media (max-width:980px){
+    .stage{grid-template-columns:1fr}
+    .column{flex-direction:row;overflow-x:auto;gap:6px;-webkit-overflow-scrolling:touch}
+    .ckbtn{flex-direction:column;align-items:center;gap:5px;min-width:62px;padding:9px 6px;text-align:center}
+    .ckbtn .lab{align-items:center}
+    .ckbtn .lab span{display:none}
+    .center{order:-1}
+    .rail{flex-direction:row;flex-wrap:wrap}
+    .panel{flex:1 1 300px}
+  }
+  @media (max-width:560px){
+    .rail{flex-direction:column}
+    .meta{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div id="atmos" aria-hidden="true"></div>
+<div class="blob a" aria-hidden="true"></div>
+<div class="blob b" aria-hidden="true"></div>
+<div class="blob c" aria-hidden="true"></div>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <h1>AURORA</h1>
+      <div class="tag" data-i18n="tag"></div>
+    </div>
+    <div class="head-ctl">
+      <button class="iconbtn lang" id="langBtn" aria-label="Switch language">EN</button>
+      <button class="iconbtn" id="aboutBtn" data-i18n="about" aria-label="About">Despre</button>
+    </div>
+  </header>
+
+  <div class="stage">
+    <!-- Chakra column -->
+    <nav class="column" id="column" aria-label="Chakra selector"></nav>
+
+    <!-- Center -->
+    <div class="center">
+      <div class="mandala-wrap">
+        <canvas id="mandala" role="img" aria-label="Living chakra mandala"></canvas>
+      </div>
+      <div class="breath" id="breath"></div>
+      <div class="affirm" id="affirm"></div>
+    </div>
+
+    <!-- Rail -->
+    <div class="rail">
+      <section class="panel" aria-labelledby="toneH">
+        <h2 id="toneH" data-i18n="tone">Ton</h2>
+        <div class="ck-name" id="ckName"></div>
+        <div class="ck-sk" id="ckSk"></div>
+        <div class="meta">
+          <div class="cell"><div class="k" data-i18n="freq">Frecvență</div><div class="v" id="mFreq"></div></div>
+          <div class="cell"><div class="k" data-i18n="element">Element</div><div class="v" id="mEl"></div></div>
+          <div class="cell"><div class="k" data-i18n="mantra">Mantră</div><div class="v mantra" id="mBija"></div></div>
+          <div class="cell"><div class="k" data-i18n="petals">Petale</div><div class="v" id="mPet"></div></div>
+        </div>
+        <button class="primary" id="playBtn"><svg class="ico" id="playIco" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span id="playTxt"></span></button>
+        <div class="row">
+          <button class="primary ghost" id="gongBtn"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/></svg><span data-i18n="gong">Gong</span></button>
+        </div>
+        <div class="field">
+          <label class="toggle" for="binOn"><span class="tl"><b data-i18n="binaural">Bătăi binaurale</b><small data-i18n="binauralS">Folosește căști</small></span>
+            <input type="checkbox" id="binOn"><span class="sw"></span></label>
+          <div class="sub" id="binSub" style="margin-top:11px">
+            <label style="font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim2);margin-bottom:7px;display:block" data-i18n="beat">Bătaie</label>
+            <select id="beatSel"></select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="vol" data-i18n="volume">Volum</label>
+          <input type="range" id="vol" min="0" max="100" value="50">
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="sessH">
+        <h2 id="sessH" data-i18n="session">Sesiune</h2>
+        <div class="field" style="margin-top:0">
+          <label data-i18n="duration">Durată</label>
+          <div class="chips" id="durChips"></div>
+        </div>
+        <div class="field">
+          <label class="toggle" for="jOn"><span class="tl"><b data-i18n="journey">Călătorie prin chakre</b><small data-i18n="journeyS">Echilibrare automată</small></span>
+            <input type="checkbox" id="jOn"><span class="sw"></span></label>
+          <div class="sub" id="jSub" style="margin-top:11px">
+            <label class="toggle" for="transOn"><span class="tl"><b data-i18n="trans">Include transpersonale</b><small data-i18n="transS">9 chakre în loc de 7</small></span>
+              <input type="checkbox" id="transOn"><span class="sw"></span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label data-i18n="breathL">Respirație</label>
+          <select id="breathSel"></select>
+        </div>
+        <button class="primary" id="sessBtn" style="margin-top:16px"><svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span id="sessTxt"></span></button>
+        <div class="prog" id="prog">
+          <div class="bar"><div class="fill" id="progFill"></div></div>
+          <div class="lbl"><span id="progNow"></span><span id="progRem"></span></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- About -->
+<div class="scrim" id="scrim">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+    <h3 id="aboutTitle">Aurora</h3>
+    <p data-i18n="aboutP1"></p>
+    <p data-i18n="aboutP2"></p>
+    <div class="note" data-i18n="aboutNote"></div>
+    <h4 data-i18n="shortcuts">Scurtături</h4>
+    <div class="keys" id="keys"></div>
+    <button class="primary close" id="closeBtn" data-i18n="close">Închide</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ---------- Chakra data (top → bottom) ---------- */
+const CHAKRAS = [
+  {id:"soul",  ro:"Steaua Sufletului", en:"Soul Star",    sk:"Sutara",      col:"#dcc6ff", freq:1074, bija:"\u2726", petals:0,  star:true,  elRo:"Transpersonal", elEn:"Transpersonal", affRo:"M\u0103 las ghidat de lumina sufletului meu.", affEn:"I let the light of my soul guide me."},
+  {id:"crown", ro:"Coroan\u0103",      en:"Crown",        sk:"Sahasrara",   col:"#9b59b6", freq:963,  bija:"AUM",     petals:48, elRo:"Con\u0219tiin\u021b\u0103", elEn:"Consciousness", affRo:"Sunt conectat cu \u00eentregul. Totul este unul.", affEn:"I am connected to the whole. All is one."},
+  {id:"third", ro:"Al treilea ochi",   en:"Third Eye",    sk:"Ajna",        col:"#5b54d6", freq:852,  bija:"OM",      petals:2,  elRo:"Lumin\u0103", elEn:"Light", affRo:"V\u0103d cu claritate \u0219i am \u00eencredere \u00een intui\u021bia mea.", affEn:"I see clearly and trust my intuition."},
+  {id:"throat",ro:"G\u00e2t",          en:"Throat",       sk:"Vishuddha",   col:"#2e9bde", freq:741,  bija:"HAM",     petals:16, elRo:"Eter", elEn:"Ether", affRo:"\u00cemi spun adev\u0103rul cu vocea mea liber\u0103.", affEn:"I speak my truth with my free voice."},
+  {id:"heart", ro:"Inim\u0103",        en:"Heart",        sk:"Anahata",     col:"#36c06a", freq:639,  bija:"YAM",     petals:12, elRo:"Aer", elEn:"Air", affRo:"M\u0103 deschid s\u0103 dau \u0219i s\u0103 primesc iubire.", affEn:"I open to give and receive love."},
+  {id:"solar", ro:"Plexul solar",      en:"Solar Plexus", sk:"Manipura",    col:"#f4c40f", freq:528,  bija:"RAM",     petals:10, elRo:"Foc", elEn:"Fire", affRo:"Am puterea \u0219i \u00eencrederea s\u0103 fiu eu \u00eensumi.", affEn:"I have the power and confidence to be myself."},
+  {id:"sacral",ro:"Sacral",            en:"Sacral",       sk:"Svadhisthana",col:"#ef8a3c", freq:417,  bija:"VAM",     petals:6,  elRo:"Ap\u0103", elEn:"Water", affRo:"\u00cemi simt emo\u021biile \u0219i las creativitatea s\u0103 curg\u0103.", affEn:"I feel my emotions and let creativity flow."},
+  {id:"root",  ro:"R\u0103d\u0103cin\u0103", en:"Root",   sk:"Muladhara",   col:"#df4a45", freq:396,  bija:"LAM",     petals:4,  elRo:"P\u0103m\u00e2nt", elEn:"Earth", affRo:"Am dreptul s\u0103 fiu aici. Sunt \u00een siguran\u021b\u0103 \u0219i prezent.", affEn:"I have the right to be here. I am safe and present."},
+  {id:"earth", ro:"Steaua Gaiei",      en:"Earth Star",   sk:"Vasundhara",  col:"#a86a33", freq:174,  bija:"\u2726", petals:0,  star:true,  elRo:"Transpersonal", elEn:"Transpersonal", affRo:"Sunt ancorat \u00een P\u0103m\u00e2nt; aici sunt \u00een siguran\u021b\u0103.", affEn:"I am anchored to the Earth; here I am safe."}
+];
+const IDX_HEART = 4;
+let current = IDX_HEART;
+
+/* ---------- i18n ---------- */
+const T = {
+  ro:{
+    titleDoc:"Aurora \u00b7 Sunete vindec\u0103toare & medita\u021bie pe chakre",
+    tag:"Sunete vindec\u0103toare & medita\u021bie pe chakre \u2014 sintetizate \u00een timp real, complet offline.",
+    about:"Despre", tone:"Ton", freq:"Frecven\u021b\u0103", element:"Element", mantra:"Mantr\u0103", petals:"Petale",
+    play:"Porne\u0219te tonul", pause:"Oprește tonul", gong:"Gong",
+    binaural:"B\u0103t\u0103i binaurale", binauralS:"Folose\u0219te c\u0103\u0219ti", beat:"B\u0103taie", volume:"Volum",
+    session:"Sesiune", duration:"Durat\u0103", journey:"C\u0103l\u0103torie prin chakre", journeyS:"Echilibrare automat\u0103",
+    trans:"Include transpersonale", transS:"9 chakre \u00een loc de 7", breathL:"Respira\u021bie",
+    start:"\u00cencepe sesiunea", stop:"Opre\u0219te sesiunea", remaining:"r\u0103mas", elapsed:"trecut",
+    inhale:"Inspir\u0103", hold:"\u021aine", exhale:"Expir\u0103",
+    bOff:"F\u0103r\u0103", bCoh:"Coerent\u0103 5\u00b75", bBox:"P\u0103trat 4\u00b74\u00b74\u00b74", bCalm:"Calmant\u0103 4\u00b77\u00b78",
+    delta:"Delta \u00b7 2 Hz (somn profund)", theta:"Theta \u00b7 6 Hz (meditatie)", alpha:"Alpha \u00b7 10 Hz (relaxare)",
+    shortcuts:"Scurt\u0103turi", close:"\u00cenchide",
+    aboutP1:"Aurora este un sanctuar sonor: alege o chakr\u0103, las\u0103 tonul s\u0103 te \u00eenconjoare \u0219i, dac\u0103 vrei, urmeaz\u0103 ghidul de respira\u021bie sau o c\u0103l\u0103torie automat\u0103 prin toate centrele energetice.",
+    aboutP2:"Totul \u2014 tonurile, gongul, b\u0103t\u0103ile binaurale \u2014 este generat live cu Web Audio API. Nu exist\u0103 fi\u0219iere audio, conturi sau telemetrie: o singur\u0103 pagin\u0103 HTML care func\u021bioneaz\u0103 complet offline.",
+    aboutNote:"Instrument contemplativ inspirat de practica sunetelor vindec\u0103toare (ex. Centrul AmaneSer, amaneser.ro). Frecven\u021bele \u0219i chakrele apar\u021bin unor tradi\u021bii spirituale, nu medicinei \u2014 pentru relaxare \u0219i medita\u021bie, nu ca tratament."
+  },
+  en:{
+    titleDoc:"Aurora \u00b7 Healing Sounds & Chakra Meditation",
+    tag:"Healing sounds & chakra meditation \u2014 synthesised in real time, fully offline.",
+    about:"About", tone:"Tone", freq:"Frequency", element:"Element", mantra:"Mantra", petals:"Petals",
+    play:"Play tone", pause:"Pause tone", gong:"Gong",
+    binaural:"Binaural beats", binauralS:"Use headphones", beat:"Beat", volume:"Volume",
+    session:"Session", duration:"Duration", journey:"Chakra journey", journeyS:"Automatic balancing",
+    trans:"Include transpersonal", transS:"9 chakras instead of 7", breathL:"Breathing",
+    start:"Start session", stop:"Stop session", remaining:"left", elapsed:"elapsed",
+    inhale:"Inhale", hold:"Hold", exhale:"Exhale",
+    bOff:"Off", bCoh:"Coherent 5\u00b75", bBox:"Box 4\u00b74\u00b74\u00b74", bCalm:"Calming 4\u00b77\u00b78",
+    delta:"Delta \u00b7 2 Hz (deep sleep)", theta:"Theta \u00b7 6 Hz (meditation)", alpha:"Alpha \u00b7 10 Hz (relaxation)",
+    shortcuts:"Shortcuts", close:"Close",
+    aboutP1:"Aurora is a sound sanctuary: choose a chakra, let its tone surround you and, if you like, follow the breathing pacer or an automatic journey through every energy centre.",
+    aboutP2:"Everything \u2014 the tones, the gong, the binaural beats \u2014 is generated live with the Web Audio API. There are no audio files, accounts or telemetry: a single HTML page that runs completely offline.",
+    aboutNote:"A contemplative tool inspired by sound-healing practice (e.g. Centrul AmaneSer, amaneser.ro). The frequencies and chakras belong to spiritual traditions, not medicine \u2014 for relaxation and meditation, not as treatment."
+  }
+};
+function loadPref(k){ try{ return localStorage.getItem("aurora."+k); }catch(e){ return null; } }
+function savePref(k,v){ try{ localStorage.setItem("aurora."+k,v); }catch(e){} }
+function detectLang(){
+  const l=(navigator.languages&&navigator.languages[0])||navigator.language||"en";
+  return /^ro\b/i.test(l)?"ro":"en";   // Romanian browser -> RO, otherwise default English
+}
+let lang = (function(){ const s=loadPref("lang"); return (s==="ro"||s==="en")?s:detectLang(); })();
+
+/* ---------- Audio engine ---------- */
+let actx=null, master=null, dryG=null, wetG=null, reverb=null, sumG=null, limiter=null, analyser=null, aData=null;
+let isPlaying=false, toneVoice=null, binVoice=null;
+let volume=0.5, binauralOn=false, beatHz=6;
+
+function makeImpulse(dur,decay){
+  const rate=actx.sampleRate, len=Math.floor(rate*dur), buf=actx.createBuffer(2,len,rate);
+  for(let ch=0;ch<2;ch++){const d=buf.getChannelData(ch);
+    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,decay);}
+  return buf;
+}
+function noiseBuffer(sec){
+  const len=Math.floor(actx.sampleRate*sec), b=actx.createBuffer(1,len,actx.sampleRate), d=b.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=Math.random()*2-1;
+  return b;
+}
+function ensureAudio(){
+  if(actx) return;
+  const AC=window.AudioContext||window.webkitAudioContext;
+  actx=new AC();
+  master=actx.createGain(); master.gain.value=volume;
+  dryG=actx.createGain(); dryG.gain.value=0.82;
+  wetG=actx.createGain(); wetG.gain.value=0.38;
+  reverb=actx.createConvolver(); reverb.buffer=makeImpulse(3.4,2.6);
+  sumG=actx.createGain(); sumG.gain.value=0.9;
+  limiter=actx.createDynamicsCompressor();
+  limiter.threshold.value=-2; limiter.knee.value=0; limiter.ratio.value=15; limiter.attack.value=0.004; limiter.release.value=0.22;
+  analyser=actx.createAnalyser(); analyser.fftSize=256; aData=new Uint8Array(analyser.frequencyBinCount);
+  master.connect(dryG); dryG.connect(sumG);
+  master.connect(reverb); reverb.connect(wetG); wetG.connect(sumG);
+  sumG.connect(limiter); limiter.connect(actx.destination);
+  master.connect(analyser);
+}
+function resume(){ if(actx && actx.state==="suspended") actx.resume(); }
+
+function startToneVoice(freq){
+  const t=actx.currentTime;
+  const g=actx.createGain(); g.gain.setValueAtTime(0.0001,t);
+  const filt=actx.createBiquadFilter(); filt.type="lowpass"; filt.frequency.value=Math.min(freq*6,9000); filt.Q.value=0.5;
+  const o1=actx.createOscillator(); o1.type="sine"; o1.frequency.value=freq;
+  const o2=actx.createOscillator(); o2.type="sine"; o2.frequency.value=freq; o2.detune.value=6;
+  const o3=actx.createOscillator(); o3.type="triangle"; o3.frequency.value=freq/2;
+  const o3g=actx.createGain(); o3g.gain.value=0.16;
+  const lfo=actx.createOscillator(); lfo.type="sine"; lfo.frequency.value=0.11;
+  const lfoG=actx.createGain(); lfoG.gain.value=freq*0.7;
+  lfo.connect(lfoG); lfoG.connect(filt.frequency);
+  o1.connect(filt); o2.connect(filt); o3.connect(o3g); o3g.connect(filt);
+  filt.connect(g); g.connect(master);
+  g.gain.linearRampToValueAtTime(0.46,t+1.5);
+  [o1,o2,o3,lfo].forEach(n=>n.start(t));
+  toneVoice={nodes:[o1,o2,o3,lfo],gain:g};
+}
+function stopToneVoice(){
+  if(!toneVoice) return;
+  const v=toneVoice; toneVoice=null;
+  const t=actx.currentTime;
+  v.gain.gain.cancelScheduledValues(t);
+  v.gain.gain.setValueAtTime(Math.max(v.gain.gain.value,0.0001),t);
+  v.gain.gain.exponentialRampToValueAtTime(0.0001,t+1.1);
+  v.nodes.forEach(n=>{try{n.stop(t+1.2);}catch(e){}});
+}
+function startBinaural(freq){
+  const t=actx.currentTime;
+  const lo=actx.createOscillator(), ro=actx.createOscillator();
+  lo.type="sine"; ro.type="sine"; lo.frequency.value=freq; ro.frequency.value=freq+beatHz;
+  const lg=actx.createGain(), rg=actx.createGain(); lg.gain.value=0.0001; rg.gain.value=0.0001;
+  const lp=actx.createStereoPanner(), rp=actx.createStereoPanner(); lp.pan.value=-1; rp.pan.value=1;
+  lo.connect(lg); lg.connect(lp); lp.connect(master);
+  ro.connect(rg); rg.connect(rp); rp.connect(master);
+  lg.gain.linearRampToValueAtTime(0.18,t+1.4); rg.gain.linearRampToValueAtTime(0.18,t+1.4);
+  lo.start(t); ro.start(t);
+  binVoice={nodes:[lo,ro],gains:[lg,rg]};
+}
+function stopBinaural(){
+  if(!binVoice) return;
+  const v=binVoice; binVoice=null; const t=actx.currentTime;
+  v.gains.forEach(g=>{g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(Math.max(g.gain.value,0.0001),t);g.gain.exponentialRampToValueAtTime(0.0001,t+0.9);});
+  v.nodes.forEach(n=>{try{n.stop(t+1);}catch(e){}});
+}
+function strikeGong(){
+  ensureAudio(); resume();
+  const t=actx.currentTime;
+  const out=actx.createGain(); out.gain.value=0.8; out.connect(master);
+  const base=104+Math.random()*16;
+  const ratios=[1,1.48,1.97,2.41,2.90,3.43,4.07,5.18,6.3];
+  ratios.forEach((r,i)=>{
+    const o=actx.createOscillator(); o.type="sine"; o.frequency.value=base*r*(1+(Math.random()-0.5)*0.012);
+    const g=actx.createGain(); const amp=0.5/(i+1.1);
+    g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(amp,t+0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+4.2+Math.random()*2.2);
+    o.connect(g); g.connect(out); o.start(t); o.stop(t+7);
+  });
+  const nb=actx.createBufferSource(); nb.buffer=noiseBuffer(0.7);
+  const nf=actx.createBiquadFilter(); nf.type="bandpass"; nf.frequency.value=base*4.2; nf.Q.value=0.6;
+  const ng=actx.createGain(); ng.gain.setValueAtTime(0.28,t); ng.gain.exponentialRampToValueAtTime(0.0001,t+0.6);
+  nb.connect(nf); nf.connect(ng); ng.connect(out); nb.start(t); nb.stop(t+0.7);
+}
+function setVolume(v){ volume=v; if(master){ master.gain.setTargetAtTime(v,actx.currentTime,0.05); } }
+
+/* play / pause / switch */
+function playTone(){
+  ensureAudio(); resume();
+  isPlaying=true;
+  startToneVoice(CHAKRAS[current].freq);
+  if(binauralOn) startBinaural(CHAKRAS[current].freq);
+  refreshPlayBtn();
+}
+function pauseTone(){
+  isPlaying=false;
+  stopToneVoice(); stopBinaural();
+  refreshPlayBtn();
+}
+function applyChakra(i,fromUser){
+  current=((i%CHAKRAS.length)+CHAKRAS.length)%CHAKRAS.length;
+  const c=CHAKRAS[current];
+  document.documentElement.style.setProperty("--accent",c.col);
+  document.documentElement.style.setProperty("--accent-soft",hexA(c.col,0.16));
+  document.documentElement.style.setProperty("--accent-glow",hexA(c.col,0.42));
+  refreshInfo(); refreshColumn();
+  const mEl=document.getElementById("mandala"); if(mEl) mEl.setAttribute("aria-label", c[lang]+" \u00b7 "+c.sk+" \u00b7 "+c.freq+" Hz");
+  const act=document.querySelector('.ckbtn[data-i="'+current+'"]');
+  if(act&&act.scrollIntoView){ try{ act.scrollIntoView({block:"nearest",inline:"center",behavior:reduce?"auto":"smooth"}); }catch(e){} }
+  if(isPlaying){ stopToneVoice(); startToneVoice(c.freq); stopBinaural(); if(binauralOn) startBinaural(c.freq); }
+}
+
+/* ---------- Session + Journey ---------- */
+let session={active:false,start:0,total:0,order:[],seg:-1,segMs:0};
+let journeyOn=false, includeTrans=false, durMin=10;
+
+function buildOrder(){
+  // ascending root -> crown (traditional balancing)
+  if(includeTrans) return [8,7,6,5,4,3,2,1,0];
+  return [7,6,5,4,3,2,1];
+}
+function startSession(){
+  ensureAudio(); resume();
+  session.active=true; session.start=performance.now(); session.total=durMin*60000;
+  strikeGong();
+  if(journeyOn){
+    session.order=buildOrder(); session.seg=0; session.segMs=session.total/session.order.length;
+    applyChakra(session.order[0]);
+  } else { session.order=[]; session.seg=-1; }
+  if(!isPlaying) playTone();
+  document.getElementById("prog").classList.add("on");
+  refreshSessBtn();
+}
+function endSession(){
+  session.active=false;
+  strikeGong();
+  pauseTone();
+  document.getElementById("prog").classList.remove("on");
+  document.getElementById("progFill").style.width="0%";
+  refreshSessBtn();
+}
+function tickSession(now){
+  if(!session.active) return;
+  const el=now-session.start;
+  if(journeyOn && session.order.length){
+    const seg=Math.min(session.order.length-1, Math.floor(el/session.segMs));
+    if(seg!==session.seg){ session.seg=seg; applyChakra(session.order[seg]); strikeGong(); }
+  }
+  const frac=Math.min(1,el/session.total);
+  document.getElementById("progFill").style.width=(frac*100).toFixed(1)+"%";
+  document.getElementById("progNow").textContent=fmt(el)+" "+T[lang].elapsed;
+  document.getElementById("progRem").textContent=fmt(Math.max(0,session.total-el))+" "+T[lang].remaining;
+  if(el>=session.total) endSession();
+}
+function fmt(ms){const s=Math.floor(ms/1000);const m=Math.floor(s/60);return m+":"+String(s%60).padStart(2,"0");}
+
+/* ---------- Breathing pacer ---------- */
+const PATTERNS={off:null, coherent:[5,0,5,0], box:[4,4,4,4], calm:[4,7,8,0]};
+let breathKey="off", breath={phase:0,start:0,scale:1};
+const PHASE_KEY=["inhale","hold","exhale","hold"];
+function setBreath(k){ breathKey=k; breath.phase=0; breath.start=performance.now(); }
+function tickBreath(now){
+  const pat=PATTERNS[breathKey];
+  const el=document.getElementById("breath");
+  if(!pat){ el.classList.remove("on"); el.innerHTML=""; breath.scale=1; return; }
+  el.classList.add("on");
+  let guard=0;
+  while(pat[breath.phase]===0 && guard<4){ breath.phase=(breath.phase+1)%4; breath.start=now; guard++; }
+  const dur=pat[breath.phase];
+  let t=(now-breath.start)/1000;
+  if(t>=dur){ breath.phase=(breath.phase+1)%4; breath.start=now; t=0;
+    let g2=0; while(pat[breath.phase]===0 && g2<4){ breath.phase=(breath.phase+1)%4; g2++; } }
+  const d=pat[breath.phase]; const p=d?Math.min(1,t/d):0;
+  const ease=0.5-0.5*Math.cos(Math.PI*p);
+  const ph=breath.phase;
+  if(ph===0) breath.scale=1+0.20*ease;        // inhale
+  else if(ph===1) breath.scale=1.20;           // hold (full)
+  else if(ph===2) breath.scale=1.20-0.20*ease; // exhale
+  else breath.scale=1.0;                        // hold (empty)
+  const remain=Math.max(0,Math.ceil(d-t));
+  el.innerHTML=T[lang][PHASE_KEY[ph]]+"<small>"+remain+"</small>";
+}
+
+/* ---------- Visualisation ---------- */
+const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const bg=document.getElementById("bg"), bgx=bg.getContext("2d");
+const mc=document.getElementById("mandala"), mx=mc.getContext("2d");
+let stars=[], rot=0, energy=0, particles=[];
+let W=0,H=0,MW=0,MH=0,DPR=Math.min(window.devicePixelRatio||1,2);
+
+function sizeAll(){
+  DPR=Math.min(window.devicePixelRatio||1,2);
+  W=window.innerWidth; H=window.innerHeight;
+  bg.width=W*DPR; bg.height=H*DPR; bg.style.width=W+"px"; bg.style.height=H+"px"; bgx.setTransform(DPR,0,0,DPR,0,0);
+  const r=mc.getBoundingClientRect(); MW=r.width; MH=r.height;
+  mc.width=MW*DPR; mc.height=MH*DPR; mx.setTransform(DPR,0,0,DPR,0,0);
+  stars=[]; const n=reduce?70:120;
+  for(let i=0;i<n;i++) stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+0.3,a:Math.random()*0.5+0.15,ph:Math.random()*6.28,sp:0.4+Math.random()*0.8});
+}
+function hexRGB(hex){const h=hex.replace("#","");return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+function hexA(hex,a){const c=hexRGB(hex);return "rgba("+c[0]+","+c[1]+","+c[2]+","+a+")";}
+
+function drawBG(ts){
+  bgx.clearRect(0,0,W,H);
+  for(const s of stars){
+    const tw=reduce?s.a:s.a*(0.55+0.45*Math.sin(ts*0.001*s.sp+s.ph));
+    bgx.beginPath(); bgx.arc(s.x,s.y,s.r,0,6.2832);
+    bgx.fillStyle="rgba(236,230,245,"+tw.toFixed(3)+")"; bgx.fill();
+  }
+}
+function drawMandala(ts,dt){
+  const c=CHAKRAS[current], col=c.col;
+  mx.clearRect(0,0,MW,MH);
+  const cx=MW/2, cy=MH/2;
+  const baseR=Math.min(MW,MH)*0.29;
+  // smooth energy
+  let target=0;
+  if(analyser && isPlaying){ analyser.getByteFrequencyData(aData); let s=0; const N=24; for(let i=0;i<N;i++)s+=aData[i]; target=Math.min(1,(s/N)/150); }
+  else { target=0.18+0.12*Math.sin(ts*0.0011); }
+  energy+=(target-energy)*Math.min(1,dt*0.006);
+  const pulse=1+energy*0.16;
+  const breathScale=breath.scale;
+  if(!reduce) rot+=dt*0.00006*(0.6+energy);
+
+  mx.save(); mx.translate(cx,cy);
+  mx.globalCompositeOperation="lighter";
+
+  // outer breathing ring (kept inside canvas bounds: 1.32 * 0.29 * 1.20 < 0.5)
+  if(PATTERNS[breathKey]){
+    const rr=baseR*1.32*breathScale;
+    mx.beginPath(); mx.arc(0,0,rr,0,6.2832); mx.fillStyle=hexA(col,0.05); mx.fill();
+    mx.beginPath(); mx.arc(0,0,rr,0,6.2832); mx.strokeStyle=hexA(col,0.55); mx.lineWidth=2.5; mx.stroke();
+  }
+
+  // halo
+  const halo=mx.createRadialGradient(0,0,baseR*0.2,0,0,baseR*1.9*pulse);
+  halo.addColorStop(0,hexA(col,0.26)); halo.addColorStop(0.5,hexA(col,0.07)); halo.addColorStop(1,"rgba(0,0,0,0)");
+  mx.beginPath(); mx.arc(0,0,baseR*1.9*pulse,0,6.2832); mx.fillStyle=halo; mx.fill();
+
+  const R=baseR*pulse*breathScale;
+  if(c.star){
+    drawStar(0, R*1.12, 5, col, rot, 0.85);
+    drawStar(0, R*0.70, 5, col, -rot*0.7+Math.PI/5, 0.5);
+    mx.beginPath(); mx.arc(0,0,R*1.12,0,6.2832); mx.strokeStyle=hexA(col,0.18); mx.lineWidth=1; mx.stroke();
+  } else {
+    const n=Math.max(1,c.petals);
+    const pa=Math.max(0.08,Math.min(0.5,2.4/n));   // brightness ~constant across petal counts
+    mx.save(); mx.rotate(rot);
+    for(let i=0;i<n;i++){ drawPetal((i/n)*6.2832, R, col, pa); }
+    mx.restore();
+    const n2=Math.min(n,12);
+    mx.save(); mx.rotate(-rot*1.3);
+    for(let i=0;i<n2;i++){ drawPetal((i/n2)*6.2832, R*0.62, col, Math.max(0.1,pa*0.7)); }
+    mx.restore();
+    mx.beginPath(); mx.arc(0,0,R*1.02,0,6.2832); mx.strokeStyle=hexA(col,0.16); mx.lineWidth=1; mx.stroke();
+  }
+
+  // core orb
+  const core=mx.createRadialGradient(0,0,0,0,0,R*0.42);
+  core.addColorStop(0,"rgba(255,255,255,0.95)");
+  core.addColorStop(0.35,hexA(col,0.85));
+  core.addColorStop(1,"rgba(0,0,0,0)");
+  mx.beginPath(); mx.arc(0,0,R*0.42,0,6.2832); mx.fillStyle=core; mx.fill();
+
+  // particles
+  if(!reduce){
+    if(Math.random()<0.4+energy) particles.push({a:Math.random()*6.2832,r:R*0.3,v:0.02+Math.random()*0.05,life:1});
+    for(let i=particles.length-1;i>=0;i--){
+      const p=particles[i]; p.r+=p.v*dt*0.5; p.life-=dt*0.0008;
+      if(p.life<=0||p.r>R*2){ particles.splice(i,1); continue; }
+      mx.beginPath(); mx.arc(Math.cos(p.a)*p.r,Math.sin(p.a)*p.r,1.4,0,6.2832);
+      mx.fillStyle=hexA(col,0.5*p.life); mx.fill();
+    }
+  }
+  mx.restore();
+
+  // bija (source-over, crisp)
+  mx.save(); mx.translate(cx,cy);
+  mx.globalCompositeOperation="source-over";
+  mx.textAlign="center"; mx.textBaseline="middle";
+  mx.font='500 '+Math.round(baseR*0.42)+'px "Iowan Old Style", Palatino, Georgia, serif';
+  mx.shadowColor=col; mx.shadowBlur=18;
+  mx.fillStyle="rgba(255,255,255,0.96)";
+  mx.fillText(c.bija, 0, baseR*0.02);
+  mx.restore();
+}
+function drawPetal(ang,R,col,alpha){
+  mx.save(); mx.rotate(ang);
+  const len=R*1.0, w=R*0.26;
+  mx.beginPath();
+  mx.moveTo(0,-R*0.2);
+  mx.quadraticCurveTo(w,-len*0.55,0,-len);
+  mx.quadraticCurveTo(-w,-len*0.55,0,-R*0.2);
+  mx.closePath(); mx.fillStyle=hexA(col,alpha); mx.fill();
+  mx.restore();
+}
+function drawStar(cx0,R,points,col,rotation,alpha){
+  mx.save(); mx.rotate(rotation);
+  mx.beginPath();
+  for(let i=0;i<points*2;i++){
+    const rr=i%2===0?R:R*0.42;
+    const a=(i/(points*2))*6.2832-Math.PI/2;
+    const x=Math.cos(a)*rr, y=Math.sin(a)*rr;
+    if(i===0) mx.moveTo(x,y); else mx.lineTo(x,y);
+  }
+  mx.closePath();
+  const g=mx.createRadialGradient(0,0,0,0,0,R);
+  g.addColorStop(0,hexA(col,alpha)); g.addColorStop(1,hexA(col,alpha*0.15));
+  mx.fillStyle=g; mx.fill();
+  mx.restore();
+}
+
+let last=performance.now();
+function loop(ts){
+  const dt=Math.min(60,ts-last); last=ts;
+  tickBreath(ts);
+  tickSession(ts);
+  drawBG(ts);
+  drawMandala(ts,dt);
+  requestAnimationFrame(loop);
+}
+
+/* ---------- UI build & wiring ---------- */
+function buildColumn(){
+  const col=document.getElementById("column");
+  col.innerHTML="";
+  CHAKRAS.forEach((c,i)=>{
+    const b=document.createElement("button");
+    b.className="ckbtn"; b.setAttribute("aria-pressed", i===current?"true":"false");
+    b.dataset.i=i;
+    b.innerHTML='<span class="dot" style="background:'+c.col+';color:'+c.col+'"></span>'+
+      '<span class="lab"><b>'+c[lang]+'</b><span>'+c.freq+' Hz</span></span>';
+    b.addEventListener("click",()=>{ applyChakra(i,true); });
+    col.appendChild(b);
+  });
+}
+function refreshColumn(){
+  document.querySelectorAll(".ckbtn").forEach(b=>{
+    const i=+b.dataset.i;
+    b.setAttribute("aria-pressed", i===current?"true":"false");
+    b.querySelector(".lab b").textContent=CHAKRAS[i][lang];
+  });
+}
+function refreshInfo(){
+  const c=CHAKRAS[current];
+  document.getElementById("ckName").textContent=c[lang];
+  document.getElementById("ckSk").textContent=c.sk;
+  document.getElementById("mFreq").textContent=c.freq+" Hz";
+  document.getElementById("mEl").textContent=lang==="ro"?c.elRo:c.elEn;
+  document.getElementById("mBija").textContent=c.bija;
+  document.getElementById("mPet").textContent=c.star?"\u2726":c.petals;
+  const aff=document.getElementById("affirm");
+  aff.style.opacity=0;
+  setTimeout(()=>{ aff.textContent=lang==="ro"?c.affRo:c.affEn; aff.style.opacity=1; },180);
+}
+function refreshPlayBtn(){
+  document.getElementById("playTxt").textContent=isPlaying?T[lang].pause:T[lang].play;
+  document.getElementById("playIco").innerHTML=isPlaying?'<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';
+}
+function refreshSessBtn(){
+  document.getElementById("sessTxt").textContent=session.active?T[lang].stop:T[lang].start;
+}
+function buildSelects(){
+  const beat=document.getElementById("beatSel");
+  beat.innerHTML='<option value="2">'+T[lang].delta+'</option><option value="6">'+T[lang].theta+'</option><option value="10">'+T[lang].alpha+'</option>';
+  beat.value=String(beatHz);
+  const br=document.getElementById("breathSel");
+  br.innerHTML='<option value="off">'+T[lang].bOff+'</option><option value="coherent">'+T[lang].bCoh+'</option><option value="box">'+T[lang].bBox+'</option><option value="calm">'+T[lang].bCalm+'</option>';
+  br.value=breathKey;
+}
+function buildDur(){
+  const wrap=document.getElementById("durChips"); wrap.innerHTML="";
+  [5,10,15,20].forEach(m=>{
+    const b=document.createElement("button"); b.className="chip"; b.textContent=m+" "+(lang==="ro"?"min":"min");
+    b.setAttribute("aria-pressed", m===durMin?"true":"false"); b.dataset.m=m;
+    b.addEventListener("click",()=>{ durMin=m; document.querySelectorAll("#durChips .chip").forEach(x=>x.setAttribute("aria-pressed", (+x.dataset.m)===durMin?"true":"false")); });
+    wrap.appendChild(b);
+  });
+}
+function buildKeys(){
+  const rows=[["Space",lang==="ro"?"porne\u0219te / opre\u0219te tonul":"play / pause tone"],
+    ["G","gong"],["\u2191 \u2193",lang==="ro"?"schimb\u0103 chakra":"change chakra"],
+    ["B",lang==="ro"?"respira\u021bie":"breathing"],["L",lang==="ro"?"limb\u0103":"language"]];
+  const k=document.getElementById("keys"); k.innerHTML="";
+  rows.forEach(r=>{ const a=document.createElement("kbd"); a.textContent=r[0]; const b=document.createElement("span"); b.textContent=r[1]; k.appendChild(a); k.appendChild(b); });
+}
+function setLang(l){
+  lang=l; document.documentElement.lang=l; document.title=T[l].titleDoc; savePref("lang",l);
+  document.getElementById("langBtn").textContent=l==="ro"?"EN":"RO";
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ const k=el.getAttribute("data-i18n"); if(T[l][k]!=null) el.textContent=T[l][k]; });
+  buildSelects(); buildDur(); buildKeys();
+  refreshInfo(); refreshColumn(); refreshPlayBtn(); refreshSessBtn();
+  const c=CHAKRAS[current], mEl=document.getElementById("mandala");
+  if(mEl) mEl.setAttribute("aria-label", c[l]+" \u00b7 "+c.sk+" \u00b7 "+c.freq+" Hz");
+}
+
+/* events */
+document.getElementById("langBtn").addEventListener("click",()=>setLang(lang==="ro"?"en":"ro"));
+document.getElementById("playBtn").addEventListener("click",()=>{ isPlaying?pauseTone():playTone(); });
+document.getElementById("gongBtn").addEventListener("click",strikeGong);
+document.getElementById("sessBtn").addEventListener("click",()=>{ session.active?endSession():startSession(); });
+document.getElementById("binOn").addEventListener("change",e=>{
+  binauralOn=e.target.checked; document.getElementById("binSub").classList.toggle("on",binauralOn);
+  if(isPlaying){ if(binauralOn) startBinaural(CHAKRAS[current].freq); else stopBinaural(); }
+});
+document.getElementById("beatSel").addEventListener("change",e=>{ beatHz=+e.target.value; if(isPlaying&&binauralOn){stopBinaural();startBinaural(CHAKRAS[current].freq);} });
+document.getElementById("jOn").addEventListener("change",e=>{ journeyOn=e.target.checked; document.getElementById("jSub").classList.toggle("on",journeyOn); });
+document.getElementById("transOn").addEventListener("change",e=>{ includeTrans=e.target.checked; });
+document.getElementById("breathSel").addEventListener("change",e=>setBreath(e.target.value));
+const vol=document.getElementById("vol");
+vol.addEventListener("input",e=>{ const v=+e.target.value/100; setVolume(v); e.target.style.setProperty("--p",e.target.value+"%"); savePref("vol",e.target.value); });
+(function(){ const s=loadPref("vol"); const val=(s!==null&&!isNaN(+s))?Math.max(0,Math.min(100,+s)):50; volume=val/100; vol.value=val; vol.style.setProperty("--p",val+"%"); })();
+
+const scrim=document.getElementById("scrim");
+let lastFocus=null;
+function openAbout(){ lastFocus=document.activeElement; scrim.classList.add("on"); document.getElementById("closeBtn").focus(); }
+function closeAbout(){ scrim.classList.remove("on"); if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+document.getElementById("aboutBtn").addEventListener("click",openAbout);
+document.getElementById("closeBtn").addEventListener("click",closeAbout);
+scrim.addEventListener("click",e=>{ if(e.target===scrim) closeAbout(); });
+scrim.addEventListener("keydown",e=>{
+  if(e.key!=="Tab") return;
+  const f=scrim.querySelectorAll("button,a[href]"); if(!f.length) return;
+  const first=f[0], last=f[f.length-1];
+  if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+});
+
+document.addEventListener("keydown",e=>{
+  if(scrim.classList.contains("on")){ if(e.key==="Escape"){ e.preventDefault(); closeAbout(); } return; }
+  if(e.target.tagName==="SELECT"||e.target.tagName==="INPUT") return;
+  if(e.code==="Space"){ e.preventDefault(); isPlaying?pauseTone():playTone(); }
+  else if(e.key==="g"||e.key==="G") strikeGong();
+  else if(e.key==="ArrowUp"){ e.preventDefault(); applyChakra(current-1,true); }
+  else if(e.key==="ArrowDown"){ e.preventDefault(); applyChakra(current+1,true); }
+  else if(e.key==="b"||e.key==="B"){ const keys=Object.keys(PATTERNS); const ni=(keys.indexOf(breathKey)+1)%keys.length; setBreath(keys[ni]); document.getElementById("breathSel").value=keys[ni]; }
+  else if(e.key==="l"||e.key==="L") setLang(lang==="ro"?"en":"ro");
+});
+
+window.addEventListener("resize",sizeAll);
+
+/* init */
+buildColumn();
+setLang(lang);
+applyChakra(IDX_HEART,false);
+sizeAll();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
