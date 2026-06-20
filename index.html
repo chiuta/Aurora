@@ -14,6 +14,9 @@
 <!-- Offline guarantee: no network of any kind is permitted (no fetch/XHR/WebSocket, no remote scripts/styles/fonts/images). -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
 <title>Aurora · Healing Sounds & Chakra Meditation</title>
+<meta name="theme-color" content="#0c0717">
+<meta name="description" content="Aurora — healing sounds and chakra meditation, synthesised live in your browser. Fully offline, no accounts, no tracking.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%230c0717'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23c9a14a' stroke-width='1.4' opacity='0.85'/%3E%3Ccircle cx='16' cy='16' r='3.6' fill='%23e8c45f'/%3E%3C/svg%3E">
 <style>
   :root{
     --void:#070410;
@@ -82,6 +85,8 @@
   .iconbtn:hover{border-color:var(--line2);background:var(--panel2)}
   .iconbtn:active{transform:translateY(1px)}
   .iconbtn.lang{font-weight:500;letter-spacing:.06em;min-width:46px}
+  #langSel{width:auto;min-width:128px;padding:9px 30px 9px 13px;font-size:13px;border-radius:11px;background-color:var(--panel);backdrop-filter:blur(8px)}
+  #langSel:hover{border-color:var(--line2);background-color:var(--panel2)}
 
   .stage{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(280px,330px);gap:clamp(14px,2.4vw,30px);align-items:start;flex:1}
 
@@ -141,7 +146,7 @@
   .ico{width:16px;height:16px;flex:none}
 
   .field{margin-top:14px}
-  .field>label{display:block;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim2);margin-bottom:7px}
+  .field>label:not(.toggle){display:block;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim2);margin-bottom:7px}
   .chips{display:flex;gap:7px;flex-wrap:wrap}
   .chip{appearance:none;border:1px solid var(--line);background:transparent;color:var(--dim);cursor:pointer;
     font-family:var(--sans);font-size:13px;padding:7px 13px;border-radius:9px;transition:all .18s}
@@ -162,11 +167,14 @@
   .toggle input{position:absolute;opacity:0;width:0;height:0}
   .toggle input:checked+.sw{background:var(--accent)}
   .toggle input:checked+.sw::after{transform:translateX(18px)}
-  input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:4px;
-    background:linear-gradient(90deg,var(--accent) var(--p,50%),rgba(255,255,255,0.13) var(--p,50%));outline:none;margin-top:4px}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;
-    background:#fff;cursor:pointer;box-shadow:0 0 10px var(--accent-glow)}
-  input[type=range]::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:#fff;cursor:pointer}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:transparent;outline:none;margin-top:2px;cursor:pointer}
+  input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;
+    background:linear-gradient(90deg,var(--accent) var(--p,50%),rgba(255,255,255,0.13) var(--p,50%))}
+  input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:rgba(255,255,255,0.13)}
+  input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:var(--accent)}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+    background:#fff;cursor:pointer;box-shadow:0 0 10px var(--accent-glow);margin-top:-7px}
+  input[type=range]::-moz-range-thumb{width:18px;height:18px;border:none;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 0 10px var(--accent-glow)}
 
   .prog{margin-top:14px;display:none}
   .prog.on{display:block}
@@ -194,10 +202,38 @@
     border-bottom-width:2px;border-radius:6px;padding:3px 8px;color:var(--text);justify-self:start}
   .modal a{color:var(--gold)}
   .modal .close{margin-top:22px;width:100%}
+  .lblrow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}
+  .lblrow>label{display:block;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim2);margin:0}
+  .help{appearance:none;width:22px;height:22px;flex:none;border-radius:50%;border:1px solid var(--line2);
+    background:rgba(255,255,255,0.04);color:var(--dim);font-family:var(--sans);font-size:12px;font-weight:600;
+    line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
+  .help:hover{border-color:var(--accent);color:var(--text);background:var(--accent-soft)}
+  .tut-item{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:12px;background:rgba(255,255,255,0.02)}
+  .tut-item h5{font-family:var(--serif);font-weight:500;font-size:15px;color:var(--text);margin-bottom:9px}
+  .tut-phases{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px}
+  .tut-ph{font-size:11.5px;padding:4px 9px;border-radius:8px;background:var(--accent-soft);
+    border:1px solid var(--line);color:var(--text);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+  .tut-item p{font-size:13px;color:var(--dim);margin:0;line-height:1.55}
+  .tut-try{margin-top:11px}
+  .custom-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .custom-cell{display:flex;flex-direction:column;gap:5px}
+  .custom-cell label{font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim2);margin:0;text-align:center}
+  .custom-cell input{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--line);color:var(--text);
+    border-radius:9px;padding:8px 4px;font-size:14px;text-align:center;font-variant-numeric:tabular-nums;font-family:var(--sans)}
+  .custom-cell input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
   :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
   .toggle input:focus-visible+.sw{outline:2px solid var(--accent);outline-offset:2px}
   select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+  /* Focus (zen) mode */
+  body.zen .top, body.zen .column, body.zen .rail{display:none}
+  body.zen .stage{grid-template-columns:1fr}
+  body.zen .app{justify-content:center}
+  body.zen .center{order:0;gap:22px}
+  body.zen .mandala-wrap{max-width:min(74vh,560px)}
+  .zen-exit{position:fixed;top:16px;right:16px;z-index:60;display:none;align-items:center;justify-content:center}
+  body.zen .zen-exit{display:flex}
 
   @media (max-width:980px){
     .stage{grid-template-columns:1fr}
@@ -221,6 +257,7 @@
 <div class="blob a" aria-hidden="true"></div>
 <div class="blob b" aria-hidden="true"></div>
 <div class="blob c" aria-hidden="true"></div>
+<button class="iconbtn zen-exit" id="zenExit" aria-label="Exit focus mode"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7"/></svg></button>
 
 <div class="app">
   <header class="top">
@@ -229,8 +266,9 @@
       <div class="tag" data-i18n="tag"></div>
     </div>
     <div class="head-ctl">
-      <button class="iconbtn lang" id="langBtn" aria-label="Switch language">EN</button>
-      <button class="iconbtn" id="aboutBtn" data-i18n="about" aria-label="About">Despre</button>
+      <select id="langSel" aria-label="Language"></select>
+      <button class="iconbtn" id="zenBtn" aria-label="Focus mode"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
+      <button class="iconbtn" id="aboutBtn" data-i18n="about">About</button>
     </div>
   </header>
 
@@ -250,50 +288,53 @@
     <!-- Rail -->
     <div class="rail">
       <section class="panel" aria-labelledby="toneH">
-        <h2 id="toneH" data-i18n="tone">Ton</h2>
+        <h2 id="toneH" data-i18n="tone">Tone</h2>
         <div class="ck-name" id="ckName"></div>
         <div class="ck-sk" id="ckSk"></div>
         <div class="meta">
-          <div class="cell"><div class="k" data-i18n="freq">Frecvență</div><div class="v" id="mFreq"></div></div>
+          <div class="cell"><div class="k" data-i18n="freq">Frequency</div><div class="v" id="mFreq"></div></div>
           <div class="cell"><div class="k" data-i18n="element">Element</div><div class="v" id="mEl"></div></div>
-          <div class="cell"><div class="k" data-i18n="mantra">Mantră</div><div class="v mantra" id="mBija"></div></div>
-          <div class="cell"><div class="k" data-i18n="petals">Petale</div><div class="v" id="mPet"></div></div>
+          <div class="cell"><div class="k" data-i18n="mantra">Mantra</div><div class="v mantra" id="mBija"></div></div>
+          <div class="cell"><div class="k" data-i18n="petals">Petals</div><div class="v" id="mPet"></div></div>
         </div>
         <button class="primary" id="playBtn"><svg class="ico" id="playIco" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span id="playTxt"></span></button>
         <div class="row">
           <button class="primary ghost" id="gongBtn"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/></svg><span data-i18n="gong">Gong</span></button>
         </div>
         <div class="field">
-          <label class="toggle" for="binOn"><span class="tl"><b data-i18n="binaural">Bătăi binaurale</b><small data-i18n="binauralS">Folosește căști</small></span>
+          <label class="toggle" for="binOn"><span class="tl"><b data-i18n="binaural">Binaural beats</b><small data-i18n="binauralS">Use headphones</small></span>
             <input type="checkbox" id="binOn"><span class="sw"></span></label>
           <div class="sub" id="binSub" style="margin-top:11px">
-            <label style="font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim2);margin-bottom:7px;display:block" data-i18n="beat">Bătaie</label>
+            <label for="beatSel" style="font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim2);margin-bottom:7px;display:block" data-i18n="beat">Beat</label>
             <select id="beatSel"></select>
           </div>
         </div>
         <div class="field">
-          <label for="vol" data-i18n="volume">Volum</label>
+          <label for="vol" data-i18n="volume">Volume</label>
           <input type="range" id="vol" min="0" max="100" value="50">
         </div>
       </section>
 
       <section class="panel" aria-labelledby="sessH">
-        <h2 id="sessH" data-i18n="session">Sesiune</h2>
+        <h2 id="sessH" data-i18n="session">Session</h2>
         <div class="field" style="margin-top:0">
-          <label data-i18n="duration">Durată</label>
+          <label data-i18n="duration">Duration</label>
           <div class="chips" id="durChips"></div>
         </div>
         <div class="field">
-          <label class="toggle" for="jOn"><span class="tl"><b data-i18n="journey">Călătorie prin chakre</b><small data-i18n="journeyS">Echilibrare automată</small></span>
+          <label class="toggle" for="jOn"><span class="tl"><b data-i18n="journey">Chakra journey</b><small data-i18n="journeyS">Automatic balancing</small></span>
             <input type="checkbox" id="jOn"><span class="sw"></span></label>
           <div class="sub" id="jSub" style="margin-top:11px">
-            <label class="toggle" for="transOn"><span class="tl"><b data-i18n="trans">Include transpersonale</b><small data-i18n="transS">9 chakre în loc de 7</small></span>
+            <label class="toggle" for="transOn"><span class="tl"><b data-i18n="trans">Include transpersonal</b><small data-i18n="transS">9 chakras instead of 7</small></span>
               <input type="checkbox" id="transOn"><span class="sw"></span></label>
           </div>
         </div>
         <div class="field">
-          <label data-i18n="breathL">Respirație</label>
+          <div class="lblrow"><label for="breathSel" data-i18n="breathL">Breathing</label><button class="help" id="breathHelp" aria-label="Breathing guide">?</button></div>
           <select id="breathSel"></select>
+          <div class="sub" id="customSub" style="margin-top:11px"></div>
+          <label class="toggle" for="cueOn" style="margin-top:12px"><span class="tl"><b data-i18n="cue">Phase cues</b><small data-i18n="cueS">Soft tone at each phase change</small></span>
+            <input type="checkbox" id="cueOn"><span class="sw"></span></label>
         </div>
         <button class="primary" id="sessBtn" style="margin-top:16px"><svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span id="sessTxt"></span></button>
         <div class="prog" id="prog">
@@ -312,9 +353,20 @@
     <p data-i18n="aboutP1"></p>
     <p data-i18n="aboutP2"></p>
     <div class="note" data-i18n="aboutNote"></div>
-    <h4 data-i18n="shortcuts">Scurtături</h4>
+    <h4 data-i18n="shortcuts">Shortcuts</h4>
     <div class="keys" id="keys"></div>
-    <button class="primary close" id="closeBtn" data-i18n="close">Închide</button>
+    <button class="primary close" id="closeBtn" data-i18n="close">Close</button>
+  </div>
+</div>
+
+<!-- Breathing guide -->
+<div class="scrim" id="tutScrim">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tutTitle">
+    <h3 id="tutTitle" data-i18n="breathGuide">Breathing guide</h3>
+    <p data-i18n="tutIntro"></p>
+    <div id="tutList"></div>
+    <div class="note" data-i18n="tutTip"></div>
+    <button class="primary close" id="tutClose" data-i18n="close">Close</button>
   </div>
 </div>
 
@@ -333,6 +385,39 @@ const CHAKRAS = [
   {id:"root",  ro:"R\u0103d\u0103cin\u0103", en:"Root",   sk:"Muladhara",   col:"#df4a45", freq:396,  bija:"LAM",     petals:4,  elRo:"P\u0103m\u00e2nt", elEn:"Earth", affRo:"Am dreptul s\u0103 fiu aici. Sunt \u00een siguran\u021b\u0103 \u0219i prezent.", affEn:"I have the right to be here. I am safe and present."},
   {id:"earth", ro:"Steaua Gaiei",      en:"Earth Star",   sk:"Vasundhara",  col:"#a86a33", freq:174,  bija:"\u2726", petals:0,  star:true,  elRo:"Transpersonal", elEn:"Transpersonal", affRo:"Sunt ancorat \u00een P\u0103m\u00e2nt; aici sunt \u00een siguran\u021b\u0103.", affEn:"I am anchored to the Earth; here I am safe."}
 ];
+/* Romance-language chakra names, elements and affirmations (en/ro live on the flat objects above). */
+const CL={
+ soul:{name:{es:"Estrella del Alma",fr:"Étoile de l'Âme",it:"Stella dell'Anima",pt:"Estrela da Alma",ca:"Estrella de l'Ànima"},
+   el:{es:"Transpersonal",fr:"Transpersonnel",it:"Transpersonale",pt:"Transpessoal",ca:"Transpersonal"},
+   aff:{es:"Dejo que la luz de mi alma me guíe.",fr:"Je laisse la lumière de mon âme me guider.",it:"Lascio che la luce della mia anima mi guidi.",pt:"Deixo que a luz da minha alma me guie.",ca:"Deixo que la llum de la meva ànima em guiï."}},
+ crown:{name:{es:"Corona",fr:"Couronne",it:"Corona",pt:"Coroa",ca:"Corona"},
+   el:{es:"Conciencia",fr:"Conscience",it:"Coscienza",pt:"Consciência",ca:"Consciència"},
+   aff:{es:"Estoy conectado con el todo. Todo es uno.",fr:"Je suis relié au tout. Tout est un.",it:"Sono connesso al tutto. Tutto è uno.",pt:"Estou ligado ao todo. Tudo é um.",ca:"Estic connectat amb el tot. Tot és u."}},
+ third:{name:{es:"Tercer ojo",fr:"Troisième œil",it:"Terzo occhio",pt:"Terceiro olho",ca:"Tercer ull"},
+   el:{es:"Luz",fr:"Lumière",it:"Luce",pt:"Luz",ca:"Llum"},
+   aff:{es:"Veo con claridad y confío en mi intuición.",fr:"Je vois clairement et je fais confiance à mon intuition.",it:"Vedo con chiarezza e mi fido della mia intuizione.",pt:"Vejo com clareza e confio na minha intuição.",ca:"Hi veig amb claredat i confio en la meva intuïció."}},
+ throat:{name:{es:"Garganta",fr:"Gorge",it:"Gola",pt:"Garganta",ca:"Gola"},
+   el:{es:"Éter",fr:"Éther",it:"Etere",pt:"Éter",ca:"Èter"},
+   aff:{es:"Expreso mi verdad con mi voz libre.",fr:"Je dis ma vérité avec ma voix libre.",it:"Dico la mia verità con la mia voce libera.",pt:"Digo a minha verdade com a minha voz livre.",ca:"Dic la meva veritat amb la meva veu lliure."}},
+ heart:{name:{es:"Corazón",fr:"Cœur",it:"Cuore",pt:"Coração",ca:"Cor"},
+   el:{es:"Aire",fr:"Air",it:"Aria",pt:"Ar",ca:"Aire"},
+   aff:{es:"Me abro a dar y recibir amor.",fr:"Je m'ouvre à donner et recevoir l'amour.",it:"Mi apro a dare e ricevere amore.",pt:"Abro-me para dar e receber amor.",ca:"M'obro a donar i rebre amor."}},
+ solar:{name:{es:"Plexo solar",fr:"Plexus solaire",it:"Plesso solare",pt:"Plexo solar",ca:"Plexe solar"},
+   el:{es:"Fuego",fr:"Feu",it:"Fuoco",pt:"Fogo",ca:"Foc"},
+   aff:{es:"Tengo el poder y la confianza para ser yo mismo.",fr:"J'ai le pouvoir et la confiance d'être moi-même.",it:"Ho il potere e la fiducia di essere me stesso.",pt:"Tenho o poder e a confiança para ser eu mesmo.",ca:"Tinc el poder i la confiança per ser jo mateix."}},
+ sacral:{name:{es:"Sacro",fr:"Sacré",it:"Sacrale",pt:"Sacro",ca:"Sacre"},
+   el:{es:"Agua",fr:"Eau",it:"Acqua",pt:"Água",ca:"Aigua"},
+   aff:{es:"Siento mis emociones y dejo fluir la creatividad.",fr:"Je ressens mes émotions et laisse couler la créativité.",it:"Sento le mie emozioni e lascio fluire la creatività.",pt:"Sinto as minhas emoções e deixo a criatividade fluir.",ca:"Sento les meves emocions i deixo fluir la creativitat."}},
+ root:{name:{es:"Raíz",fr:"Racine",it:"Radice",pt:"Raiz",ca:"Arrel"},
+   el:{es:"Tierra",fr:"Terre",it:"Terra",pt:"Terra",ca:"Terra"},
+   aff:{es:"Tengo derecho a estar aquí. Estoy seguro y presente.",fr:"J'ai le droit d'être ici. Je suis en sécurité et présent.",it:"Ho il diritto di essere qui. Sono al sicuro e presente.",pt:"Tenho o direito de estar aqui. Estou seguro e presente.",ca:"Tinc el dret de ser aquí. Estic segur i present."}},
+ earth:{name:{es:"Estrella de la Tierra",fr:"Étoile de la Terre",it:"Stella della Terra",pt:"Estrela da Terra",ca:"Estrella de la Terra"},
+   el:{es:"Transpersonal",fr:"Transpersonnel",it:"Transpersonale",pt:"Transpessoal",ca:"Transpersonal"},
+   aff:{es:"Estoy anclado a la Tierra; aquí estoy seguro.",fr:"Je suis ancré à la Terre ; ici je suis en sécurité.",it:"Sono ancorato alla Terra; qui sono al sicuro.",pt:"Estou ancorado à Terra; aqui estou seguro.",ca:"Estic ancorat a la Terra; aquí estic segur."}}
+};
+function cName(c){ const m=CL[c.id]; if(m&&m.name[lang]) return m.name[lang]; return c[lang]||c.en; }
+function cEl(c){ const m=CL[c.id]; if(m&&m.el[lang]) return m.el[lang]; return lang==="ro"?c.elRo:c.elEn; }
+function cAff(c){ const m=CL[c.id]; if(m&&m.aff[lang]) return m.aff[lang]; return lang==="ro"?c.affRo:c.affEn; }
 const IDX_HEART = 4;
 let current = IDX_HEART;
 
@@ -351,6 +436,16 @@ const T = {
     bOff:"F\u0103r\u0103", bCoh:"Coerent\u0103 5\u00b75", bBox:"P\u0103trat 4\u00b74\u00b74\u00b74", bCalm:"Calmant\u0103 4\u00b77\u00b78",
     delta:"Delta \u00b7 2 Hz (somn profund)", theta:"Theta \u00b7 6 Hz (meditatie)", alpha:"Alpha \u00b7 10 Hz (relaxare)",
     shortcuts:"Scurt\u0103turi", close:"\u00cenchide",
+    scPlay:"porne\u0219te / opre\u0219te tonul", scGong:"gong", scChakra:"schimb\u0103 chakra", scBreath:"respira\u021bie", scLang:"limb\u0103", langLabel:"Limb\u0103",
+    zenIn:"Mod concentrare", zenOut:"Ie\u0219i din concentrare",
+    breathGuide:"Ghid de respira\u021bie",
+    tryThis:"\u00cencearc\u0103",
+    bCustom:"Personalizat", cue:"Semnale sonore", cueS:"Ton discret la fiecare schimbare de faz\u0103",
+    tutIntro:"Urm\u0103re\u0219te inelul din jurul mandalei: se l\u0103rge\u0219te c\u00e2nd inspiri, r\u0103m\u00e2ne plin c\u00e2t \u021bii aerul \u0219i se str\u00e2nge c\u00e2nd expiri. Cuv\u00e2ntul \u0219i num\u0103r\u0103toarea \u00ee\u021bi spun ce s\u0103 faci. Respir\u0103 bl\u00e2nd pe nas, \u00een abdomen \u2014 niciodat\u0103 for\u021bat.",
+    tutCoh:"Echilibreaz\u0103 sistemul nervos \u2014 aproximativ \u0219ase respira\u021bii lente pe minut. Bun\u0103 pentru a te calma oric\u00e2nd.",
+    tutBox:"Timpi egali, cu re\u021bineri. Calmeaz\u0103 mintea \u0219i ascute concentrarea; folosit\u0103 de sportivi \u0219i sub presiune.",
+    tutCalm:"Un expir lung dup\u0103 aerul \u021binut. Apropie corpul de odihn\u0103 \u0219i somn.",
+    tutTip:"Dac\u0103 sim\u021bi ame\u021beal\u0103 sau lips\u0103 de aer, revino la respira\u021bia normal\u0103. Este o practic\u0103 de relaxare, nu sfat medical.",
     aboutP1:"Aurora este un sanctuar sonor: alege o chakr\u0103, las\u0103 tonul s\u0103 te \u00eenconjoare \u0219i, dac\u0103 vrei, urmeaz\u0103 ghidul de respira\u021bie sau o c\u0103l\u0103torie automat\u0103 prin toate centrele energetice.",
     aboutP2:"Totul \u2014 tonurile, gongul, b\u0103t\u0103ile binaurale \u2014 este generat live cu Web Audio API. Nu exist\u0103 fi\u0219iere audio, conturi sau telemetrie: o singur\u0103 pagin\u0103 HTML care func\u021bioneaz\u0103 complet offline.",
     aboutNote:"Instrument contemplativ inspirat de practica sunetelor vindec\u0103toare (ex. Centrul AmaneSer, amaneser.ro). Frecven\u021bele \u0219i chakrele apar\u021bin unor tradi\u021bii spirituale, nu medicinei \u2014 pentru relaxare \u0219i medita\u021bie, nu ca tratament."
@@ -368,21 +463,177 @@ const T = {
     bOff:"Off", bCoh:"Coherent 5\u00b75", bBox:"Box 4\u00b74\u00b74\u00b74", bCalm:"Calming 4\u00b77\u00b78",
     delta:"Delta \u00b7 2 Hz (deep sleep)", theta:"Theta \u00b7 6 Hz (meditation)", alpha:"Alpha \u00b7 10 Hz (relaxation)",
     shortcuts:"Shortcuts", close:"Close",
+    scPlay:"play / pause tone", scGong:"gong", scChakra:"change chakra", scBreath:"breathing", scLang:"language", langLabel:"Language",
+    zenIn:"Focus mode", zenOut:"Exit focus mode",
+    breathGuide:"Breathing guide",
+    tryThis:"Try this",
+    bCustom:"Custom", cue:"Phase cues", cueS:"Soft tone at each phase change",
+    tutIntro:"Follow the ring around the mandala: it widens as you breathe in, stays full while you hold, and narrows as you breathe out. The word and the countdown tell you what to do. Breathe gently through the nose, down into the belly \u2014 never force it.",
+    tutCoh:"Balances the nervous system \u2014 about six slow breaths a minute. Good for steadying yourself any time.",
+    tutBox:"Equal counts with holds. Calms the mind and sharpens focus; used by athletes and under pressure.",
+    tutCalm:"A long exhale after a held breath. Eases the body toward rest and sleep.",
+    tutTip:"If you feel dizzy or short of breath, return to normal breathing. This is a relaxation practice, not medical advice.",
     aboutP1:"Aurora is a sound sanctuary: choose a chakra, let its tone surround you and, if you like, follow the breathing pacer or an automatic journey through every energy centre.",
     aboutP2:"Everything \u2014 the tones, the gong, the binaural beats \u2014 is generated live with the Web Audio API. There are no audio files, accounts or telemetry: a single HTML page that runs completely offline.",
     aboutNote:"A contemplative tool inspired by sound-healing practice (e.g. Centrul AmaneSer, amaneser.ro). The frequencies and chakras belong to spiritual traditions, not medicine \u2014 for relaxation and meditation, not as treatment."
+  },
+  es:{
+    titleDoc:"Aurora · Sonidos sanadores y meditación de chakras",
+    tag:"Sonidos sanadores y meditación de chakras — sintetizados en tiempo real, totalmente sin conexión.",
+    about:"Acerca de", tone:"Tono", freq:"Frecuencia", element:"Elemento", mantra:"Mantra", petals:"Pétalos",
+    play:"Reproducir tono", pause:"Pausar tono", gong:"Gong",
+    binaural:"Sonidos binaurales", binauralS:"Usa auriculares", beat:"Pulso", volume:"Volumen",
+    session:"Sesión", duration:"Duración", journey:"Viaje por los chakras", journeyS:"Equilibrado automático",
+    trans:"Incluir transpersonales", transS:"9 chakras en vez de 7", breathL:"Respiración",
+    start:"Iniciar sesión", stop:"Detener sesión", remaining:"restante", elapsed:"transcurrido",
+    inhale:"Inhala", hold:"Retén", exhale:"Exhala",
+    bOff:"Desactivada", bCoh:"Coherente 5·5", bBox:"Cuadrada 4·4·4·4", bCalm:"Calmante 4·7·8",
+    delta:"Delta · 2 Hz (sueño profundo)", theta:"Theta · 6 Hz (meditación)", alpha:"Alfa · 10 Hz (relajación)",
+    shortcuts:"Atajos", close:"Cerrar",
+    scPlay:"reproducir / pausar tono", scGong:"gong", scChakra:"cambiar de chakra", scBreath:"respiración", scLang:"idioma", langLabel:"Idioma",
+    zenIn:"Modo enfoque", zenOut:"Salir del modo enfoque",
+    breathGuide:"Guía de respiración",
+    tryThis:"Probar",
+    bCustom:"Personalizado", cue:"Señales de fase", cueS:"Tono suave en cada cambio de fase",
+    tutIntro:"Sigue el anillo alrededor del mandala: se ensancha al inspirar, permanece lleno mientras retienes y se estrecha al espirar. La palabra y la cuenta atrás te indican qué hacer. Respira suavemente por la nariz, hacia el vientre — nunca lo fuerces.",
+    tutCoh:"Equilibra el sistema nervioso — unas seis respiraciones lentas por minuto. Buena para serenarte en cualquier momento.",
+    tutBox:"Tiempos iguales con retenciones. Calma la mente y agudiza la concentración; la usan atletas y bajo presión.",
+    tutCalm:"Una espiración larga tras retener el aire. Acerca el cuerpo al descanso y al sueño.",
+    tutTip:"Si sientes mareo o falta de aire, vuelve a la respiración normal. Es una práctica de relajación, no un consejo médico.",
+    aboutP1:"Aurora es un santuario sonoro: elige un chakra, deja que su tono te envuelva y, si quieres, sigue la guía de respiración o un viaje automático por todos los centros energéticos.",
+    aboutP2:"Todo —los tonos, el gong, los sonidos binaurales— se genera en directo con la Web Audio API. No hay archivos de audio, cuentas ni telemetría: una sola página HTML que funciona totalmente sin conexión.",
+    aboutNote:"Herramienta contemplativa inspirada en la práctica de los sonidos sanadores (p. ej. Centrul AmaneSer, amaneser.ro). Las frecuencias y los chakras pertenecen a tradiciones espirituales, no a la medicina — para relajación y meditación, no como tratamiento."
+  },
+  fr:{
+    titleDoc:"Aurora · Sons de guérison et méditation des chakras",
+    tag:"Sons de guérison et méditation des chakras — synthétisés en temps réel, entièrement hors ligne.",
+    about:"À propos", tone:"Tonalité", freq:"Fréquence", element:"Élément", mantra:"Mantra", petals:"Pétales",
+    play:"Jouer le son", pause:"Mettre en pause", gong:"Gong",
+    binaural:"Sons binauraux", binauralS:"Utilisez un casque", beat:"Battement", volume:"Volume",
+    session:"Séance", duration:"Durée", journey:"Voyage des chakras", journeyS:"Équilibrage automatique",
+    trans:"Inclure les transpersonnels", transS:"9 chakras au lieu de 7", breathL:"Respiration",
+    start:"Démarrer la séance", stop:"Arrêter la séance", remaining:"restant", elapsed:"écoulé",
+    inhale:"Inspirez", hold:"Retenez", exhale:"Expirez",
+    bOff:"Désactivée", bCoh:"Cohérente 5·5", bBox:"Carrée 4·4·4·4", bCalm:"Apaisante 4·7·8",
+    delta:"Delta · 2 Hz (sommeil profond)", theta:"Thêta · 6 Hz (méditation)", alpha:"Alpha · 10 Hz (relaxation)",
+    shortcuts:"Raccourcis", close:"Fermer",
+    scPlay:"jouer / mettre en pause", scGong:"gong", scChakra:"changer de chakra", scBreath:"respiration", scLang:"langue", langLabel:"Langue",
+    zenIn:"Mode focus", zenOut:"Quitter le mode focus",
+    breathGuide:"Guide de respiration",
+    tryThis:"Essayer",
+    bCustom:"Personnalisé", cue:"Repères sonores", cueS:"Son doux à chaque changement de phase",
+    tutIntro:"Suivez l'anneau autour du mandala : il s'élargit quand vous inspirez, reste plein pendant la rétention et se rétrécit quand vous expirez. Le mot et le compte à rebours vous indiquent quoi faire. Respirez doucement par le nez, vers le ventre — sans jamais forcer.",
+    tutCoh:"Équilibre le système nerveux — environ six respirations lentes par minute. Idéale pour se recentrer à tout moment.",
+    tutBox:"Temps égaux avec rétentions. Apaise l'esprit et aiguise la concentration ; utilisée par les athlètes et sous pression.",
+    tutCalm:"Une longue expiration après une rétention. Achemine le corps vers le repos et le sommeil.",
+    tutTip:"En cas de vertige ou d'essoufflement, revenez à une respiration normale. C'est une pratique de détente, pas un avis médical.",
+    aboutP1:"Aurora est un sanctuaire sonore : choisissez un chakra, laissez son timbre vous envelopper et, si vous le souhaitez, suivez le guide de respiration ou un voyage automatique à travers tous les centres énergétiques.",
+    aboutP2:"Tout — les sons, le gong, les battements binauraux — est généré en direct avec la Web Audio API. Aucun fichier audio, aucun compte, aucune télémétrie : une seule page HTML qui fonctionne entièrement hors ligne.",
+    aboutNote:"Outil contemplatif inspiré de la pratique des sons de guérison (p. ex. Centrul AmaneSer, amaneser.ro). Les fréquences et les chakras relèvent de traditions spirituelles, pas de la médecine — pour la détente et la méditation, non comme traitement."
+  },
+  it:{
+    titleDoc:"Aurora · Suoni curativi e meditazione sui chakra",
+    tag:"Suoni curativi e meditazione sui chakra — sintetizzati in tempo reale, completamente offline.",
+    about:"Informazioni", tone:"Tono", freq:"Frequenza", element:"Elemento", mantra:"Mantra", petals:"Petali",
+    play:"Riproduci il tono", pause:"Metti in pausa", gong:"Gong",
+    binaural:"Battiti binaurali", binauralS:"Usa le cuffie", beat:"Battito", volume:"Volume",
+    session:"Sessione", duration:"Durata", journey:"Viaggio nei chakra", journeyS:"Riequilibrio automatico",
+    trans:"Includi i transpersonali", transS:"9 chakra invece di 7", breathL:"Respirazione",
+    start:"Avvia la sessione", stop:"Ferma la sessione", remaining:"rimanente", elapsed:"trascorso",
+    inhale:"Inspira", hold:"Trattieni", exhale:"Espira",
+    bOff:"Disattivata", bCoh:"Coerente 5·5", bBox:"Quadrata 4·4·4·4", bCalm:"Calmante 4·7·8",
+    delta:"Delta · 2 Hz (sonno profondo)", theta:"Theta · 6 Hz (meditazione)", alpha:"Alfa · 10 Hz (rilassamento)",
+    shortcuts:"Scorciatoie", close:"Chiudi",
+    scPlay:"riproduci / metti in pausa", scGong:"gong", scChakra:"cambia chakra", scBreath:"respirazione", scLang:"lingua", langLabel:"Lingua",
+    zenIn:"Modalità focus", zenOut:"Esci dalla modalità focus",
+    breathGuide:"Guida alla respirazione",
+    tryThis:"Prova",
+    bCustom:"Personalizzato", cue:"Segnali di fase", cueS:"Tono lieve a ogni cambio di fase",
+    tutIntro:"Segui l'anello attorno al mandala: si allarga mentre inspiri, resta pieno mentre trattieni e si restringe mentre espiri. La parola e il conto alla rovescia ti dicono cosa fare. Respira dolcemente dal naso, verso la pancia — senza mai forzare.",
+    tutCoh:"Riequilibra il sistema nervoso — circa sei respiri lenti al minuto. Utile per ritrovare la calma in qualsiasi momento.",
+    tutBox:"Tempi uguali con ritenzioni. Calma la mente e affina la concentrazione; usata dagli atleti e sotto pressione.",
+    tutCalm:"Una lunga espirazione dopo una ritenzione. Accompagna il corpo verso il riposo e il sonno.",
+    tutTip:"Se senti capogiri o fiato corto, torna alla respirazione normale. È una pratica di rilassamento, non un consiglio medico.",
+    aboutP1:"Aurora è un santuario sonoro: scegli un chakra, lascia che il suo tono ti avvolga e, se vuoi, segui la guida del respiro o un viaggio automatico attraverso tutti i centri energetici.",
+    aboutP2:"Tutto — i toni, il gong, i battiti binaurali — è generato dal vivo con la Web Audio API. Nessun file audio, account o telemetria: una singola pagina HTML che funziona completamente offline.",
+    aboutNote:"Strumento contemplativo ispirato alla pratica dei suoni curativi (es. Centrul AmaneSer, amaneser.ro). Le frequenze e i chakra appartengono a tradizioni spirituali, non alla medicina — per il rilassamento e la meditazione, non come trattamento."
+  },
+  pt:{
+    titleDoc:"Aurora · Sons de cura e meditação dos chakras",
+    tag:"Sons de cura e meditação dos chakras — sintetizados em tempo real, totalmente offline.",
+    about:"Sobre", tone:"Tom", freq:"Frequência", element:"Elemento", mantra:"Mantra", petals:"Pétalas",
+    play:"Reproduzir o tom", pause:"Pausar o tom", gong:"Gongo",
+    binaural:"Batidas binaurais", binauralS:"Use fones de ouvido", beat:"Batida", volume:"Volume",
+    session:"Sessão", duration:"Duração", journey:"Viagem pelos chakras", journeyS:"Equilíbrio automático",
+    trans:"Incluir transpessoais", transS:"9 chakras em vez de 7", breathL:"Respiração",
+    start:"Iniciar sessão", stop:"Parar sessão", remaining:"restante", elapsed:"decorrido",
+    inhale:"Inspire", hold:"Segure", exhale:"Expire",
+    bOff:"Desativada", bCoh:"Coerente 5·5", bBox:"Quadrada 4·4·4·4", bCalm:"Calmante 4·7·8",
+    delta:"Delta · 2 Hz (sono profundo)", theta:"Theta · 6 Hz (meditação)", alpha:"Alfa · 10 Hz (relaxamento)",
+    shortcuts:"Atalhos", close:"Fechar",
+    scPlay:"reproduzir / pausar tom", scGong:"gongo", scChakra:"mudar de chakra", scBreath:"respiração", scLang:"idioma", langLabel:"Idioma",
+    zenIn:"Modo de foco", zenOut:"Sair do modo de foco",
+    breathGuide:"Guia de respiração",
+    tryThis:"Experimentar",
+    bCustom:"Personalizado", cue:"Sinais de fase", cueS:"Tom suave a cada mudança de fase",
+    tutIntro:"Siga o anel à volta da mandala: alarga-se quando inspira, mantém-se cheio enquanto retém e estreita-se quando expira. A palavra e a contagem decrescente dizem-lhe o que fazer. Respire suavemente pelo nariz, em direção à barriga — sem nunca forçar.",
+    tutCoh:"Equilibra o sistema nervoso — cerca de seis respirações lentas por minuto. Boa para se acalmar a qualquer momento.",
+    tutBox:"Tempos iguais com retenções. Acalma a mente e afia a concentração; usada por atletas e sob pressão.",
+    tutCalm:"Uma expiração longa após reter o ar. Aproxima o corpo do descanso e do sono.",
+    tutTip:"Se sentir tonturas ou falta de ar, volte à respiração normal. É uma prática de relaxamento, não um conselho médico.",
+    aboutP1:"Aurora é um santuário sonoro: escolha um chakra, deixe o seu tom envolvê-lo e, se quiser, siga o guia de respiração ou uma viagem automática por todos os centros de energia.",
+    aboutP2:"Tudo — os tons, o gongo, as batidas binaurais — é gerado ao vivo com a Web Audio API. Não há ficheiros de áudio, contas nem telemetria: uma única página HTML que funciona totalmente offline.",
+    aboutNote:"Ferramenta contemplativa inspirada na prática dos sons de cura (ex.: Centrul AmaneSer, amaneser.ro). As frequências e os chakras pertencem a tradições espirituais, não à medicina — para relaxamento e meditação, não como tratamento."
+  },
+  ca:{
+    titleDoc:"Aurora · Sons curatius i meditació dels chakres",
+    tag:"Sons curatius i meditació dels chakres — sintetitzats en temps real, totalment fora de línia.",
+    about:"Quant a", tone:"To", freq:"Freqüència", element:"Element", mantra:"Mantra", petals:"Pètals",
+    play:"Reprodueix el to", pause:"Pausa el to", gong:"Gong",
+    binaural:"Batecs binaurals", binauralS:"Fes servir auriculars", beat:"Batec", volume:"Volum",
+    session:"Sessió", duration:"Durada", journey:"Viatge pels chakres", journeyS:"Equilibri automàtic",
+    trans:"Inclou els transpersonals", transS:"9 chakres en lloc de 7", breathL:"Respiració",
+    start:"Inicia la sessió", stop:"Atura la sessió", remaining:"restant", elapsed:"transcorregut",
+    inhale:"Inspira", hold:"Retén", exhale:"Expira",
+    bOff:"Desactivada", bCoh:"Coherent 5·5", bBox:"Quadrada 4·4·4·4", bCalm:"Calmant 4·7·8",
+    delta:"Delta · 2 Hz (son profund)", theta:"Theta · 6 Hz (meditació)", alpha:"Alfa · 10 Hz (relaxació)",
+    shortcuts:"Dreceres", close:"Tanca",
+    scPlay:"reprodueix / pausa el to", scGong:"gong", scChakra:"canvia de chakra", scBreath:"respiració", scLang:"idioma", langLabel:"Idioma",
+    zenIn:"Mode concentració", zenOut:"Surt del mode concentració",
+    breathGuide:"Guia de respiració",
+    tryThis:"Prova-ho",
+    bCustom:"Personalitzat", cue:"Senyals de fase", cueS:"To suau a cada canvi de fase",
+    tutIntro:"Segueix l'anell al voltant de la mandala: s'eixampla quan inspires, es manté ple mentre retens i s'estreny quan expires. La paraula i el compte enrere et diuen què fer. Respira suaument pel nas, cap al ventre — sense forçar mai.",
+    tutCoh:"Equilibra el sistema nerviós — unes sis respiracions lentes per minut. Bona per asserenar-te en qualsevol moment.",
+    tutBox:"Temps iguals amb retencions. Calma la ment i afina la concentració; la fan servir atletes i sota pressió.",
+    tutCalm:"Una expiració llarga després de retenir l'aire. Acosta el cos al descans i a la son.",
+    tutTip:"Si sents mareig o falta d'aire, torna a la respiració normal. És una pràctica de relaxació, no un consell mèdic.",
+    aboutP1:"Aurora és un santuari sonor: tria un chakra, deixa que el seu to t'envolti i, si vols, segueix la guia de respiració o un viatge automàtic per tots els centres energètics.",
+    aboutP2:"Tot —els tons, el gong, els batecs binaurals— es genera en directe amb la Web Audio API. No hi ha fitxers d'àudio, comptes ni telemetria: una sola pàgina HTML que funciona totalment fora de línia.",
+    aboutNote:"Eina contemplativa inspirada en la pràctica dels sons curatius (p. ex. Centrul AmaneSer, amaneser.ro). Les freqüències i els chakres pertanyen a tradicions espirituals, no a la medicina — per a la relaxació i la meditació, no com a tractament."
   }
 };
+const LANGS=[
+  {code:"en",name:"English"},
+  {code:"ro",name:"Română"},
+  {code:"es",name:"Español"},
+  {code:"fr",name:"Français"},
+  {code:"it",name:"Italiano"},
+  {code:"pt",name:"Português"},
+  {code:"ca",name:"Català"}
+];
+function isLang(c){ return LANGS.some(l=>l.code===c); }
 function loadPref(k){ try{ return localStorage.getItem("aurora."+k); }catch(e){ return null; } }
 function savePref(k,v){ try{ localStorage.setItem("aurora."+k,v); }catch(e){} }
 function detectLang(){
-  const l=(navigator.languages&&navigator.languages[0])||navigator.language||"en";
-  return /^ro\b/i.test(l)?"ro":"en";   // Romanian browser -> RO, otherwise default English
+  const list=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||"en"];
+  for(const raw of list){ const c=(raw||"").slice(0,2).toLowerCase(); if(isLang(c)) return c; }
+  return "en";   // no supported language among browser preferences -> English
 }
-let lang = (function(){ const s=loadPref("lang"); return (s==="ro"||s==="en")?s:detectLang(); })();
+let lang = (function(){ const s=loadPref("lang"); return isLang(s)?s:detectLang(); })();
 
 /* ---------- Audio engine ---------- */
-let actx=null, master=null, dryG=null, wetG=null, reverb=null, sumG=null, limiter=null, analyser=null, aData=null;
+let actx=null, master=null, dryG=null, wetG=null, reverb=null, sumG=null, limiter=null, binBus=null, analyser=null, aData=null;
 let isPlaying=false, toneVoice=null, binVoice=null;
 let volume=0.5, binauralOn=false, beatHz=6;
 
@@ -397,24 +648,31 @@ function noiseBuffer(sec){
   for(let i=0;i<len;i++) d[i]=Math.random()*2-1;
   return b;
 }
+let audioBlocked=false;
 function ensureAudio(){
-  if(actx) return;
-  const AC=window.AudioContext||window.webkitAudioContext;
-  actx=new AC();
-  master=actx.createGain(); master.gain.value=volume;
-  dryG=actx.createGain(); dryG.gain.value=0.82;
-  wetG=actx.createGain(); wetG.gain.value=0.38;
-  reverb=actx.createConvolver(); reverb.buffer=makeImpulse(3.4,2.6);
-  sumG=actx.createGain(); sumG.gain.value=0.9;
-  limiter=actx.createDynamicsCompressor();
-  limiter.threshold.value=-2; limiter.knee.value=0; limiter.ratio.value=15; limiter.attack.value=0.004; limiter.release.value=0.22;
-  analyser=actx.createAnalyser(); analyser.fftSize=256; aData=new Uint8Array(analyser.frequencyBinCount);
-  master.connect(dryG); dryG.connect(sumG);
-  master.connect(reverb); reverb.connect(wetG); wetG.connect(sumG);
-  sumG.connect(limiter); limiter.connect(actx.destination);
-  master.connect(analyser);
+  if(actx) return true;
+  if(audioBlocked) return false;
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) throw new Error("Web Audio unavailable");
+    actx=new AC();
+    master=actx.createGain(); master.gain.value=volume;
+    dryG=actx.createGain(); dryG.gain.value=0.82;
+    wetG=actx.createGain(); wetG.gain.value=0.38;
+    reverb=actx.createConvolver(); reverb.buffer=makeImpulse(3.4,2.6);
+    sumG=actx.createGain(); sumG.gain.value=0.9;
+    limiter=actx.createDynamicsCompressor();
+    limiter.threshold.value=-2; limiter.knee.value=0; limiter.ratio.value=15; limiter.attack.value=0.004; limiter.release.value=0.22;
+    analyser=actx.createAnalyser(); analyser.fftSize=256; aData=new Uint8Array(analyser.frequencyBinCount);
+    master.connect(dryG); dryG.connect(sumG);
+    master.connect(reverb); reverb.connect(wetG); wetG.connect(sumG);
+    sumG.connect(limiter); limiter.connect(actx.destination);
+    binBus=actx.createGain(); binBus.gain.value=volume; binBus.connect(sumG); // binaural stays dry (no reverb smearing the L/R beat)
+    master.connect(analyser);
+    return true;
+  }catch(e){ audioBlocked=true; actx=null; return false; }
 }
-function resume(){ if(actx && actx.state==="suspended") actx.resume(); }
+function resume(){ if(actx && actx.state==="suspended"){ try{ actx.resume(); }catch(e){} } }
 
 function startToneVoice(freq){
   const t=actx.currentTime;
@@ -448,8 +706,8 @@ function startBinaural(freq){
   lo.type="sine"; ro.type="sine"; lo.frequency.value=freq; ro.frequency.value=freq+beatHz;
   const lg=actx.createGain(), rg=actx.createGain(); lg.gain.value=0.0001; rg.gain.value=0.0001;
   const lp=actx.createStereoPanner(), rp=actx.createStereoPanner(); lp.pan.value=-1; rp.pan.value=1;
-  lo.connect(lg); lg.connect(lp); lp.connect(master);
-  ro.connect(rg); rg.connect(rp); rp.connect(master);
+  lo.connect(lg); lg.connect(lp); lp.connect(binBus);
+  ro.connect(rg); rg.connect(rp); rp.connect(binBus);
   lg.gain.linearRampToValueAtTime(0.18,t+1.4); rg.gain.linearRampToValueAtTime(0.18,t+1.4);
   lo.start(t); ro.start(t);
   binVoice={nodes:[lo,ro],gains:[lg,rg]};
@@ -461,7 +719,7 @@ function stopBinaural(){
   v.nodes.forEach(n=>{try{n.stop(t+1);}catch(e){}});
 }
 function strikeGong(){
-  ensureAudio(); resume();
+  if(!ensureAudio()) return; resume();
   const t=actx.currentTime;
   const out=actx.createGain(); out.gain.value=0.8; out.connect(master);
   const base=104+Math.random()*16;
@@ -478,11 +736,24 @@ function strikeGong(){
   const ng=actx.createGain(); ng.gain.setValueAtTime(0.28,t); ng.gain.exponentialRampToValueAtTime(0.0001,t+0.6);
   nb.connect(nf); nf.connect(ng); ng.connect(out); nb.start(t); nb.stop(t+0.7);
 }
-function setVolume(v){ volume=v; if(master){ master.gain.setTargetAtTime(v,actx.currentTime,0.05); } }
+function setVolume(v){ volume=v; if(master){ master.gain.setTargetAtTime(v,actx.currentTime,0.05); if(binBus) binBus.gain.setTargetAtTime(v,actx.currentTime,0.05); } }
+function playCue(ph){
+  if(!actx) return;
+  const t=actx.currentTime;
+  const freq = ph===0?528 : ph===2?396 : 466;   // inhale higher, exhale lower, hold mid
+  const o=actx.createOscillator(); o.type="sine"; o.frequency.value=freq;
+  const o2=actx.createOscillator(); o2.type="sine"; o2.frequency.value=freq*2;
+  const o2g=actx.createGain(); o2g.gain.value=0.25;
+  const g=actx.createGain(); g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(0.09,t+0.04);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+0.55);
+  o.connect(g); o2.connect(o2g); o2g.connect(g); g.connect(master);
+  o.start(t); o2.start(t); o.stop(t+0.6); o2.stop(t+0.6);
+}
 
 /* play / pause / switch */
 function playTone(){
-  ensureAudio(); resume();
+  if(!ensureAudio()) return; resume();
   isPlaying=true;
   startToneVoice(CHAKRAS[current].freq);
   if(binauralOn) startBinaural(CHAKRAS[current].freq);
@@ -495,12 +766,13 @@ function pauseTone(){
 }
 function applyChakra(i,fromUser){
   current=((i%CHAKRAS.length)+CHAKRAS.length)%CHAKRAS.length;
+  if(fromUser) savePref("chakra",String(current));
   const c=CHAKRAS[current];
   document.documentElement.style.setProperty("--accent",c.col);
   document.documentElement.style.setProperty("--accent-soft",hexA(c.col,0.16));
   document.documentElement.style.setProperty("--accent-glow",hexA(c.col,0.42));
   refreshInfo(); refreshColumn();
-  const mEl=document.getElementById("mandala"); if(mEl) mEl.setAttribute("aria-label", c[lang]+" \u00b7 "+c.sk+" \u00b7 "+c.freq+" Hz");
+  const mEl=document.getElementById("mandala"); if(mEl) mEl.setAttribute("aria-label", cName(c)+" \u00b7 "+c.sk+" \u00b7 "+c.freq+" Hz");
   const act=document.querySelector('.ckbtn[data-i="'+current+'"]');
   if(act&&act.scrollIntoView){ try{ act.scrollIntoView({block:"nearest",inline:"center",behavior:reduce?"auto":"smooth"}); }catch(e){} }
   if(isPlaying){ stopToneVoice(); startToneVoice(c.freq); stopBinaural(); if(binauralOn) startBinaural(c.freq); }
@@ -518,6 +790,7 @@ function buildOrder(){
 function startSession(){
   ensureAudio(); resume();
   session.active=true; session.start=performance.now(); session.total=durMin*60000;
+  acquireWake();
   strikeGong();
   if(journeyOn){
     session.order=buildOrder(); session.seg=0; session.segMs=session.total/session.order.length;
@@ -529,6 +802,7 @@ function startSession(){
 }
 function endSession(){
   session.active=false;
+  releaseWake();
   strikeGong();
   pauseTone();
   document.getElementById("prog").classList.remove("on");
@@ -551,14 +825,16 @@ function tickSession(now){
 function fmt(ms){const s=Math.floor(ms/1000);const m=Math.floor(s/60);return m+":"+String(s%60).padStart(2,"0");}
 
 /* ---------- Breathing pacer ---------- */
-const PATTERNS={off:null, coherent:[5,0,5,0], box:[4,4,4,4], calm:[4,7,8,0]};
-let breathKey="off", breath={phase:0,start:0,scale:1};
+let customPat=[4,2,6,0];
+const PATTERNS={off:null, coherent:[5,0,5,0], box:[4,4,4,4], calm:[4,7,8,0], custom:customPat};
+let breathKey="off", breath={phase:0,start:0,scale:1,lastTxt:"",cuedPhase:-1};
+let breathCues=false;
 const PHASE_KEY=["inhale","hold","exhale","hold"];
-function setBreath(k){ breathKey=k; breath.phase=0; breath.start=performance.now(); }
+function setBreath(k){ breathKey=k; breath.phase=0; breath.start=performance.now(); breath.cuedPhase=-1; savePref("breath",k); const cs=document.getElementById("customSub"); if(cs) cs.classList.toggle("on",k==="custom"); }
 function tickBreath(now){
   const pat=PATTERNS[breathKey];
   const el=document.getElementById("breath");
-  if(!pat){ el.classList.remove("on"); el.innerHTML=""; breath.scale=1; return; }
+  if(!pat){ el.classList.remove("on"); el.innerHTML=""; breath.lastTxt=""; breath.scale=1; return; }
   el.classList.add("on");
   let guard=0;
   while(pat[breath.phase]===0 && guard<4){ breath.phase=(breath.phase+1)%4; breath.start=now; guard++; }
@@ -573,8 +849,10 @@ function tickBreath(now){
   else if(ph===1) breath.scale=1.20;           // hold (full)
   else if(ph===2) breath.scale=1.20-0.20*ease; // exhale
   else breath.scale=1.0;                        // hold (empty)
+  if(breathCues && actx && ph!==breath.cuedPhase){ breath.cuedPhase=ph; playCue(ph); }
   const remain=Math.max(0,Math.ceil(d-t));
-  el.innerHTML=T[lang][PHASE_KEY[ph]]+"<small>"+remain+"</small>";
+  const txt=PHASE_KEY[ph]+"|"+remain+"|"+lang;
+  if(txt!==breath.lastTxt){ breath.lastTxt=txt; el.innerHTML=T[lang][PHASE_KEY[ph]]+"<small>"+remain+"</small>"; }
 }
 
 /* ---------- Visualisation ---------- */
@@ -592,8 +870,10 @@ function sizeAll(){
   mc.width=MW*DPR; mc.height=MH*DPR; mx.setTransform(DPR,0,0,DPR,0,0);
   stars=[]; const n=reduce?70:120;
   for(let i=0;i<n;i++) stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+0.3,a:Math.random()*0.5+0.15,ph:Math.random()*6.28,sp:0.4+Math.random()*0.8});
+  drawBG(performance.now());
 }
-function hexRGB(hex){const h=hex.replace("#","");return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+const _rgb={};
+function hexRGB(hex){ let v=_rgb[hex]; if(v) return v; const h=hex.replace("#",""); v=[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; _rgb[hex]=v; return v; }
 function hexA(hex,a){const c=hexRGB(hex);return "rgba("+c[0]+","+c[1]+","+c[2]+","+a+")";}
 
 function drawBG(ts){
@@ -709,10 +989,8 @@ function drawStar(cx0,R,points,col,rotation,alpha){
 let last=performance.now();
 function loop(ts){
   const dt=Math.min(60,ts-last); last=ts;
-  tickBreath(ts);
-  tickSession(ts);
-  drawBG(ts);
-  drawMandala(ts,dt);
+  tickSession(ts);                 // keep timing accurate even when hidden
+  if(!document.hidden){ tickBreath(ts); if(!reduce) drawBG(ts); drawMandala(ts,dt); }
   requestAnimationFrame(loop);
 }
 
@@ -725,7 +1003,7 @@ function buildColumn(){
     b.className="ckbtn"; b.setAttribute("aria-pressed", i===current?"true":"false");
     b.dataset.i=i;
     b.innerHTML='<span class="dot" style="background:'+c.col+';color:'+c.col+'"></span>'+
-      '<span class="lab"><b>'+c[lang]+'</b><span>'+c.freq+' Hz</span></span>';
+      '<span class="lab"><b>'+cName(c)+'</b><span>'+c.freq+' Hz</span></span>';
     b.addEventListener("click",()=>{ applyChakra(i,true); });
     col.appendChild(b);
   });
@@ -734,20 +1012,20 @@ function refreshColumn(){
   document.querySelectorAll(".ckbtn").forEach(b=>{
     const i=+b.dataset.i;
     b.setAttribute("aria-pressed", i===current?"true":"false");
-    b.querySelector(".lab b").textContent=CHAKRAS[i][lang];
+    b.querySelector(".lab b").textContent=cName(CHAKRAS[i]);
   });
 }
 function refreshInfo(){
   const c=CHAKRAS[current];
-  document.getElementById("ckName").textContent=c[lang];
+  document.getElementById("ckName").textContent=cName(c);
   document.getElementById("ckSk").textContent=c.sk;
   document.getElementById("mFreq").textContent=c.freq+" Hz";
-  document.getElementById("mEl").textContent=lang==="ro"?c.elRo:c.elEn;
+  document.getElementById("mEl").textContent=cEl(c);
   document.getElementById("mBija").textContent=c.bija;
   document.getElementById("mPet").textContent=c.star?"\u2726":c.petals;
   const aff=document.getElementById("affirm");
-  aff.style.opacity=0;
-  setTimeout(()=>{ aff.textContent=lang==="ro"?c.affRo:c.affEn; aff.style.opacity=1; },180);
+  if(reduce){ aff.textContent=cAff(c); aff.style.opacity=1; }
+  else { aff.style.opacity=0; setTimeout(()=>{ aff.textContent=cAff(c); aff.style.opacity=1; },180); }
 }
 function refreshPlayBtn(){
   document.getElementById("playTxt").textContent=isPlaying?T[lang].pause:T[lang].play;
@@ -756,89 +1034,186 @@ function refreshPlayBtn(){
 function refreshSessBtn(){
   document.getElementById("sessTxt").textContent=session.active?T[lang].stop:T[lang].start;
 }
+function buildLangOptions(){
+  const sel=document.getElementById("langSel");
+  sel.innerHTML=LANGS.map(l=>'<option value="'+l.code+'" lang="'+l.code+'">'+l.name+'</option>').join("");
+  sel.value=lang;
+}
 function buildSelects(){
   const beat=document.getElementById("beatSel");
   beat.innerHTML='<option value="2">'+T[lang].delta+'</option><option value="6">'+T[lang].theta+'</option><option value="10">'+T[lang].alpha+'</option>';
   beat.value=String(beatHz);
   const br=document.getElementById("breathSel");
-  br.innerHTML='<option value="off">'+T[lang].bOff+'</option><option value="coherent">'+T[lang].bCoh+'</option><option value="box">'+T[lang].bBox+'</option><option value="calm">'+T[lang].bCalm+'</option>';
+  br.innerHTML='<option value="off">'+T[lang].bOff+'</option><option value="coherent">'+T[lang].bCoh+'</option><option value="box">'+T[lang].bBox+'</option><option value="calm">'+T[lang].bCalm+'</option><option value="custom">'+T[lang].bCustom+'</option>';
   br.value=breathKey;
 }
 function buildDur(){
   const wrap=document.getElementById("durChips"); wrap.innerHTML="";
   [5,10,15,20].forEach(m=>{
-    const b=document.createElement("button"); b.className="chip"; b.textContent=m+" "+(lang==="ro"?"min":"min");
+    const b=document.createElement("button"); b.className="chip"; b.textContent=m+" min";
     b.setAttribute("aria-pressed", m===durMin?"true":"false"); b.dataset.m=m;
-    b.addEventListener("click",()=>{ durMin=m; document.querySelectorAll("#durChips .chip").forEach(x=>x.setAttribute("aria-pressed", (+x.dataset.m)===durMin?"true":"false")); });
+    b.addEventListener("click",()=>{ durMin=m; savePref("dur",String(durMin)); document.querySelectorAll("#durChips .chip").forEach(x=>x.setAttribute("aria-pressed", (+x.dataset.m)===durMin?"true":"false")); });
     wrap.appendChild(b);
   });
 }
 function buildKeys(){
-  const rows=[["Space",lang==="ro"?"porne\u0219te / opre\u0219te tonul":"play / pause tone"],
-    ["G","gong"],["\u2191 \u2193",lang==="ro"?"schimb\u0103 chakra":"change chakra"],
-    ["B",lang==="ro"?"respira\u021bie":"breathing"],["L",lang==="ro"?"limb\u0103":"language"]];
+  const rows=[["Space",T[lang].scPlay],["G",T[lang].scGong],["\u2191 \u2193",T[lang].scChakra],["B",T[lang].scBreath],["L",T[lang].scLang]];
   const k=document.getElementById("keys"); k.innerHTML="";
   rows.forEach(r=>{ const a=document.createElement("kbd"); a.textContent=r[0]; const b=document.createElement("span"); b.textContent=r[1]; k.appendChild(a); k.appendChild(b); });
 }
+function buildCustom(){
+  const wrap=document.getElementById("customSub"); if(!wrap) return;
+  wrap.innerHTML="";
+  const labels=[T[lang].inhale,T[lang].hold,T[lang].exhale,T[lang].hold];
+  const grid=document.createElement("div"); grid.className="custom-grid";
+  labels.forEach((lab,i)=>{
+    const cell=document.createElement("div"); cell.className="custom-cell";
+    const l=document.createElement("label"); l.textContent=lab; l.setAttribute("for","cust"+i);
+    const inp=document.createElement("input"); inp.type="number"; inp.id="cust"+i;
+    inp.min=(i===0||i===2)?"1":"0"; inp.max="20"; inp.step="1"; inp.inputMode="numeric"; inp.value=customPat[i];
+    inp.addEventListener("change",()=>{
+      const lo=(i===0||i===2)?1:0;
+      let v=Math.round(+inp.value); if(isNaN(v)) v=lo; v=Math.max(lo,Math.min(20,v));
+      inp.value=v; customPat[i]=v; savePref("custom",customPat.join(","));
+      if(breathKey==="custom") setBreath("custom");
+    });
+    cell.appendChild(l); cell.appendChild(inp); grid.appendChild(cell);
+  });
+  wrap.appendChild(grid);
+}
+function buildTutorial(){
+  const list=document.getElementById("tutList"); if(!list) return; list.innerHTML="";
+  [["coherent","bCoh","tutCoh"],["box","bBox","tutBox"],["calm","bCalm","tutCalm"]].forEach(def=>{
+    const pat=PATTERNS[def[0]];
+    const item=document.createElement("div"); item.className="tut-item";
+    const h=document.createElement("h5"); h.textContent=T[lang][def[1]]; item.appendChild(h);
+    const ph=document.createElement("div"); ph.className="tut-phases";
+    for(let i=0;i<4;i++){ if(pat[i]>0){ const s=document.createElement("span"); s.className="tut-ph"; s.textContent=T[lang][PHASE_KEY[i]]+" "+pat[i]+"s"; ph.appendChild(s); } }
+    item.appendChild(ph);
+    const p=document.createElement("p"); p.textContent=T[lang][def[2]]; item.appendChild(p);
+    const btn=document.createElement("button"); btn.className="chip tut-try"; btn.textContent=T[lang].tryThis;
+    btn.addEventListener("click",()=>{ setBreath(def[0]); const sel=document.getElementById("breathSel"); if(sel) sel.value=def[0]; closeModal(tutScrim); });
+    item.appendChild(btn);
+    list.appendChild(item);
+  });
+}
 function setLang(l){
   lang=l; document.documentElement.lang=l; document.title=T[l].titleDoc; savePref("lang",l);
-  document.getElementById("langBtn").textContent=l==="ro"?"EN":"RO";
+  const sel=document.getElementById("langSel"); if(sel){ if(sel.value!==l) sel.value=l; sel.setAttribute("aria-label",T[l].langLabel); }
   document.querySelectorAll("[data-i18n]").forEach(el=>{ const k=el.getAttribute("data-i18n"); if(T[l][k]!=null) el.textContent=T[l][k]; });
-  buildSelects(); buildDur(); buildKeys();
+  buildSelects(); buildDur(); buildKeys(); buildTutorial(); buildCustom();
   refreshInfo(); refreshColumn(); refreshPlayBtn(); refreshSessBtn();
   const c=CHAKRAS[current], mEl=document.getElementById("mandala");
-  if(mEl) mEl.setAttribute("aria-label", c[l]+" \u00b7 "+c.sk+" \u00b7 "+c.freq+" Hz");
+  if(mEl) mEl.setAttribute("aria-label", cName(c)+" \u00b7 "+c.sk+" \u00b7 "+c.freq+" Hz");
+  const hb=document.getElementById("breathHelp"); if(hb) hb.setAttribute("aria-label",T[l].breathGuide);
+  refreshZenBtn();
 }
 
 /* events */
-document.getElementById("langBtn").addEventListener("click",()=>setLang(lang==="ro"?"en":"ro"));
+document.getElementById("langSel").addEventListener("change",e=>setLang(e.target.value));
 document.getElementById("playBtn").addEventListener("click",()=>{ isPlaying?pauseTone():playTone(); });
 document.getElementById("gongBtn").addEventListener("click",strikeGong);
 document.getElementById("sessBtn").addEventListener("click",()=>{ session.active?endSession():startSession(); });
 document.getElementById("binOn").addEventListener("change",e=>{
-  binauralOn=e.target.checked; document.getElementById("binSub").classList.toggle("on",binauralOn);
+  binauralOn=e.target.checked; document.getElementById("binSub").classList.toggle("on",binauralOn); savePref("bin",binauralOn?"1":"0");
   if(isPlaying){ if(binauralOn) startBinaural(CHAKRAS[current].freq); else stopBinaural(); }
 });
-document.getElementById("beatSel").addEventListener("change",e=>{ beatHz=+e.target.value; if(isPlaying&&binauralOn){stopBinaural();startBinaural(CHAKRAS[current].freq);} });
-document.getElementById("jOn").addEventListener("change",e=>{ journeyOn=e.target.checked; document.getElementById("jSub").classList.toggle("on",journeyOn); });
-document.getElementById("transOn").addEventListener("change",e=>{ includeTrans=e.target.checked; });
+document.getElementById("beatSel").addEventListener("change",e=>{ beatHz=+e.target.value; savePref("beat",String(beatHz)); if(isPlaying&&binauralOn){stopBinaural();startBinaural(CHAKRAS[current].freq);} });
+document.getElementById("jOn").addEventListener("change",e=>{ journeyOn=e.target.checked; document.getElementById("jSub").classList.toggle("on",journeyOn); savePref("journey",journeyOn?"1":"0"); });
+document.getElementById("transOn").addEventListener("change",e=>{ includeTrans=e.target.checked; savePref("trans",includeTrans?"1":"0"); });
 document.getElementById("breathSel").addEventListener("change",e=>setBreath(e.target.value));
+document.getElementById("cueOn").addEventListener("change",e=>{ breathCues=e.target.checked; savePref("cue",breathCues?"1":"0"); if(breathCues){ ensureAudio(); resume(); } });
 const vol=document.getElementById("vol");
 vol.addEventListener("input",e=>{ const v=+e.target.value/100; setVolume(v); e.target.style.setProperty("--p",e.target.value+"%"); savePref("vol",e.target.value); });
 (function(){ const s=loadPref("vol"); const val=(s!==null&&!isNaN(+s))?Math.max(0,Math.min(100,+s)):50; volume=val/100; vol.value=val; vol.style.setProperty("--p",val+"%"); })();
 
-const scrim=document.getElementById("scrim");
 let lastFocus=null;
-function openAbout(){ lastFocus=document.activeElement; scrim.classList.add("on"); document.getElementById("closeBtn").focus(); }
-function closeAbout(){ scrim.classList.remove("on"); if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
-document.getElementById("aboutBtn").addEventListener("click",openAbout);
-document.getElementById("closeBtn").addEventListener("click",closeAbout);
-scrim.addEventListener("click",e=>{ if(e.target===scrim) closeAbout(); });
-scrim.addEventListener("keydown",e=>{
-  if(e.key!=="Tab") return;
-  const f=scrim.querySelectorAll("button,a[href]"); if(!f.length) return;
-  const first=f[0], last=f[f.length-1];
-  if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
-  else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+function openModal(s){ lastFocus=document.activeElement; s.classList.add("on"); const f=s.querySelector("button,a[href]"); if(f) f.focus(); }
+function closeModal(s){ s.classList.remove("on"); if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+function openScrim(){ return document.querySelector(".scrim.on"); }
+document.querySelectorAll(".scrim").forEach(s=>{
+  s.addEventListener("click",e=>{ if(e.target===s) closeModal(s); });
+  s.addEventListener("keydown",e=>{
+    if(e.key!=="Tab") return;
+    const f=s.querySelectorAll("button,a[href]"); if(!f.length) return;
+    const first=f[0], last=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+  });
 });
+const tutScrim=document.getElementById("tutScrim");
+document.getElementById("aboutBtn").addEventListener("click",()=>openModal(document.getElementById("scrim")));
+document.getElementById("closeBtn").addEventListener("click",()=>closeModal(document.getElementById("scrim")));
+document.getElementById("breathHelp").addEventListener("click",()=>{ buildTutorial(); openModal(tutScrim); });
+document.getElementById("tutClose").addEventListener("click",()=>closeModal(tutScrim));
 
 document.addEventListener("keydown",e=>{
-  if(scrim.classList.contains("on")){ if(e.key==="Escape"){ e.preventDefault(); closeAbout(); } return; }
+  const op=openScrim();
+  if(op){ if(e.key==="Escape"){ e.preventDefault(); closeModal(op); } return; }
+  if(document.body.classList.contains("zen") && e.key==="Escape"){ e.preventDefault(); exitZen(); return; }
   if(e.target.tagName==="SELECT"||e.target.tagName==="INPUT") return;
   if(e.code==="Space"){ e.preventDefault(); isPlaying?pauseTone():playTone(); }
   else if(e.key==="g"||e.key==="G") strikeGong();
   else if(e.key==="ArrowUp"){ e.preventDefault(); applyChakra(current-1,true); }
   else if(e.key==="ArrowDown"){ e.preventDefault(); applyChakra(current+1,true); }
   else if(e.key==="b"||e.key==="B"){ const keys=Object.keys(PATTERNS); const ni=(keys.indexOf(breathKey)+1)%keys.length; setBreath(keys[ni]); document.getElementById("breathSel").value=keys[ni]; }
-  else if(e.key==="l"||e.key==="L") setLang(lang==="ro"?"en":"ro");
+  else if(e.key==="l"||e.key==="L"){ const i=LANGS.findIndex(x=>x.code===lang); setLang(LANGS[(i+1)%LANGS.length].code); }
 });
 
-window.addEventListener("resize",sizeAll);
+let rzT=null;
+window.addEventListener("resize",()=>{ if(rzT) clearTimeout(rzT); rzT=setTimeout(()=>{ rzT=null; sizeAll(); },150); });
+
+/* Focus / fullscreen mode */
+function fsEl(){ return document.fullscreenElement||document.webkitFullscreenElement||null; }
+function reqFs(){ const el=document.documentElement, r=el.requestFullscreen||el.webkitRequestFullscreen; if(r){ try{ const p=r.call(el); if(p&&p.catch) p.catch(()=>{}); }catch(e){} } }
+function exitFs(){ if(fsEl()){ const x=document.exitFullscreen||document.webkitExitFullscreen; if(x){ try{ x.call(document); }catch(e){} } } }
+function refreshZenBtn(){ const on=document.body.classList.contains("zen"); const b=document.getElementById("zenBtn"); if(b) b.setAttribute("aria-label", on?T[lang].zenOut:T[lang].zenIn); }
+function enterZen(){ document.body.classList.add("zen"); reqFs(); refreshZenBtn(); }
+function exitZen(){ document.body.classList.remove("zen"); exitFs(); refreshZenBtn(); }
+function toggleZen(){ document.body.classList.contains("zen")?exitZen():enterZen(); }
+document.getElementById("zenBtn").addEventListener("click",toggleZen);
+document.getElementById("zenExit").addEventListener("click",exitZen);
+function onFsChange(){ if(!fsEl()) document.body.classList.remove("zen"); refreshZenBtn(); }
+document.addEventListener("fullscreenchange",onFsChange);
+document.addEventListener("webkitfullscreenchange",onFsChange);
+
+/* Screen wake lock during sessions */
+let wakeLock=null;
+async function acquireWake(){ try{ if(("wakeLock" in navigator) && document.visibilityState==="visible" && !wakeLock){ wakeLock=await navigator.wakeLock.request("screen"); wakeLock.addEventListener("release",()=>{ wakeLock=null; }); } }catch(e){ wakeLock=null; } }
+function releaseWake(){ try{ const w=wakeLock; wakeLock=null; if(w) w.release(); }catch(e){} }
+
+/* Resume audio + re-acquire wake lock when returning to the page (mobile suspends both) */
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden) return;
+  if(actx && actx.state==="suspended" && (isPlaying||session.active)){ try{ actx.resume(); }catch(e){} }
+  if(session.active && !wakeLock) acquireWake();
+});
+
+/* Restore persisted state */
+function restoreState(){
+  let v;
+  v=loadPref("bin"); if(v!=null) binauralOn=(v==="1");
+  v=loadPref("beat"); if(v!=null&&!isNaN(+v)) beatHz=+v;
+  v=loadPref("breath"); if(v&&Object.prototype.hasOwnProperty.call(PATTERNS,v)) breathKey=v;
+  v=loadPref("journey"); if(v!=null) journeyOn=(v==="1");
+  v=loadPref("trans"); if(v!=null) includeTrans=(v==="1");
+  v=loadPref("dur"); if(v!=null&&[5,10,15,20].indexOf(+v)>=0) durMin=+v;
+  v=loadPref("custom"); if(v){ const a=v.split(",").map(x=>parseInt(x,10)); if(a.length===4&&a.every(n=>!isNaN(n))){ for(let i=0;i<4;i++){ const lo=(i===0||i===2)?1:0; customPat[i]=Math.max(lo,Math.min(20,a[i])); } } }
+  v=loadPref("cue"); if(v!=null) breathCues=(v==="1");
+  v=loadPref("chakra"); if(v!=null&&!isNaN(+v)) current=(((+v)%CHAKRAS.length)+CHAKRAS.length)%CHAKRAS.length;
+  document.getElementById("binOn").checked=binauralOn; document.getElementById("binSub").classList.toggle("on",binauralOn);
+  document.getElementById("jOn").checked=journeyOn; document.getElementById("jSub").classList.toggle("on",journeyOn);
+  document.getElementById("transOn").checked=includeTrans;
+  document.getElementById("cueOn").checked=breathCues;
+}
 
 /* init */
 buildColumn();
+buildLangOptions();
+restoreState();
 setLang(lang);
-applyChakra(IDX_HEART,false);
+applyChakra(current,false);
+setBreath(breathKey);
 sizeAll();
 requestAnimationFrame(loop);
 </script>
