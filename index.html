@@ -36,11 +36,13 @@
     --radius:16px;
     --serif:'Iowan Old Style','Palatino Linotype',Palatino,'Book Antiqua','Hoefler Text',Georgia,serif;
     --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,system-ui,sans-serif;
+    color-scheme:dark; --optbg:#160c28;
   }
   html[data-theme="minimal"]{ --void:#0a0717; --void2:#0a0717 }
   html[data-theme="minimal"] .blob, html[data-theme="minimal"] #atmos{ display:none }
   html[data-theme="minimal"] #bg{ opacity:.4 }
   html[data-theme="contrast"]{
+    color-scheme:dark; --optbg:#000;
     --void:#000; --void2:#000; --panel:#0b0b14; --panel2:#13131f;
     --line:rgba(255,255,255,0.4); --line2:rgba(255,255,255,0.62);
     --text:#fff; --dim:#ece8f4; --dim2:#cfc7dc; --gold:#ffd9a0; --dawn:#ffe2b8;
@@ -48,6 +50,7 @@
   html[data-theme="contrast"] .blob, html[data-theme="contrast"] #atmos, html[data-theme="contrast"] #bg{ display:none }
   html[data-theme="contrast"] .panel, html[data-theme="contrast"] .modal, html[data-theme="contrast"] .notice, html[data-theme="contrast"] .iconbtn, html[data-theme="contrast"] #langSel, html[data-theme="contrast"] #themeSel{ backdrop-filter:none }
   html[data-theme="light"]{
+    color-scheme:light; --optbg:#ffffff;
     --void:#f5f1ea; --void2:#ebe5d9; --panel:rgba(255,255,255,0.8); --panel2:rgba(255,255,255,0.92);
     --line:rgba(40,20,10,0.15); --line2:rgba(40,20,10,0.26);
     --text:#241a30; --dim:#5c5070; --dim2:#7e7090; --dawn:#a9612a; --gold:#946322;
@@ -130,6 +133,10 @@
   .center{display:flex;flex-direction:column;align-items:center;gap:14px;min-width:0}
   .mandala-wrap{position:relative;width:100%;max-width:min(460px,72dvh);aspect-ratio:1/1}
   #mandala{position:absolute;inset:0;width:100%;height:100%}
+  #sphere{position:absolute;inset:0;width:100%;height:100%;display:none}
+  body.viz-sphere #sphere{display:block;touch-action:none;cursor:grab}
+  body.viz-sphere #sphere:active{cursor:grabbing}
+  body.viz-sphere #mandala{display:none}
   .breath{min-height:30px;text-align:center;font-family:var(--serif);font-size:19px;letter-spacing:.12em;
     color:var(--dawn);opacity:0;transition:opacity .4s}
   .breath.on{opacity:.92}
@@ -143,15 +150,30 @@
   .rail{display:flex;flex-direction:column;gap:16px;min-width:0}
   .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
     padding:16px 16px 18px;backdrop-filter:blur(10px)}
-  .panel h2{font-family:var(--serif);font-weight:500;font-size:13px;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--dim);margin-bottom:13px;display:flex;align-items:center;gap:8px}
-  .panel h2::after{content:"";flex:1;height:1px;background:var(--line)}
+  .panel h2{margin-bottom:12px}
+  .ph2btn{appearance:none;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;
+    background:none;border:1px solid transparent;border-radius:10px;padding:7px 9px;margin:-7px -9px 5px;
+    font-family:var(--serif);font-weight:500;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);text-align:left;
+    transition:background .18s,border-color .18s,color .18s;-webkit-tap-highlight-color:transparent}
+  .ph2btn:hover{background:rgba(255,255,255,0.05);border-color:var(--line);color:var(--text)}
+  .ph2btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .ph2ind{display:inline-flex;align-items:center;gap:8px;flex:none;letter-spacing:0;text-transform:none}
+  .ph2more{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+  .panel:not(.collapsed) .ph2more{display:none}
+  .ph2chev{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:var(--dim2);transition:transform .25s,color .2s,background .2s}
+  .ph2chev::before{content:"\25BE";font-size:11px;line-height:1}
+  .ph2btn:hover .ph2chev{color:var(--accent)}
+  .panel.collapsed .ph2chev{transform:rotate(-90deg);background:var(--accent-soft);color:var(--accent)}
+  .panel.collapsed .ph2btn{background:var(--accent-soft);border-color:var(--line2)}
+  .panel.collapsed > :not(h2):not(.keepvis){display:none}
+  .panel.collapsed{padding-bottom:16px}
 
-  .ck-name{font-family:var(--serif);font-size:24px;font-weight:500;color:var(--text);line-height:1.05}
-  .ck-sk{font-size:12.5px;color:var(--accent);letter-spacing:.05em;margin-top:3px}
-  .ck-desc{font-size:12.5px;color:var(--dim);line-height:1.55;margin-top:9px}
-  .meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 16px}
-  .meta .cell{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:11px;padding:9px 11px}
+  .identity{width:100%;max-width:520px;margin-top:8px;text-align:center}
+  .ck-name{font-family:var(--serif);font-size:clamp(22px,3.2vw,28px);font-weight:500;color:var(--text);line-height:1.08}
+  .ck-sk{font-size:13px;color:var(--accent);letter-spacing:.06em;margin-top:4px}
+  .ck-desc{font-size:13px;color:var(--dim);line-height:1.55;margin-top:10px;max-width:44ch;margin-left:auto;margin-right:auto}
+  .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px;margin:18px auto 0;max-width:480px}
+  .meta .cell{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:11px;padding:9px 11px;text-align:center}
   .meta .k{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim2)}
   .meta .v{font-size:16px;color:var(--text);margin-top:3px;font-variant-numeric:tabular-nums}
   .meta .v.mantra{font-family:var(--serif);letter-spacing:.14em}
@@ -180,7 +202,7 @@
     color:var(--text);border-radius:9px;padding:9px 11px;font-size:13.5px;cursor:pointer;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a99bc4' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat:no-repeat;background-position:right 11px center}
-  select option{background:#160c28;color:var(--text)}
+  select option{background:var(--optbg);color:var(--text)}
   .toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;user-select:none;padding:2px 0}
   .toggle .tl{display:flex;flex-direction:column}
   .toggle .tl b{font-weight:500;font-size:14px;color:var(--text)}
@@ -220,7 +242,8 @@
   .modal .note{font-size:13px;color:var(--text);background:var(--accent-soft);border:1px solid var(--line);
     border-radius:11px;padding:12px 14px;margin-top:16px}
   .modal h4{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim2);margin-top:20px;margin-bottom:9px}
-  .keys{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:13px;align-items:center}
+  .keys{display:flex;flex-wrap:wrap;gap:12px 26px}
+  .keys-col{flex:1 1 190px;display:grid;grid-template-columns:auto 1fr;gap:9px 12px;font-size:13px;align-items:center}
   kbd{font-family:var(--sans);font-size:11.5px;background:rgba(255,255,255,0.06);border:1px solid var(--line2);
     border-bottom-width:2px;border-radius:6px;padding:3px 8px;color:var(--text);justify-self:start}
   .modal a{color:var(--gold)}
@@ -309,6 +332,7 @@
   body.zen .stage{grid-template-columns:1fr}
   body.zen .app{justify-content:center}
   body.zen .center{order:0;gap:22px}
+  body.zen .affirm, body.zen .identity{display:none}
   body.zen .breath{font-size:30px;min-height:42px}
   body.zen .mandala-wrap{max-width:min(74dvh,560px)}
   .zen-exit{position:fixed;top:16px;right:16px;z-index:60;display:none;align-items:center;justify-content:center}
@@ -341,7 +365,14 @@
   }
   @media (max-width:560px){
     .rail{flex-direction:column}
-    .meta{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:400px){
+    .app{padding:16px 12px 30px;gap:14px}
+    .panel{padding:14px 13px 16px}
+    .brand h1{font-size:25px;letter-spacing:.1em}
+    .brand .tag{display:none}
+    .center{gap:11px}
+    .stage{gap:14px}
   }
 </style>
 </head>
@@ -368,6 +399,7 @@
     <div class="head-ctl">
       <select id="themeSel" aria-label="Theme"></select>
       <select id="langSel" aria-label="Language"></select>
+      <button class="iconbtn" id="vizBtn" aria-pressed="false" aria-label="3D sphere"></button>
       <button class="iconbtn" id="zenBtn" aria-label="Focus mode"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
       <button class="iconbtn" id="aboutBtn" data-i18n="about">About</button>
     </div>
@@ -393,16 +425,12 @@
     <div class="center">
       <div class="mandala-wrap">
         <canvas id="mandala" role="img" aria-label="Living chakra mandala"></canvas>
+        <canvas id="sphere" aria-hidden="true"></canvas>
       </div>
       <div class="breath" id="breath"></div>
       <div class="affirm" id="affirm"></div>
       <button class="primary begin" id="beginBtn" data-i18n="beginBtn">Begin</button>
-    </div>
-
-    <!-- Rail -->
-    <div class="rail">
-      <section class="panel" aria-labelledby="toneH">
-        <h2 id="toneH" data-i18n="tone">Tone</h2>
+      <div class="identity">
         <div class="ck-name" id="ckName"></div>
         <div class="ck-sk" id="ckSk"></div>
         <div class="ck-desc" id="ckDesc"></div>
@@ -411,10 +439,17 @@
           <div class="cell"><div class="k" data-i18n="element">Element</div><div class="v" id="mEl"></div></div>
           <div class="cell"><div class="k" data-i18n="mantra">Mantra</div><div class="v mantra" id="mBija"></div></div>
           <div class="cell"><div class="k" data-i18n="petals">Petals</div><div class="v" id="mPet"></div></div>
-          <div class="cell"><div class="k" data-i18n="noteL">Note</div><div class="v" id="mNote"></div></div>
+          <div class="cell"><div class="k" data-i18n="noteL">Solfeggio</div><div class="v" id="mNote"></div></div>
           <div class="cell"><div class="k" data-i18n="senseL">Sense</div><div class="v" id="mSense"></div></div>
         </div>
-        <button class="primary" id="playBtn"><svg class="ico" id="playIco" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span id="playTxt"></span></button>
+      </div>
+    </div>
+
+    <!-- Rail -->
+    <div class="rail">
+      <section class="panel" aria-labelledby="toneH">
+        <h2 id="toneH"><button class="ph2btn" aria-expanded="true"><span class="ph2t" data-i18n="tone">Tone</span><span class="ph2ind"><span class="ph2more" data-i18n="expand" aria-hidden="true">expand</span><span class="ph2chev" aria-hidden="true"></span></span></button></h2>
+        <button class="primary keepvis" id="playBtn"><svg class="ico" id="playIco" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span id="playTxt"></span></button>
         <div class="row">
           <button class="primary ghost" id="gongBtn"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/></svg><span data-i18n="gong">Gong</span></button>
         </div>
@@ -453,7 +488,7 @@
       </section>
 
       <section class="panel" aria-labelledby="sessH">
-        <h2 id="sessH" data-i18n="session">Session</h2>
+        <h2 id="sessH"><button class="ph2btn" aria-expanded="true"><span class="ph2t" data-i18n="session">Session</span><span class="ph2ind"><span class="ph2more" data-i18n="expand" aria-hidden="true">expand</span><span class="ph2chev" aria-hidden="true"></span></span></button></h2>
         <div class="field" style="margin-top:0">
           <label data-i18n="duration">Duration</label>
           <div class="chips" id="durChips"></div>
@@ -473,8 +508,8 @@
           <label class="toggle" for="cueOn" style="margin-top:12px"><span class="tl"><b data-i18n="cue">Phase cues</b><small data-i18n="cueS">Soft tone at each phase change</small></span>
             <input type="checkbox" id="cueOn"><span class="sw"></span></label>
         </div>
-        <button class="primary" id="sessBtn" style="margin-top:16px"><svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span id="sessTxt"></span></button>
-        <div class="prog" id="prog">
+        <button class="primary keepvis" id="sessBtn" style="margin-top:16px"><svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span id="sessTxt"></span></button>
+        <div class="prog keepvis" id="prog">
           <div class="bar"><div class="fill" id="progFill"></div></div>
           <div class="lbl"><span id="progNow"></span><span id="progRem"></span></div>
         </div>
@@ -588,7 +623,7 @@ const SENSE={
  root:{en:"Smell",ro:"Miros",es:"Olfato",fr:"Odorat",it:"Olfatto",pt:"Olfato",ca:"Olfacte",hi:"गंध",ar:"الشم"},
  sacral:{en:"Taste",ro:"Gust",es:"Gusto",fr:"Goût",it:"Gusto",pt:"Paladar",ca:"Gust",hi:"स्वाद",ar:"التذوق"},
  solar:{en:"Sight",ro:"Văz",es:"Vista",fr:"Vue",it:"Vista",pt:"Visão",ca:"Vista",hi:"दृष्टि",ar:"البصر"},
- heart:{en:"Touch",ro:"Tact",es:"Tacto",fr:"Toucher",it:"Tatto",pt:"Tato",ca:"Tacte",hi:"स्पर्श",ar:"اللمس"},
+ heart:{en:"Touch",ro:"Tactil",es:"Tacto",fr:"Toucher",it:"Tatto",pt:"Tato",ca:"Tacte",hi:"स्पर्श",ar:"اللمس"},
  throat:{en:"Hearing",ro:"Auz",es:"Oído",fr:"Ouïe",it:"Udito",pt:"Audição",ca:"Oïda",hi:"श्रवण",ar:"السمع"},
  third:{en:"All senses",ro:"Toate simțurile",es:"Todos los sentidos",fr:"Tous les sens",it:"Tutti i sensi",pt:"Todos os sentidos",ca:"Tots els sentits",hi:"सभी इंद्रियाँ",ar:"كل الحواس"}
 };
@@ -629,7 +664,7 @@ const T = {
     tutTip:"Dac\u0103 sim\u021bi ame\u021beal\u0103 sau lips\u0103 de aer, revino la respira\u021bia normal\u0103. Este o practic\u0103 de relaxare, nu sfat medical.",
     aboutP1:"Aurora este un sanctuar sonor: alege o chakr\u0103, las\u0103 tonul s\u0103 te \u00eenconjoare \u0219i, dac\u0103 vrei, urmeaz\u0103 ghidul de respira\u021bie sau o c\u0103l\u0103torie automat\u0103 prin toate centrele energetice.",
     aboutP2:"Totul \u2014 tonurile, gongul, b\u0103t\u0103ile binaurale \u2014 este generat live cu Web Audio API. Nu exist\u0103 fi\u0219iere audio, conturi sau telemetrie: o singur\u0103 pagin\u0103 HTML care func\u021bioneaz\u0103 complet offline.",
-    aboutNote:"Instrument contemplativ inspirat de practica sunetelor vindec\u0103toare (ex. Centrul AmaneSer, amaneser.ro). Frecven\u021bele \u0219i chakrele apar\u021bin unor tradi\u021bii spirituale, nu medicinei \u2014 pentru relaxare \u0219i medita\u021bie, nu ca tratament.", toneVolL:"Volum ton", gongVolL:"Volum gong", savePresetL:"Salvează", presetsL:"Tipare salvate", obTitle:"Bun venit", ob1:"Alege o chakră din coloană.", ob2:"Apasă Începe pentru un ton blând și respirație ghidată.", ob3:"Folosește căști pentru bătăile binaurale. Totul rulează offline — nimic nu părăsește dispozitivul.", storageWarn:"Setările nu vor fi salvate în acest mod al browserului.", bDeep:"Profund (4-8)", bSlow:"Lent (6-6)", exportL:"Exportă setările", importL:"Importă setările", noteL:"Solfeggio", senseL:"Simț", aboutFreq:"Frecvențele urmează tradiția Solfeggio — de ex. 396 Hz pentru eliberare, 528 Hz pentru echilibru, 639 Hz pentru relații, 963 Hz pentru conectare. Sunt asocieri tradiționale din practica sunetelor vindecătoare, nu efecte medicale măsurate."
+    aboutNote:"Instrument contemplativ inspirat de practica sunetelor vindec\u0103toare (ex. Centrul AmaneSer, amaneser.ro). Frecven\u021bele \u0219i chakrele apar\u021bin unor tradi\u021bii spirituale, nu medicinei \u2014 pentru relaxare \u0219i medita\u021bie, nu ca tratament.", toneVolL:"Volum ton", gongVolL:"Volum gong", savePresetL:"Salvează", presetsL:"Tipare salvate", obTitle:"Bun venit", ob1:"Alege o chakră din coloană.", ob2:"Apasă Începe pentru un ton blând și respirație ghidată.", ob3:"Folosește căști pentru bătăile binaurale. Totul rulează offline — nimic nu părăsește dispozitivul.", storageWarn:"Setările nu vor fi salvate în acest mod al browserului.", bDeep:"Profund (4-8)", bSlow:"Lent (6-6)", exportL:"Exportă setările", importL:"Importă setările", noteL:"Solfeggio", senseL:"Simț", aboutFreq:"Frecvențele urmează tradiția Solfeggio — de ex. 396 Hz pentru eliberare, 528 Hz pentru echilibru, 639 Hz pentru relații, 963 Hz pentru conectare. Sunt asocieri tradiționale din practica sunetelor vindecătoare, nu efecte medicale măsurate.", expand:"extinde", vizMandala:"Mandală", vizSphere:"Sferă 3D"
   },
   en:{
     titleDoc:"Aurora \u00b7 Chakra Sound & Meditation",
@@ -661,7 +696,7 @@ const T = {
     tutTip:"If you feel dizzy or short of breath, return to normal breathing. This is a relaxation practice, not medical advice.",
     aboutP1:"Aurora is a sound sanctuary: choose a chakra, let its tone surround you and, if you like, follow the breathing pacer or an automatic journey through every energy centre.",
     aboutP2:"Everything \u2014 the tones, the gong, the binaural beats \u2014 is generated live with the Web Audio API. There are no audio files, accounts or telemetry: a single HTML page that runs completely offline.",
-    aboutNote:"A contemplative tool inspired by sound-healing practice (e.g. Centrul AmaneSer, amaneser.ro). The frequencies and chakras belong to spiritual traditions, not medicine \u2014 for relaxation and meditation, not as treatment.", toneVolL:"Tone volume", gongVolL:"Gong volume", savePresetL:"Save", presetsL:"Saved patterns", obTitle:"Welcome", ob1:"Pick a chakra from the column.", ob2:"Press Begin for a gentle tone and guided breathing.", ob3:"Use headphones for binaural beats. Everything runs offline — nothing leaves your device.", storageWarn:"Settings won't be saved in this browser mode.", bDeep:"Deep (4-8)", bSlow:"Slow (6-6)", exportL:"Export settings", importL:"Import settings", noteL:"Solfeggio", senseL:"Sense", aboutFreq:"The frequencies follow the Solfeggio tradition — e.g. 396 Hz for release, 528 Hz for balance, 639 Hz for relationships, 963 Hz for connection. These are traditional associations from sound-healing practice, not measured medical effects."
+    aboutNote:"A contemplative tool inspired by sound-healing practice (e.g. Centrul AmaneSer, amaneser.ro). The frequencies and chakras belong to spiritual traditions, not medicine \u2014 for relaxation and meditation, not as treatment.", toneVolL:"Tone volume", gongVolL:"Gong volume", savePresetL:"Save", presetsL:"Saved patterns", obTitle:"Welcome", ob1:"Pick a chakra from the column.", ob2:"Press Begin for a gentle tone and guided breathing.", ob3:"Use headphones for binaural beats. Everything runs offline — nothing leaves your device.", storageWarn:"Settings won't be saved in this browser mode.", bDeep:"Deep (4-8)", bSlow:"Slow (6-6)", exportL:"Export settings", importL:"Import settings", noteL:"Solfeggio", senseL:"Sense", aboutFreq:"The frequencies follow the Solfeggio tradition — e.g. 396 Hz for release, 528 Hz for balance, 639 Hz for relationships, 963 Hz for connection. These are traditional associations from sound-healing practice, not measured medical effects.", expand:"expand", vizMandala:"Mandala", vizSphere:"3D sphere"
   },
   es:{
     titleDoc:"Aurora · Sonidos y meditación de chakras",
@@ -693,7 +728,7 @@ const T = {
     tutTip:"Si sientes mareo o falta de aire, vuelve a la respiración normal. Es una práctica de relajación, no un consejo médico.",
     aboutP1:"Aurora es un santuario sonoro: elige un chakra, deja que su tono te envuelva y, si quieres, sigue la guía de respiración o un viaje automático por todos los centros energéticos.",
     aboutP2:"Todo —los tonos, el gong, los sonidos binaurales— se genera en directo con la Web Audio API. No hay archivos de audio, cuentas ni telemetría: una sola página HTML que funciona totalmente sin conexión.",
-    aboutNote:"Herramienta contemplativa inspirada en la práctica de los sonidos sanadores (p. ej. Centrul AmaneSer, amaneser.ro). Las frecuencias y los chakras pertenecen a tradiciones espirituales, no a la medicina — para relajación y meditación, no como tratamiento.", toneVolL:"Volumen del tono", gongVolL:"Volumen del gong", savePresetL:"Guardar", presetsL:"Patrones guardados", obTitle:"Bienvenido", ob1:"Elige un chakra de la columna.", ob2:"Pulsa Empezar para un tono suave y respiración guiada.", ob3:"Usa auriculares para los sonidos binaurales. Todo funciona sin conexión — nada sale de tu dispositivo.", storageWarn:"La configuración no se guardará en este modo del navegador.", bDeep:"Profundo (4-8)", bSlow:"Lento (6-6)", exportL:"Exportar ajustes", importL:"Importar ajustes", noteL:"Solfeggio", senseL:"Sentido", aboutFreq:"Las frecuencias siguen la tradición Solfeggio — p. ej. 396 Hz para liberar, 528 Hz para el equilibrio, 639 Hz para las relaciones, 963 Hz para la conexión. Son asociaciones tradicionales de la práctica del sonido, no efectos médicos medidos."
+    aboutNote:"Herramienta contemplativa inspirada en la práctica de los sonidos sanadores (p. ej. Centrul AmaneSer, amaneser.ro). Las frecuencias y los chakras pertenecen a tradiciones espirituales, no a la medicina — para relajación y meditación, no como tratamiento.", toneVolL:"Volumen del tono", gongVolL:"Volumen del gong", savePresetL:"Guardar", presetsL:"Patrones guardados", obTitle:"Bienvenido", ob1:"Elige un chakra de la columna.", ob2:"Pulsa Empezar para un tono suave y respiración guiada.", ob3:"Usa auriculares para los sonidos binaurales. Todo funciona sin conexión — nada sale de tu dispositivo.", storageWarn:"La configuración no se guardará en este modo del navegador.", bDeep:"Profundo (4-8)", bSlow:"Lento (6-6)", exportL:"Exportar ajustes", importL:"Importar ajustes", noteL:"Solfeggio", senseL:"Sentido", aboutFreq:"Las frecuencias siguen la tradición Solfeggio — p. ej. 396 Hz para liberar, 528 Hz para el equilibrio, 639 Hz para las relaciones, 963 Hz para la conexión. Son asociaciones tradicionales de la práctica del sonido, no efectos médicos medidos.", expand:"expandir", vizMandala:"Mandala", vizSphere:"Esfera 3D"
   },
   fr:{
     titleDoc:"Aurora · Sons et méditation des chakras",
@@ -725,7 +760,7 @@ const T = {
     tutTip:"En cas de vertige ou d'essoufflement, revenez à une respiration normale. C'est une pratique de détente, pas un avis médical.",
     aboutP1:"Aurora est un sanctuaire sonore : choisissez un chakra, laissez son timbre vous envelopper et, si vous le souhaitez, suivez le guide de respiration ou un voyage automatique à travers tous les centres énergétiques.",
     aboutP2:"Tout — les sons, le gong, les battements binauraux — est généré en direct avec la Web Audio API. Aucun fichier audio, aucun compte, aucune télémétrie : une seule page HTML qui fonctionne entièrement hors ligne.",
-    aboutNote:"Outil contemplatif inspiré de la pratique des sons de guérison (p. ex. Centrul AmaneSer, amaneser.ro). Les fréquences et les chakras relèvent de traditions spirituelles, pas de la médecine — pour la détente et la méditation, non comme traitement.", toneVolL:"Volume du son", gongVolL:"Volume du gong", savePresetL:"Enregistrer", presetsL:"Modèles enregistrés", obTitle:"Bienvenue", ob1:"Choisissez un chakra dans la colonne.", ob2:"Appuyez sur Commencer pour un son doux et une respiration guidée.", ob3:"Utilisez un casque pour les battements binauraux. Tout fonctionne hors ligne — rien ne quitte votre appareil.", storageWarn:"Les réglages ne seront pas enregistrés dans ce mode du navigateur.", bDeep:"Profond (4-8)", bSlow:"Lent (6-6)", exportL:"Exporter les réglages", importL:"Importer les réglages", noteL:"Solfeggio", senseL:"Sens", aboutFreq:"Les fréquences suivent la tradition Solfeggio — p. ex. 396 Hz pour libérer, 528 Hz pour l'équilibre, 639 Hz pour les relations, 963 Hz pour la connexion. Ce sont des associations traditionnelles de la pratique sonore, non des effets médicaux mesurés."
+    aboutNote:"Outil contemplatif inspiré de la pratique des sons de guérison (p. ex. Centrul AmaneSer, amaneser.ro). Les fréquences et les chakras relèvent de traditions spirituelles, pas de la médecine — pour la détente et la méditation, non comme traitement.", toneVolL:"Volume du son", gongVolL:"Volume du gong", savePresetL:"Enregistrer", presetsL:"Modèles enregistrés", obTitle:"Bienvenue", ob1:"Choisissez un chakra dans la colonne.", ob2:"Appuyez sur Commencer pour un son doux et une respiration guidée.", ob3:"Utilisez un casque pour les battements binauraux. Tout fonctionne hors ligne — rien ne quitte votre appareil.", storageWarn:"Les réglages ne seront pas enregistrés dans ce mode du navigateur.", bDeep:"Profond (4-8)", bSlow:"Lent (6-6)", exportL:"Exporter les réglages", importL:"Importer les réglages", noteL:"Solfeggio", senseL:"Sens", aboutFreq:"Les fréquences suivent la tradition Solfeggio — p. ex. 396 Hz pour libérer, 528 Hz pour l'équilibre, 639 Hz pour les relations, 963 Hz pour la connexion. Ce sont des associations traditionnelles de la pratique sonore, non des effets médicaux mesurés.", expand:"déplier", vizMandala:"Mandala", vizSphere:"Sphère 3D"
   },
   it:{
     titleDoc:"Aurora · Suoni e meditazione sui chakra",
@@ -757,7 +792,7 @@ const T = {
     tutTip:"Se senti capogiri o fiato corto, torna alla respirazione normale. È una pratica di rilassamento, non un consiglio medico.",
     aboutP1:"Aurora è un santuario sonoro: scegli un chakra, lascia che il suo tono ti avvolga e, se vuoi, segui la guida del respiro o un viaggio automatico attraverso tutti i centri energetici.",
     aboutP2:"Tutto — i toni, il gong, i battiti binaurali — è generato dal vivo con la Web Audio API. Nessun file audio, account o telemetria: una singola pagina HTML che funziona completamente offline.",
-    aboutNote:"Strumento contemplativo ispirato alla pratica dei suoni curativi (es. Centrul AmaneSer, amaneser.ro). Le frequenze e i chakra appartengono a tradizioni spirituali, non alla medicina — per il rilassamento e la meditazione, non come trattamento.", toneVolL:"Volume del tono", gongVolL:"Volume del gong", savePresetL:"Salva", presetsL:"Schemi salvati", obTitle:"Benvenuto", ob1:"Scegli un chakra dalla colonna.", ob2:"Premi Inizia per un tono lieve e respirazione guidata.", ob3:"Usa le cuffie per i battiti binaurali. Tutto funziona offline — nulla lascia il tuo dispositivo.", storageWarn:"Le impostazioni non verranno salvate in questa modalità del browser.", bDeep:"Profondo (4-8)", bSlow:"Lento (6-6)", exportL:"Esporta impostazioni", importL:"Importa impostazioni", noteL:"Solfeggio", senseL:"Senso", aboutFreq:"Le frequenze seguono la tradizione Solfeggio — es. 396 Hz per il rilascio, 528 Hz per l'equilibrio, 639 Hz per le relazioni, 963 Hz per la connessione. Sono associazioni tradizionali della pratica sonora, non effetti medici misurati."
+    aboutNote:"Strumento contemplativo ispirato alla pratica dei suoni curativi (es. Centrul AmaneSer, amaneser.ro). Le frequenze e i chakra appartengono a tradizioni spirituali, non alla medicina — per il rilassamento e la meditazione, non come trattamento.", toneVolL:"Volume del tono", gongVolL:"Volume del gong", savePresetL:"Salva", presetsL:"Schemi salvati", obTitle:"Benvenuto", ob1:"Scegli un chakra dalla colonna.", ob2:"Premi Inizia per un tono lieve e respirazione guidata.", ob3:"Usa le cuffie per i battiti binaurali. Tutto funziona offline — nulla lascia il tuo dispositivo.", storageWarn:"Le impostazioni non verranno salvate in questa modalità del browser.", bDeep:"Profondo (4-8)", bSlow:"Lento (6-6)", exportL:"Esporta impostazioni", importL:"Importa impostazioni", noteL:"Solfeggio", senseL:"Senso", aboutFreq:"Le frequenze seguono la tradizione Solfeggio — es. 396 Hz per il rilascio, 528 Hz per l'equilibrio, 639 Hz per le relazioni, 963 Hz per la connessione. Sono associazioni tradizionali della pratica sonora, non effetti medici misurati.", expand:"espandi", vizMandala:"Mandala", vizSphere:"Sfera 3D"
   },
   pt:{
     titleDoc:"Aurora · Sons e meditação dos chakras",
@@ -789,7 +824,7 @@ const T = {
     tutTip:"Se sentir tonturas ou falta de ar, volte à respiração normal. É uma prática de relaxamento, não um conselho médico.",
     aboutP1:"Aurora é um santuário sonoro: escolha um chakra, deixe o seu tom envolvê-lo e, se quiser, siga o guia de respiração ou uma viagem automática por todos os centros de energia.",
     aboutP2:"Tudo — os tons, o gongo, as batidas binaurais — é gerado ao vivo com a Web Audio API. Não há ficheiros de áudio, contas nem telemetria: uma única página HTML que funciona totalmente offline.",
-    aboutNote:"Ferramenta contemplativa inspirada na prática dos sons de cura (ex.: Centrul AmaneSer, amaneser.ro). As frequências e os chakras pertencem a tradições espirituais, não à medicina — para relaxamento e meditação, não como tratamento.", toneVolL:"Volume do tom", gongVolL:"Volume do gongo", savePresetL:"Guardar", presetsL:"Padrões guardados", obTitle:"Bem-vindo", ob1:"Escolha um chakra na coluna.", ob2:"Carregue em Começar para um tom suave e respiração guiada.", ob3:"Use fones para os batimentos binaurais. Tudo funciona offline — nada sai do seu dispositivo.", storageWarn:"As definições não serão guardadas neste modo do navegador.", bDeep:"Profundo (4-8)", bSlow:"Lento (6-6)", exportL:"Exportar definições", importL:"Importar definições", noteL:"Solfeggio", senseL:"Sentido", aboutFreq:"As frequências seguem a tradição Solfeggio — p. ex. 396 Hz para libertar, 528 Hz para o equilíbrio, 639 Hz para as relações, 963 Hz para a ligação. São associações tradicionais da prática do som, não efeitos médicos medidos."
+    aboutNote:"Ferramenta contemplativa inspirada na prática dos sons de cura (ex.: Centrul AmaneSer, amaneser.ro). As frequências e os chakras pertencem a tradições espirituais, não à medicina — para relaxamento e meditação, não como tratamento.", toneVolL:"Volume do tom", gongVolL:"Volume do gongo", savePresetL:"Guardar", presetsL:"Padrões guardados", obTitle:"Bem-vindo", ob1:"Escolha um chakra na coluna.", ob2:"Carregue em Começar para um tom suave e respiração guiada.", ob3:"Use fones para os batimentos binaurais. Tudo funciona offline — nada sai do seu dispositivo.", storageWarn:"As definições não serão guardadas neste modo do navegador.", bDeep:"Profundo (4-8)", bSlow:"Lento (6-6)", exportL:"Exportar definições", importL:"Importar definições", noteL:"Solfeggio", senseL:"Sentido", aboutFreq:"As frequências seguem a tradição Solfeggio — p. ex. 396 Hz para libertar, 528 Hz para o equilíbrio, 639 Hz para as relações, 963 Hz para a ligação. São associações tradicionais da prática do som, não efeitos médicos medidos.", expand:"expandir", vizMandala:"Mandala", vizSphere:"Esfera 3D"
   },
   ca:{
     titleDoc:"Aurora · Sons i meditació dels chakres",
@@ -821,13 +856,13 @@ const T = {
     tutTip:"Si sents mareig o falta d'aire, torna a la respiració normal. És una pràctica de relaxació, no un consell mèdic.",
     aboutP1:"Aurora és un santuari sonor: tria un chakra, deixa que el seu to t'envolti i, si vols, segueix la guia de respiració o un viatge automàtic per tots els centres energètics.",
     aboutP2:"Tot —els tons, el gong, els batecs binaurals— es genera en directe amb la Web Audio API. No hi ha fitxers d'àudio, comptes ni telemetria: una sola pàgina HTML que funciona totalment fora de línia.",
-    aboutNote:"Eina contemplativa inspirada en la pràctica dels sons curatius (p. ex. Centrul AmaneSer, amaneser.ro). Les freqüències i els chakres pertanyen a tradicions espirituals, no a la medicina — per a la relaxació i la meditació, no com a tractament.", toneVolL:"Volum del to", gongVolL:"Volum del gong", savePresetL:"Desa", presetsL:"Patrons desats", obTitle:"Benvingut", ob1:"Tria un chakra de la columna.", ob2:"Prem Comença per a un to suau i respiració guiada.", ob3:"Fes servir auriculars per als batecs binaurals. Tot funciona sense connexió — res no surt del teu dispositiu.", storageWarn:"La configuració no es desarà en aquest mode del navegador.", bDeep:"Profund (4-8)", bSlow:"Lent (6-6)", exportL:"Exporta la configuració", importL:"Importa la configuració", noteL:"Solfeggio", senseL:"Sentit", aboutFreq:"Les freqüències segueixen la tradició Solfeggio — p. ex. 396 Hz per alliberar, 528 Hz per a l'equilibri, 639 Hz per a les relacions, 963 Hz per a la connexió. Són associacions tradicionals de la pràctica del so, no efectes mèdics mesurats."
+    aboutNote:"Eina contemplativa inspirada en la pràctica dels sons curatius (p. ex. Centrul AmaneSer, amaneser.ro). Les freqüències i els chakres pertanyen a tradicions espirituals, no a la medicina — per a la relaxació i la meditació, no com a tractament.", toneVolL:"Volum del to", gongVolL:"Volum del gong", savePresetL:"Desa", presetsL:"Patrons desats", obTitle:"Benvingut", ob1:"Tria un chakra de la columna.", ob2:"Prem Comença per a un to suau i respiració guiada.", ob3:"Fes servir auriculars per als batecs binaurals. Tot funciona sense connexió — res no surt del teu dispositiu.", storageWarn:"La configuració no es desarà en aquest mode del navegador.", bDeep:"Profund (4-8)", bSlow:"Lent (6-6)", exportL:"Exporta la configuració", importL:"Importa la configuració", noteL:"Solfeggio", senseL:"Sentit", aboutFreq:"Les freqüències segueixen la tradició Solfeggio — p. ex. 396 Hz per alliberar, 528 Hz per a l'equilibri, 639 Hz per a les relacions, 963 Hz per a la connexió. Són associacions tradicionals de la pràctica del so, no efectes mèdics mesurats.", expand:"desplega", vizMandala:"Mandala", vizSphere:"Esfera 3D"
   },
   hi:{
-    titleDoc:"ऑरोरा — चक्र ध्वनि व ध्यान", tag:"ध्वनि व चक्र ध्यान — वास्तविक समय में संश्लेषित, पूर्णतः ऑफ़लाइन।", about:"परिचय", tone:"स्वर", freq:"आवृत्ति", element:"तत्व", mantra:"मंत्र", petals:"पंखुड़ियाँ", play:"चलाएँ", pause:"रोकें", gong:"घंटा", binaural:"बाइनॉरल बीट्स", binauralS:"हेडफ़ोन का प्रयोग करें · प्रायोगिक", beat:"बीट", volume:"मात्रा", session:"सत्र", duration:"अवधि", journey:"चक्र यात्रा", journeyS:"स्वचालित संतुलन", trans:"ट्रांसपर्सनल शामिल करें", transS:"7 के बजाय 9 चक्र", breathL:"श्वास", start:"आरंभ", stop:"रोकें", remaining:"शेष", elapsed:"बीता", inhale:"साँस लें", hold:"रोकें", exhale:"साँस छोड़ें", bOff:"बंद", bCoh:"सुसंगत (5-5)", bBox:"बॉक्स (4-4-4-4)", bCalm:"शांत (4-7-8)", delta:"डेल्टा (2 Hz)", theta:"थीटा (6 Hz)", alpha:"अल्फ़ा (10 Hz)", shortcuts:"शॉर्टकट", close:"बंद करें", scPlay:"स्वर चलाएँ/रोकें", scGong:"घंटा बजाएँ", scChakra:"चक्र बदलें", scBreath:"श्वास बदलें", scLang:"भाषा बदलें", langLabel:"भाषा", zenIn:"फ़ोकस मोड", zenOut:"फ़ोकस से बाहर", breathGuide:"श्वास मार्गदर्शिका", tryThis:"आज़माएँ", bCustom:"कस्टम", cue:"चरण संकेत", cueS:"हर चरण बदलने पर मृदु स्वर", disclaimer:"ऑरोरा विश्राम और चिंतन के लिए है। इसकी आवृत्तियाँ और चक्र आध्यात्मिक परंपराओं से हैं, चिकित्सा से नहीं।", gotIt:"समझ गया", affShow:"पुष्टि-वाक्य दिखाएँ", affShowS:"मंडल के नीचे का पाठ", holdF:"रोकें (भरा)", holdE:"रोकें (खाली)", customHint:"प्रति चरण सेकंड (1–20)। साँस लेना और छोड़ना कम से कम 1।", beginBtn:"आरंभ करें", reverbL:"रीवर्ब", cueVolL:"संकेत मात्रा", scGuide:"श्वास मार्गदर्शिका", themeL:"थीम", thCosmic:"कॉस्मिक", thMinimal:"न्यूनतम", thLight:"उजला", thContrast:"उच्च कंट्रास्ट", simpleL:"सरल मोड", simpleS:"उन्नत नियंत्रण छिपाएँ", histL:"हाल के सत्र", histEmpty:"अभी कोई सत्र नहीं", sessDone:"सत्र पूर्ण", clModern:"आधुनिक जोड़ — शास्त्रीय सात में नहीं", wakeL:"स्क्रीन चालू रहती है", aboutSci:"यहाँ की आवृत्तियाँ, चक्र और बीज ध्वनियाँ आध्यात्मिक और योग परंपराओं से हैं, विज्ञान से नहीं। इसका कोई विश्वसनीय प्रमाण नहीं कि विशिष्ट आवृत्तियाँ अंगों को ठीक करती हैं या बाइनॉरल बीट्स मस्तिष्क की अवस्था बदलती हैं। ऑरोरा को चिंतन का साधन मानें, चिकित्सा का नहीं।", tutIntro:"अपनी सुविधा अनुसार एक श्वास लय चुनें। बढ़ता वलय साँस लेने का, घटता वलय साँस छोड़ने का संकेत देता है।", tutCoh:"सुसंगत: 5 सेकंड साँस लें, 5 सेकंड छोड़ें। संतुलन के लिए सरल और सौम्य।", tutBox:"बॉक्स: 4 गिनती साँस, 4 रोकें, 4 छोड़ें, 4 रोकें। एकाग्रता के लिए।", tutCalm:"शांत: 4 साँस, 7 रोकें, 8 छोड़ें। विश्राम और नींद के लिए।", tutTip:"नाक से साँस लें। संकेत आपका मार्गदर्शन करते हैं — गिनती नहीं, बस अनुसरण करें।", aboutP1:"ऑरोरा वास्तविक समय में चक्र स्वर, बीज ध्वनियाँ और सौम्य परिवेश संश्लेषित करता है — पूर्णतः आपके ब्राउज़र में, बिना किसी नेटवर्क के।", aboutP2:"कोई फ़ाइल नहीं, कोई ट्रैकिंग नहीं, कोई सर्वर नहीं। सब कुछ स्थानीय रूप से चलता है और आपकी पसंद इसी डिवाइस पर सहेजी जाती है।", aboutNote:"यह चिकित्सा या उपचार नहीं है। यदि आप अस्वस्थ हैं तो किसी योग्य चिकित्सक से परामर्श लें।", toneVolL:"स्वर मात्रा", gongVolL:"घंटा मात्रा", savePresetL:"सहेजें", presetsL:"सहेजे गए पैटर्न", obTitle:"स्वागत है", ob1:"स्तंभ से एक चक्र चुनें।", ob2:"मृदु स्वर और निर्देशित श्वास के लिए आरंभ करें दबाएँ।", ob3:"बाइनॉरल बीट्स के लिए हेडफ़ोन का प्रयोग करें। सब कुछ ऑफ़लाइन चलता है — कुछ भी आपके डिवाइस से बाहर नहीं जाता।", storageWarn:"इस ब्राउज़र मोड में सेटिंग्स सहेजी नहीं जाएँगी।", bDeep:"गहरा (4-8)", bSlow:"धीमा (6-6)", exportL:"सेटिंग्स निर्यात करें", importL:"सेटिंग्स आयात करें", noteL:"Solfeggio", senseL:"इंद्रिय", aboutFreq:"आवृत्तियाँ सॉल्फ़ेजियो परंपरा का अनुसरण करती हैं — जैसे 396 Hz मुक्ति के लिए, 528 Hz संतुलन के लिए, 639 Hz रिश्तों के लिए, 963 Hz जुड़ाव के लिए। ये ध्वनि-अभ्यास की पारंपरिक संगतियाँ हैं, मापे गए चिकित्सीय प्रभाव नहीं।"
+    titleDoc:"ऑरोरा — चक्र ध्वनि व ध्यान", tag:"ध्वनि व चक्र ध्यान — वास्तविक समय में संश्लेषित, पूर्णतः ऑफ़लाइन।", about:"परिचय", tone:"स्वर", freq:"आवृत्ति", element:"तत्व", mantra:"मंत्र", petals:"पंखुड़ियाँ", play:"चलाएँ", pause:"रोकें", gong:"घंटा", binaural:"बाइनॉरल बीट्स", binauralS:"हेडफ़ोन का प्रयोग करें · प्रायोगिक", beat:"बीट", volume:"मात्रा", session:"सत्र", duration:"अवधि", journey:"चक्र यात्रा", journeyS:"स्वचालित संतुलन", trans:"ट्रांसपर्सनल शामिल करें", transS:"7 के बजाय 9 चक्र", breathL:"श्वास", start:"आरंभ", stop:"रोकें", remaining:"शेष", elapsed:"बीता", inhale:"साँस लें", hold:"रोकें", exhale:"साँस छोड़ें", bOff:"बंद", bCoh:"सुसंगत (5-5)", bBox:"बॉक्स (4-4-4-4)", bCalm:"शांत (4-7-8)", delta:"डेल्टा (2 Hz)", theta:"थीटा (6 Hz)", alpha:"अल्फ़ा (10 Hz)", shortcuts:"शॉर्टकट", close:"बंद करें", scPlay:"स्वर चलाएँ/रोकें", scGong:"घंटा बजाएँ", scChakra:"चक्र बदलें", scBreath:"श्वास बदलें", scLang:"भाषा बदलें", langLabel:"भाषा", zenIn:"फ़ोकस मोड", zenOut:"फ़ोकस से बाहर", breathGuide:"श्वास मार्गदर्शिका", tryThis:"आज़माएँ", bCustom:"कस्टम", cue:"चरण संकेत", cueS:"हर चरण बदलने पर मृदु स्वर", disclaimer:"ऑरोरा विश्राम और चिंतन के लिए है। इसकी आवृत्तियाँ और चक्र आध्यात्मिक परंपराओं से हैं, चिकित्सा से नहीं।", gotIt:"समझ गया", affShow:"पुष्टि-वाक्य दिखाएँ", affShowS:"मंडल के नीचे का पाठ", holdF:"रोकें (भरा)", holdE:"रोकें (खाली)", customHint:"प्रति चरण सेकंड (1–20)। साँस लेना और छोड़ना कम से कम 1।", beginBtn:"आरंभ करें", reverbL:"रीवर्ब", cueVolL:"संकेत मात्रा", scGuide:"श्वास मार्गदर्शिका", themeL:"थीम", thCosmic:"कॉस्मिक", thMinimal:"न्यूनतम", thLight:"उजला", thContrast:"उच्च कंट्रास्ट", simpleL:"सरल मोड", simpleS:"उन्नत नियंत्रण छिपाएँ", histL:"हाल के सत्र", histEmpty:"अभी कोई सत्र नहीं", sessDone:"सत्र पूर्ण", clModern:"आधुनिक जोड़ — शास्त्रीय सात में नहीं", wakeL:"स्क्रीन चालू रहती है", aboutSci:"यहाँ की आवृत्तियाँ, चक्र और बीज ध्वनियाँ आध्यात्मिक और योग परंपराओं से हैं, विज्ञान से नहीं। इसका कोई विश्वसनीय प्रमाण नहीं कि विशिष्ट आवृत्तियाँ अंगों को ठीक करती हैं या बाइनॉरल बीट्स मस्तिष्क की अवस्था बदलती हैं। ऑरोरा को चिंतन का साधन मानें, चिकित्सा का नहीं।", tutIntro:"अपनी सुविधा अनुसार एक श्वास लय चुनें। बढ़ता वलय साँस लेने का, घटता वलय साँस छोड़ने का संकेत देता है।", tutCoh:"सुसंगत: 5 सेकंड साँस लें, 5 सेकंड छोड़ें। संतुलन के लिए सरल और सौम्य।", tutBox:"बॉक्स: 4 गिनती साँस, 4 रोकें, 4 छोड़ें, 4 रोकें। एकाग्रता के लिए।", tutCalm:"शांत: 4 साँस, 7 रोकें, 8 छोड़ें। विश्राम और नींद के लिए।", tutTip:"नाक से साँस लें। संकेत आपका मार्गदर्शन करते हैं — गिनती नहीं, बस अनुसरण करें।", aboutP1:"ऑरोरा वास्तविक समय में चक्र स्वर, बीज ध्वनियाँ और सौम्य परिवेश संश्लेषित करता है — पूर्णतः आपके ब्राउज़र में, बिना किसी नेटवर्क के।", aboutP2:"कोई फ़ाइल नहीं, कोई ट्रैकिंग नहीं, कोई सर्वर नहीं। सब कुछ स्थानीय रूप से चलता है और आपकी पसंद इसी डिवाइस पर सहेजी जाती है।", aboutNote:"यह चिकित्सा या उपचार नहीं है। यदि आप अस्वस्थ हैं तो किसी योग्य चिकित्सक से परामर्श लें।", toneVolL:"स्वर मात्रा", gongVolL:"घंटा मात्रा", savePresetL:"सहेजें", presetsL:"सहेजे गए पैटर्न", obTitle:"स्वागत है", ob1:"स्तंभ से एक चक्र चुनें।", ob2:"मृदु स्वर और निर्देशित श्वास के लिए आरंभ करें दबाएँ।", ob3:"बाइनॉरल बीट्स के लिए हेडफ़ोन का प्रयोग करें। सब कुछ ऑफ़लाइन चलता है — कुछ भी आपके डिवाइस से बाहर नहीं जाता।", storageWarn:"इस ब्राउज़र मोड में सेटिंग्स सहेजी नहीं जाएँगी।", bDeep:"गहरा (4-8)", bSlow:"धीमा (6-6)", exportL:"सेटिंग्स निर्यात करें", importL:"सेटिंग्स आयात करें", noteL:"Solfeggio", senseL:"इंद्रिय", aboutFreq:"आवृत्तियाँ सॉल्फ़ेजियो परंपरा का अनुसरण करती हैं — जैसे 396 Hz मुक्ति के लिए, 528 Hz संतुलन के लिए, 639 Hz रिश्तों के लिए, 963 Hz जुड़ाव के लिए। ये ध्वनि-अभ्यास की पारंपरिक संगतियाँ हैं, मापे गए चिकित्सीय प्रभाव नहीं।", expand:"विस्तार", vizMandala:"मंडल", vizSphere:"3D गोला"
   },
   ar:{
-    titleDoc:"أورورا — صوت الشاكرات والتأمل", tag:"صوت وتأمل الشاكرات — مُركَّب آنيًا، دون اتصال بالكامل.", about:"حول", tone:"النغمة", freq:"التردد", element:"العنصر", mantra:"المانترا", petals:"البتلات", play:"تشغيل", pause:"إيقاف مؤقت", gong:"الغونغ", binaural:"النغمات ثنائية الأذن", binauralS:"استخدم سماعات الرأس · تجريبي", beat:"الإيقاع", volume:"مستوى الصوت", session:"الجلسة", duration:"المدة", journey:"رحلة الشاكرات", journeyS:"موازنة تلقائية", trans:"تضمين ما وراء الشخصية", transS:"9 شاكرات بدلًا من 7", breathL:"التنفس", start:"ابدأ", stop:"أوقف", remaining:"متبقٍ", elapsed:"منقضٍ", inhale:"شهيق", hold:"احبس", exhale:"زفير", bOff:"إيقاف", bCoh:"متناغم (5-5)", bBox:"صندوقي (4-4-4-4)", bCalm:"هادئ (4-7-8)", delta:"دلتا (2 هرتز)", theta:"ثيتا (6 هرتز)", alpha:"ألفا (10 هرتز)", shortcuts:"اختصارات", close:"إغلاق", scPlay:"تشغيل/إيقاف النغمة", scGong:"قرع الغونغ", scChakra:"تغيير الشاكرة", scBreath:"تغيير التنفس", scLang:"تغيير اللغة", langLabel:"اللغة", zenIn:"وضع التركيز", zenOut:"إنهاء التركيز", breathGuide:"دليل التنفس", tryThis:"جرّب", bCustom:"مخصص", cue:"إشارات المراحل", cueS:"نغمة خفيفة عند كل تغيّر مرحلة", disclaimer:"أورورا للاسترخاء والتأمل. تردداتها وشاكراتها من تقاليد روحية، لا من الطب.", gotIt:"فهمت", affShow:"إظهار التأكيدات", affShowS:"النص أسفل الماندالا", holdF:"احبس (ممتلئ)", holdE:"احبس (فارغ)", customHint:"ثوانٍ لكل مرحلة (1–20). الشهيق والزفير 1 على الأقل.", beginBtn:"ابدأ", reverbL:"الصدى", cueVolL:"مستوى الإشارات", scGuide:"دليل التنفس", themeL:"السمة", thCosmic:"كوني", thMinimal:"بسيط", thLight:"فاتح", thContrast:"تباين عالٍ", simpleL:"الوضع البسيط", simpleS:"إخفاء الضوابط المتقدمة", histL:"الجلسات الأخيرة", histEmpty:"لا جلسات بعد", sessDone:"اكتملت الجلسة", clModern:"إضافة حديثة — ليست من السبع الكلاسيكية", wakeL:"تبقى الشاشة مضاءة", aboutSci:"الترددات والشاكرات والأصوات البذرية هنا من تقاليد روحية ويوغية، لا من العلم. لا يوجد دليل موثوق على أن ترددات معينة تشفي الأعضاء أو أن النغمات ثنائية الأذن تغيّر حالات الدماغ بشكل موثوق. اعتبر أورورا أداة تأمل، لا أداة طبية.", tutIntro:"اختر إيقاع تنفس يناسبك. تتسع الحلقة مع الشهيق وتضيق مع الزفير.", tutCoh:"متناغم: شهيق 5 ثوانٍ، زفير 5 ثوانٍ. بسيط ولطيف للتوازن.", tutBox:"صندوقي: شهيق 4، حبس 4، زفير 4، حبس 4. للتركيز.", tutCalm:"هادئ: شهيق 4، حبس 7، زفير 8. للاسترخاء والنوم.", tutTip:"تنفّس من الأنف. الإشارات ترشدك — لا تَعُدّ، فقط اتبعها.", aboutP1:"تُركّب أورورا نغمات الشاكرات والأصوات البذرية وأجواء لطيفة آنيًا — بالكامل في متصفحك، دون أي اتصال.", aboutP2:"لا ملفات، لا تتبّع، لا خوادم. كل شيء يعمل محليًا وتُحفظ تفضيلاتك على هذا الجهاز.", aboutNote:"هذا ليس طبًا ولا علاجًا. إن كنت مريضًا فاستشر طبيبًا مختصًا.", toneVolL:"مستوى النغمة", gongVolL:"مستوى الغونغ", savePresetL:"حفظ", presetsL:"أنماط محفوظة", obTitle:"مرحبًا", ob1:"اختر شاكرة من العمود.", ob2:"اضغط ابدأ لنغمة لطيفة وتنفّس موجّه.", ob3:"استخدم سماعات الرأس للنغمات ثنائية الأذن. كل شيء يعمل دون اتصال — لا شيء يغادر جهازك.", storageWarn:"لن تُحفظ الإعدادات في وضع المتصفح هذا.", bDeep:"عميق (4-8)", bSlow:"بطيء (6-6)", exportL:"تصدير الإعدادات", importL:"استيراد الإعدادات", noteL:"Solfeggio", senseL:"الحاسة", aboutFreq:"تتبع الترددات تقليد سولفيجيو — مثلًا 396 هرتز للتحرر، 528 هرتز للتوازن، 639 هرتز للعلاقات، 963 هرتز للاتصال. هذه ارتباطات تقليدية من ممارسة الصوت، لا آثار طبية مقيسة."
+    titleDoc:"أورورا — صوت الشاكرات والتأمل", tag:"صوت وتأمل الشاكرات — مُركَّب آنيًا، دون اتصال بالكامل.", about:"حول", tone:"النغمة", freq:"التردد", element:"العنصر", mantra:"المانترا", petals:"البتلات", play:"تشغيل", pause:"إيقاف مؤقت", gong:"الغونغ", binaural:"النغمات ثنائية الأذن", binauralS:"استخدم سماعات الرأس · تجريبي", beat:"الإيقاع", volume:"مستوى الصوت", session:"الجلسة", duration:"المدة", journey:"رحلة الشاكرات", journeyS:"موازنة تلقائية", trans:"تضمين ما وراء الشخصية", transS:"9 شاكرات بدلًا من 7", breathL:"التنفس", start:"ابدأ", stop:"أوقف", remaining:"متبقٍ", elapsed:"منقضٍ", inhale:"شهيق", hold:"احبس", exhale:"زفير", bOff:"إيقاف", bCoh:"متناغم (5-5)", bBox:"صندوقي (4-4-4-4)", bCalm:"هادئ (4-7-8)", delta:"دلتا (2 هرتز)", theta:"ثيتا (6 هرتز)", alpha:"ألفا (10 هرتز)", shortcuts:"اختصارات", close:"إغلاق", scPlay:"تشغيل/إيقاف النغمة", scGong:"قرع الغونغ", scChakra:"تغيير الشاكرة", scBreath:"تغيير التنفس", scLang:"تغيير اللغة", langLabel:"اللغة", zenIn:"وضع التركيز", zenOut:"إنهاء التركيز", breathGuide:"دليل التنفس", tryThis:"جرّب", bCustom:"مخصص", cue:"إشارات المراحل", cueS:"نغمة خفيفة عند كل تغيّر مرحلة", disclaimer:"أورورا للاسترخاء والتأمل. تردداتها وشاكراتها من تقاليد روحية، لا من الطب.", gotIt:"فهمت", affShow:"إظهار التأكيدات", affShowS:"النص أسفل الماندالا", holdF:"احبس (ممتلئ)", holdE:"احبس (فارغ)", customHint:"ثوانٍ لكل مرحلة (1–20). الشهيق والزفير 1 على الأقل.", beginBtn:"ابدأ", reverbL:"الصدى", cueVolL:"مستوى الإشارات", scGuide:"دليل التنفس", themeL:"السمة", thCosmic:"كوني", thMinimal:"بسيط", thLight:"فاتح", thContrast:"تباين عالٍ", simpleL:"الوضع البسيط", simpleS:"إخفاء الضوابط المتقدمة", histL:"الجلسات الأخيرة", histEmpty:"لا جلسات بعد", sessDone:"اكتملت الجلسة", clModern:"إضافة حديثة — ليست من السبع الكلاسيكية", wakeL:"تبقى الشاشة مضاءة", aboutSci:"الترددات والشاكرات والأصوات البذرية هنا من تقاليد روحية ويوغية، لا من العلم. لا يوجد دليل موثوق على أن ترددات معينة تشفي الأعضاء أو أن النغمات ثنائية الأذن تغيّر حالات الدماغ بشكل موثوق. اعتبر أورورا أداة تأمل، لا أداة طبية.", tutIntro:"اختر إيقاع تنفس يناسبك. تتسع الحلقة مع الشهيق وتضيق مع الزفير.", tutCoh:"متناغم: شهيق 5 ثوانٍ، زفير 5 ثوانٍ. بسيط ولطيف للتوازن.", tutBox:"صندوقي: شهيق 4، حبس 4، زفير 4، حبس 4. للتركيز.", tutCalm:"هادئ: شهيق 4، حبس 7، زفير 8. للاسترخاء والنوم.", tutTip:"تنفّس من الأنف. الإشارات ترشدك — لا تَعُدّ، فقط اتبعها.", aboutP1:"تُركّب أورورا نغمات الشاكرات والأصوات البذرية وأجواء لطيفة آنيًا — بالكامل في متصفحك، دون أي اتصال.", aboutP2:"لا ملفات، لا تتبّع، لا خوادم. كل شيء يعمل محليًا وتُحفظ تفضيلاتك على هذا الجهاز.", aboutNote:"هذا ليس طبًا ولا علاجًا. إن كنت مريضًا فاستشر طبيبًا مختصًا.", toneVolL:"مستوى النغمة", gongVolL:"مستوى الغونغ", savePresetL:"حفظ", presetsL:"أنماط محفوظة", obTitle:"مرحبًا", ob1:"اختر شاكرة من العمود.", ob2:"اضغط ابدأ لنغمة لطيفة وتنفّس موجّه.", ob3:"استخدم سماعات الرأس للنغمات ثنائية الأذن. كل شيء يعمل دون اتصال — لا شيء يغادر جهازك.", storageWarn:"لن تُحفظ الإعدادات في وضع المتصفح هذا.", bDeep:"عميق (4-8)", bSlow:"بطيء (6-6)", exportL:"تصدير الإعدادات", importL:"استيراد الإعدادات", noteL:"Solfeggio", senseL:"الحاسة", aboutFreq:"تتبع الترددات تقليد سولفيجيو — مثلًا 396 هرتز للتحرر، 528 هرتز للتوازن، 639 هرتز للعلاقات، 963 هرتز للاتصال. هذه ارتباطات تقليدية من ممارسة الصوت، لا آثار طبية مقيسة.", expand:"توسيع", vizMandala:"ماندالا", vizSphere:"كرة ثلاثية الأبعاد"
   }
 };
 const LANGS=[
@@ -1093,6 +1128,102 @@ function tickBreath(now){
 const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const bg=document.getElementById("bg"), bgx=bg.getContext("2d");
 const mc=document.getElementById("mandala"), mx=mc.getContext("2d");
+/* ---------- 3D pulsating sphere (WebGL, zero dependencies, offline) ---------- */
+let visualMode="mandala", sphZoom=1, sphRotX=0, sphRotY=0, sBg=[0.027,0.016,0.063];
+const sCv=document.getElementById("sphere");
+let sGL=null, sProg=null, sphereReady=false, sU={};
+const SPHERE_FS=`precision highp float;
+uniform vec2 uRes; uniform float uTime; uniform float uPulse; uniform vec3 uColor; uniform float uLevel; uniform vec3 uBg; uniform float uZoom; uniform vec2 uRot;
+float surf(vec3 n){ float s=sin(6.0*n.x+uTime*1.2)+sin(6.0*n.y+uTime*0.9)+sin(6.0*n.z+uTime*1.5); return s*0.3333; }
+void main(){
+  vec2 uv=(gl_FragCoord.xy-0.5*uRes)/min(uRes.x,uRes.y);
+  vec3 col=uBg;
+  float R=0.40*uPulse*uZoom; float r2=dot(uv,uv);
+  float glow=exp(-max(length(uv)-R,0.0)*5.5)*0.5;
+  col=mix(col, col+uColor*0.9, clamp(glow,0.0,1.0));
+  if(r2<R*R){
+    float z=sqrt(max(R*R-r2,0.0));
+    vec3 nrm=normalize(vec3(uv,z));
+    float yaw=uTime*0.3+uRot.x, pitch=uRot.y;
+    float cy=cos(yaw), sy=sin(yaw), cp=cos(pitch), sp=sin(pitch);
+    vec3 ry=vec3(cy*nrm.x+sy*nrm.z, nrm.y, -sy*nrm.x+cy*nrm.z);
+    vec3 rn=vec3(ry.x, cp*ry.y-sp*ry.z, sp*ry.y+cp*ry.z);
+    vec3 L=normalize(vec3(0.5,0.65,0.85));
+    float diff=clamp(dot(nrm,L),0.0,1.0);
+    float rim=pow(1.0-z/R,2.2);
+    float energy=0.5+0.5*surf(rn*2.0);
+    vec3 sph=uColor*(0.28+0.72*diff);
+    sph+=uColor*rim*1.25;
+    sph+=vec3(1.0)*rim*0.22;
+    sph+=uColor*energy*0.30*(0.55+uLevel*0.9);
+    vec3 H=normalize(L+vec3(0.0,0.0,1.0));
+    float spec=pow(clamp(dot(nrm,H),0.0,1.0),26.0);
+    sph+=vec3(1.0)*spec*0.45;
+    float edge=1.0-smoothstep((R*0.985)*(R*0.985), R*R, r2);
+    col=mix(col, sph, edge);
+  }
+  gl_FragColor=vec4(clamp(col,0.0,1.0),1.0);
+}`;
+function sCompile(t,src){ const s=sGL.createShader(t); sGL.shaderSource(s,src); sGL.compileShader(s); if(!sGL.getShaderParameter(s,sGL.COMPILE_STATUS)){ sGL.deleteShader(s); return null; } return s; }
+function updateSphereBg(){ try{ let v=getComputedStyle(document.documentElement).getPropertyValue("--void").trim(); if(v.charAt(0)==="#"){ const c=hexRGB(v); sBg=[c[0]/255,c[1]/255,c[2]/255]; } else { const m=v.match(/(\d+)\D+(\d+)\D+(\d+)/); if(m) sBg=[(+m[1])/255,(+m[2])/255,(+m[3])/255]; } }catch(e){} }
+function initSphere(){
+  if(sphereReady) return true;
+  if(!sCv) return false;
+  const opt={alpha:false,antialias:true,preserveDrawingBuffer:false,depth:false,stencil:false};
+  try{ sGL=sCv.getContext("webgl",opt)||sCv.getContext("experimental-webgl",opt); }catch(e){ sGL=null; }
+  if(!sGL) return false;
+  const vs=sCompile(sGL.VERTEX_SHADER,"attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}");
+  const fs=sCompile(sGL.FRAGMENT_SHADER,SPHERE_FS);
+  if(!vs||!fs){ sGL=null; return false; }
+  const prog=sGL.createProgram(); sGL.attachShader(prog,vs); sGL.attachShader(prog,fs); sGL.linkProgram(prog);
+  if(!sGL.getProgramParameter(prog,sGL.LINK_STATUS)){ sGL=null; return false; }
+  sProg=prog;
+  const b=sGL.createBuffer(); sGL.bindBuffer(sGL.ARRAY_BUFFER,b);
+  sGL.bufferData(sGL.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),sGL.STATIC_DRAW);
+  const loc=sGL.getAttribLocation(prog,"p"); sGL.enableVertexAttribArray(loc); sGL.vertexAttribPointer(loc,2,sGL.FLOAT,false,0,0);
+  ["res","time","pulse","color","level","bg","zoom","rot"].forEach(n=>{ sU[n]=sGL.getUniformLocation(prog,"u"+n.charAt(0).toUpperCase()+n.slice(1)); });
+  updateSphereBg();
+  sCv.addEventListener("webglcontextlost",e=>{ e.preventDefault(); sphereReady=false; if(visualMode==="sphere") document.body.classList.remove("viz-sphere"); },false);
+  sCv.addEventListener("webglcontextrestored",()=>{ sphereReady=false; sProg=null; sGL=null; if(initSphere()){ sizeSphere(); if(visualMode==="sphere") document.body.classList.add("viz-sphere"); } },false);
+  sphereReady=true; return true;
+}
+function sizeSphere(){ if(!sGL||!sCv) return; const w=Math.max(1,Math.round(MW*DPR)), h=Math.max(1,Math.round(MH*DPR)); if(sCv.width!==w||sCv.height!==h){ sCv.width=w; sCv.height=h; if(visualMode==="sphere"&&sphereReady){ try{ drawSphere(performance.now()); }catch(_){}}} }
+function drawSphere(ts){
+  if(!sphereReady||!sGL) return;
+  const c=CHAKRAS[current], rgb=hexRGB(c.col);
+  let lvl=0; if(analyser&&isPlaying){ analyser.getByteFrequencyData(aData); let s=0; for(let i=0;i<24;i++)s+=aData[i]; lvl=Math.min(1,(s/24)/150); }
+  const pulse=(breath.scale||1)+0.045*Math.sin(ts*0.0011)*(reduce?0.4:1);
+  sGL.viewport(0,0,sGL.drawingBufferWidth,sGL.drawingBufferHeight);
+  sGL.useProgram(sProg);
+  sGL.uniform2f(sU.res,sGL.drawingBufferWidth,sGL.drawingBufferHeight);
+  sGL.uniform1f(sU.time,(ts*0.001)*(reduce?0.4:1));
+  sGL.uniform1f(sU.pulse,pulse);
+  sGL.uniform3f(sU.color,rgb[0]/255,rgb[1]/255,rgb[2]/255);
+  sGL.uniform1f(sU.level,lvl);
+  sGL.uniform3f(sU.bg,sBg[0],sBg[1],sBg[2]);
+  sGL.uniform1f(sU.zoom,sphZoom);
+  sGL.uniform2f(sU.rot,sphRotX,sphRotY);
+  sGL.drawArrays(sGL.TRIANGLES,0,3);
+}
+function setVizIcon(){ const vb=document.getElementById("vizBtn"); if(!vb) return; const sph='<circle cx="12" cy="12" r="8.4"/><ellipse cx="12" cy="12" rx="8.4" ry="3.3"/><path d="M12 3.6v16.8"/>'; const man='<circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="3.1"/>'; vb.innerHTML='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round">'+(visualMode==="sphere"?man:sph)+'</svg>'; }
+function applyVisual(){
+  if(visualMode==="sphere"&&!sphereReady) visualMode="mandala";
+  document.body.classList.toggle("viz-sphere",visualMode==="sphere");
+  const vb=document.getElementById("vizBtn");
+  if(vb){ vb.setAttribute("aria-pressed",visualMode==="sphere"?"true":"false"); vb.title=(visualMode==="sphere"?T[lang].vizMandala:T[lang].vizSphere); vb.setAttribute("aria-label",vb.title); setVizIcon(); }
+  savePref("viz",visualMode);
+}
+/* Sphere interaction — drag to rotate, wheel/pinch to zoom, double-click to reset */
+const sPtrs=new Map(); let sLX=0,sLY=0,sPD=0,sPZ=1;
+function sZoom(z){ sphZoom=Math.max(0.45,Math.min(2.6,z)); }
+if(sCv){
+  sCv.addEventListener("pointerdown",e=>{ if(visualMode!=="sphere")return; try{sCv.setPointerCapture(e.pointerId);}catch(_){}; sPtrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); if(sPtrs.size===1){ sLX=e.clientX; sLY=e.clientY; } else if(sPtrs.size===2){ const p=[...sPtrs.values()]; sPD=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y); sPZ=sphZoom; } });
+  sCv.addEventListener("pointermove",e=>{ if(visualMode!=="sphere"||!sPtrs.has(e.pointerId))return; sPtrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); if(sPtrs.size===1){ const dx=e.clientX-sLX, dy=e.clientY-sLY; sLX=e.clientX; sLY=e.clientY; sphRotX+=dx*0.008; sphRotY=Math.max(-1.3,Math.min(1.3,sphRotY+dy*0.008)); } else if(sPtrs.size>=2){ const p=[...sPtrs.values()]; const d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y); if(sPD>0) sZoom(sPZ*(d/sPD)); } e.preventDefault(); },{passive:false});
+  const sEnd=e=>{ sPtrs.delete(e.pointerId); if(sPtrs.size===1){ const p=[...sPtrs.values()][0]; sLX=p.x; sLY=p.y; } };
+  sCv.addEventListener("pointerup",sEnd); sCv.addEventListener("pointercancel",sEnd);
+  sCv.addEventListener("wheel",e=>{ if(visualMode!=="sphere")return; e.preventDefault(); sZoom(sphZoom*(e.deltaY<0?1.08:0.925)); },{passive:false});
+  sCv.addEventListener("dblclick",e=>{ if(visualMode!=="sphere")return; sphZoom=1; sphRotX=0; sphRotY=0; });
+}
 let stars=[], rot=0, energy=0, particles=[];
 let W=0,H=0,MW=0,MH=0,DPR=Math.min(window.devicePixelRatio||1,2);
 
@@ -1102,6 +1233,7 @@ function sizeAll(){
   bg.width=W*DPR; bg.height=H*DPR; bg.style.width=W+"px"; bg.style.height=H+"px"; bgx.setTransform(DPR,0,0,DPR,0,0);
   const r=mc.getBoundingClientRect(); MW=r.width; MH=r.height;
   mc.width=MW*DPR; mc.height=MH*DPR; mx.setTransform(DPR,0,0,DPR,0,0);
+  sizeSphere();
   stars=[]; const n=reduce?70:120;
   for(let i=0;i<n;i++) stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+0.3,a:Math.random()*0.5+0.15,ph:Math.random()*6.28,sp:0.4+Math.random()*0.8});
   drawBG(performance.now());
@@ -1249,7 +1381,7 @@ function loop(ts){
   const dt=Math.min(60,ts-last); last=ts;
   tickSession(ts);                 // keep timing accurate even when hidden
   const idle=(ts-lastAct>60000)&&!isPlaying&&!session.active&&breathKey==="off";
-  if(!document.hidden && !idle){ tickBreath(ts); if(!reduce) drawBG(ts); drawMandala(ts,dt); }
+  if(!document.hidden && !idle){ tickBreath(ts); if(!reduce) drawBG(ts); if(visualMode==="sphere"&&sphereReady) drawSphere(ts); else drawMandala(ts,dt); }
   requestAnimationFrame(loop);
 }
 
@@ -1323,9 +1455,14 @@ function buildDur(){
   });
 }
 function buildKeys(){
-  const rows=[["Space",T[lang].scPlay],["G",T[lang].scGong],["\u2191 \u2193",T[lang].scChakra],["B",T[lang].scBreath],["L",T[lang].scLang],["?",T[lang].scGuide]];
+  const left=[["Space",T[lang].scPlay],["G",T[lang].scGong],["\u2191 \u2193",T[lang].scChakra]];
+  const right=[["B",T[lang].scBreath],["L",T[lang].scLang],["?",T[lang].scGuide]];
   const k=document.getElementById("keys"); k.innerHTML="";
-  rows.forEach(r=>{ const a=document.createElement("kbd"); a.textContent=r[0]; const b=document.createElement("span"); b.textContent=r[1]; k.appendChild(a); k.appendChild(b); });
+  [left,right].forEach(group=>{
+    const col=document.createElement("div"); col.className="keys-col";
+    group.forEach(r=>{ const a=document.createElement("kbd"); a.textContent=r[0]; const b=document.createElement("span"); b.textContent=r[1]; col.appendChild(a); col.appendChild(b); });
+    k.appendChild(col);
+  });
 }
 function buildCustom(){
   const wrap=document.getElementById("customSub"); if(!wrap) return;
@@ -1378,7 +1515,7 @@ const THEMES=["cosmic","minimal","light","contrast"];
 const RTL=["ar"];
 let theme="cosmic", simpleMode=false, hist={n:0,sec:0};
 function buildThemeOptions(){ const sel=document.getElementById("themeSel"); if(!sel) return; const nm={cosmic:T[lang].thCosmic,minimal:T[lang].thMinimal,light:T[lang].thLight,contrast:T[lang].thContrast}; sel.innerHTML=THEMES.map(t=>'<option value="'+t+'">'+nm[t]+'</option>').join(""); sel.value=theme; sel.setAttribute("aria-label",T[lang].themeL); }
-function applyTheme(t){ theme=THEMES.indexOf(t)>=0?t:"cosmic"; if(theme==="cosmic") delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme=theme; lightBg=(theme==="light"); savePref("theme",theme); const sel=document.getElementById("themeSel"); if(sel) sel.value=theme; }
+function applyTheme(t){ theme=THEMES.indexOf(t)>=0?t:"cosmic"; if(theme==="cosmic") delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme=theme; lightBg=(theme==="light"); savePref("theme",theme); const sel=document.getElementById("themeSel"); if(sel) sel.value=theme; updateSphereBg(); }
 function applySimple(on){ simpleMode=!!on; document.body.classList.toggle("simple",simpleMode); savePref("simple",simpleMode?"1":"0"); }
 function loadHist(){ try{ const s=loadPref("hist"); if(s){ const o=JSON.parse(s); if(o&&typeof o.n==="number"){ hist={n:o.n|0,sec:o.sec|0}; } } }catch(e){} }
 function recordSession(ms){ hist.n++; hist.sec+=Math.round(ms/1000); savePref("hist",JSON.stringify(hist)); renderHist(); }
@@ -1422,19 +1559,31 @@ function setLang(l){
   const hb=document.getElementById("breathHelp"); if(hb) hb.setAttribute("aria-label",T[l].breathGuide);
   const setTip=(id,txt)=>{ const e=document.getElementById(id); if(e&&txt){ e.title=txt; if(e.tagName!=="SELECT"&&e.tagName!=="INPUT") e.setAttribute("aria-label",txt); } };
   setTip("zenBtn",T[l].zenIn); setTip("zenExit",T[l].zenOut); setTip("gongBtn",T[l].gong); setTip("beginBtn",T[l].beginBtn); setTip("themeSel",T[l].themeL);
+  setTip("vizBtn", visualMode==="sphere"?T[l].vizMandala:T[l].vizSphere);
   refreshZenBtn();
 }
 
 /* events */
 document.getElementById("langSel").addEventListener("change",e=>setLang(e.target.value));
 document.getElementById("themeSel").addEventListener("change",e=>applyTheme(e.target.value));
+document.getElementById("vizBtn").addEventListener("click",()=>{ visualMode=(visualMode==="sphere"?"mandala":"sphere"); applyVisual(); });
 document.getElementById("simpleOn").addEventListener("change",e=>applySimple(e.target.checked));
 document.getElementById("exportBtn").addEventListener("click",exportSettings);
 document.getElementById("importBtn").addEventListener("click",()=>document.getElementById("importFile").click());
 document.getElementById("importFile").addEventListener("change",e=>{ const f=e.target.files&&e.target.files[0]; if(f) importSettings(f); });
-document.getElementById("playBtn").addEventListener("click",()=>{ isPlaying?pauseTone():playTone(); });
+function expandPanel(p){ if(!p) return; p.classList.remove("collapsed"); const b=p.querySelector(".ph2btn"); if(b) b.setAttribute("aria-expanded","true"); }
+(function(){
+  const small = !!(window.matchMedia && window.matchMedia("(max-width:980px)").matches);
+  document.querySelectorAll(".panel").forEach(p=>{
+    if(small) p.classList.add("collapsed");
+    const btn=p.querySelector(".ph2btn"); if(!btn) return;
+    btn.setAttribute("aria-expanded", p.classList.contains("collapsed")?"false":"true");
+    btn.addEventListener("click",()=>{ const c=p.classList.toggle("collapsed"); btn.setAttribute("aria-expanded", c?"false":"true"); });
+  });
+})();
+document.getElementById("playBtn").addEventListener("click",()=>{ if(isPlaying){ pauseTone(); } else { playTone(); expandPanel(document.getElementById("playBtn").closest(".panel")); } });
 document.getElementById("gongBtn").addEventListener("click",strikeGong);
-document.getElementById("sessBtn").addEventListener("click",()=>{ session.active?endSession():startSession(); });
+document.getElementById("sessBtn").addEventListener("click",()=>{ if(session.active){ endSession(); } else { startSession(); expandPanel(document.getElementById("sessBtn").closest(".panel")); } });
 document.getElementById("binOn").addEventListener("change",e=>{
   binauralOn=e.target.checked; document.getElementById("binSub").classList.toggle("on",binauralOn); savePref("bin",binauralOn?"1":"0");
   if(isPlaying){ if(binauralOn) startBinaural(CHAKRAS[current].freq); else stopBinaural(); }
@@ -1453,7 +1602,7 @@ toneVolEl.addEventListener("input",e=>{ toneVol=+e.target.value/100; if(toneVoic
 const gongVolEl=document.getElementById("gongVolS");
 gongVolEl.addEventListener("input",e=>{ gongVol=+e.target.value/100; e.target.style.setProperty("--p",e.target.value+"%"); savePref("gongvol",e.target.value); });
 document.getElementById("affOn").addEventListener("change",e=>{ showAff=e.target.checked; savePref("aff",showAff?"1":"0"); refreshInfo(); });
-document.getElementById("beginBtn").addEventListener("click",()=>{ if(isPlaying) return; if(breathKey==="off"){ setBreath("coherent"); const bs=document.getElementById("breathSel"); if(bs) bs.value="coherent"; } playTone(); });
+document.getElementById("beginBtn").addEventListener("click",()=>{ if(isPlaying) return; if(breathKey==="off"){ setBreath("coherent"); const bs=document.getElementById("breathSel"); if(bs) bs.value="coherent"; } playTone(); expandPanel(document.getElementById("playBtn").closest(".panel")); });
 let lastFocus=null;
 const notice=document.getElementById("notice");
 const obCard=document.getElementById("onboard");
@@ -1516,12 +1665,12 @@ function fsEl(){ return document.fullscreenElement||document.webkitFullscreenEle
 function reqFs(){ const el=document.documentElement, r=el.requestFullscreen||el.webkitRequestFullscreen; if(r){ try{ const p=r.call(el); if(p&&p.catch) p.catch(()=>{}); }catch(e){} } }
 function exitFs(){ if(fsEl()){ const x=document.exitFullscreen||document.webkitExitFullscreen; if(x){ try{ x.call(document); }catch(e){} } } }
 function refreshZenBtn(){ const on=document.body.classList.contains("zen"); const b=document.getElementById("zenBtn"); if(b) b.setAttribute("aria-label", on?T[lang].zenOut:T[lang].zenIn); }
-function enterZen(){ document.body.classList.add("zen"); reqFs(); refreshZenBtn(); }
-function exitZen(){ document.body.classList.remove("zen"); exitFs(); refreshZenBtn(); }
+function enterZen(){ document.body.classList.add("zen"); reqFs(); refreshZenBtn(); setTimeout(sizeAll,60); }
+function exitZen(){ document.body.classList.remove("zen"); exitFs(); refreshZenBtn(); setTimeout(sizeAll,60); }
 function toggleZen(){ document.body.classList.contains("zen")?exitZen():enterZen(); }
 document.getElementById("zenBtn").addEventListener("click",toggleZen);
 document.getElementById("zenExit").addEventListener("click",exitZen);
-function onFsChange(){ if(!fsEl()) document.body.classList.remove("zen"); refreshZenBtn(); }
+function onFsChange(){ if(!fsEl()) document.body.classList.remove("zen"); refreshZenBtn(); requestAnimationFrame(sizeAll); setTimeout(sizeAll,80); }
 document.addEventListener("fullscreenchange",onFsChange);
 document.addEventListener("webkitfullscreenchange",onFsChange);
 
@@ -1556,6 +1705,7 @@ function restoreState(){
   loadHist(); loadPresets();
   v=loadPref("theme"); applyTheme(v||"cosmic");
   v=loadPref("simple"); applySimple(v==="1"); document.getElementById("simpleOn").checked=simpleMode;
+  v=loadPref("viz"); if(v==="sphere"||v==="mandala") visualMode=v;
 }
 
 /* init */
@@ -1566,6 +1716,9 @@ setLang(lang);
 applyChakra(current,false);
 setBreath(breathKey);
 sizeAll();
+if(!initSphere()){ const vb=document.getElementById("vizBtn"); if(vb) vb.style.display="none"; visualMode="mandala"; }
+sizeSphere();
+applyVisual();
 requestAnimationFrame(loop);
 </script>
 </body>
