@@ -133,7 +133,7 @@
   .center{display:flex;flex-direction:column;align-items:center;gap:14px;min-width:0}
   .mandala-wrap{position:relative;width:100%;max-width:min(460px,72dvh);aspect-ratio:1/1}
   #mandala{position:absolute;inset:0;width:100%;height:100%}
-  #sphere{position:absolute;inset:0;width:100%;height:100%;display:none}
+  #sphere{position:absolute;inset:0;width:100%;height:100%;display:none;transform:translateZ(0);backface-visibility:hidden;will-change:transform}
   body.viz-sphere #sphere{display:block;touch-action:none;cursor:grab}
   body.viz-sphere #sphere:active{cursor:grabbing}
   body.viz-sphere #mandala{display:none}
@@ -328,6 +328,7 @@
   select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
   /* Focus (zen) mode */
+  body.zen{overflow:hidden}
   body.zen .top, body.zen .column, body.zen .rail{display:none}
   body.zen .stage{grid-template-columns:1fr}
   body.zen .app{justify-content:center}
@@ -1169,7 +1170,7 @@ function updateSphereBg(){ try{ let v=getComputedStyle(document.documentElement)
 function initSphere(){
   if(sphereReady) return true;
   if(!sCv) return false;
-  const opt={alpha:false,antialias:true,preserveDrawingBuffer:false,depth:false,stencil:false};
+  const opt={alpha:false,antialias:true,preserveDrawingBuffer:true,depth:false,stencil:false};
   try{ sGL=sCv.getContext("webgl",opt)||sCv.getContext("experimental-webgl",opt); }catch(e){ sGL=null; }
   if(!sGL) return false;
   const vs=sCompile(sGL.VERTEX_SHADER,"attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}");
@@ -1187,7 +1188,7 @@ function initSphere(){
   sCv.addEventListener("webglcontextrestored",()=>{ sphereReady=false; sProg=null; sGL=null; if(initSphere()){ sizeSphere(); if(visualMode==="sphere") document.body.classList.add("viz-sphere"); } },false);
   sphereReady=true; return true;
 }
-function sizeSphere(){ if(!sGL||!sCv) return; const w=Math.max(1,Math.round(MW*DPR)), h=Math.max(1,Math.round(MH*DPR)); if(sCv.width!==w||sCv.height!==h){ sCv.width=w; sCv.height=h; if(visualMode==="sphere"&&sphereReady){ try{ drawSphere(performance.now()); }catch(_){}}} }
+function sizeSphere(){ if(!sGL||!sCv) return; let w=Math.round(MW*DPR), h=Math.round(MH*DPR); if(w<16||h<16) return; w=Math.min(w,1600); h=Math.min(h,1600); if(sCv.width!==w||sCv.height!==h){ sCv.width=w; sCv.height=h; if(visualMode==="sphere"&&sphereReady){ try{ drawSphere(performance.now()); }catch(_){}}} }
 function drawSphere(ts){
   if(!sphereReady||!sGL) return;
   const c=CHAKRAS[current], rgb=hexRGB(c.col);
@@ -1665,7 +1666,7 @@ function fsEl(){ return document.fullscreenElement||document.webkitFullscreenEle
 function reqFs(){ const el=document.documentElement, r=el.requestFullscreen||el.webkitRequestFullscreen; if(r){ try{ const p=r.call(el); if(p&&p.catch) p.catch(()=>{}); }catch(e){} } }
 function exitFs(){ if(fsEl()){ const x=document.exitFullscreen||document.webkitExitFullscreen; if(x){ try{ x.call(document); }catch(e){} } } }
 function refreshZenBtn(){ const on=document.body.classList.contains("zen"); const b=document.getElementById("zenBtn"); if(b) b.setAttribute("aria-label", on?T[lang].zenOut:T[lang].zenIn); }
-function enterZen(){ document.body.classList.add("zen"); reqFs(); refreshZenBtn(); setTimeout(sizeAll,60); }
+function enterZen(){ document.body.classList.add("zen"); if(visualMode!=="sphere") reqFs(); refreshZenBtn(); setTimeout(sizeAll,60); }
 function exitZen(){ document.body.classList.remove("zen"); exitFs(); refreshZenBtn(); setTimeout(sizeAll,60); }
 function toggleZen(){ document.body.classList.contains("zen")?exitZen():enterZen(); }
 document.getElementById("zenBtn").addEventListener("click",toggleZen);
