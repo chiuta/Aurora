@@ -178,9 +178,9 @@
   .ck-sk{font-size:13px;color:var(--accent);letter-spacing:.06em;margin-top:4px}
   .ck-desc{font-size:13px;color:var(--dim);line-height:1.55;margin-top:10px;max-width:44ch;margin-left:auto;margin-right:auto}
   .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px;margin:18px auto 0;max-width:480px}
-  .meta .cell{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:11px;padding:9px 11px;text-align:center}
+  .meta .cell{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:11px;padding:9px 11px;text-align:center;min-width:0}
   .meta .k{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim2)}
-  .meta .v{font-size:16px;color:var(--text);margin-top:3px;font-variant-numeric:tabular-nums}
+  .meta .v{font-size:16px;color:var(--text);margin-top:3px;font-variant-numeric:tabular-nums;overflow-wrap:break-word;word-break:break-word}
   .meta .v.mantra{font-family:var(--serif);letter-spacing:.14em}
 
   .primary{appearance:none;width:100%;border:none;cursor:pointer;font-family:var(--sans);font-weight:500;
@@ -402,6 +402,9 @@
   @media (max-width:560px){
     .rail{flex-direction:column}
     .modal{padding:20px 18px 22px}
+    .meta{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-width:none}
+    .meta .cell{padding:9px 8px}
+    .meta .v{font-size:15px}
   }
   @media (max-width:400px){
     .app{padding:calc(16px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) calc(30px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left));gap:14px}
