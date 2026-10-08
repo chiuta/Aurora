@@ -1784,10 +1784,12 @@ document.getElementById("gwBtn").addEventListener("click",()=>{ buildGateway(); 
 document.getElementById("gwClose").addEventListener("click",()=>closeModal(gwScrim));
 
 document.addEventListener("keydown",e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey) return;   /* nu intercepta Ctrl/Cmd +/- (zoom), Ctrl+L, Ctrl+B etc. */
   const op=openScrim();
   if(op){ if(e.key==="Escape"){ e.preventDefault(); closeModal(op); } return; }
   if(document.body.classList.contains("zen") && e.key==="Escape"){ e.preventDefault(); exitZen(); return; }
   if(e.target.tagName==="SELECT"||e.target.tagName==="INPUT") return;
+  if(e.code==="Space" && e.target.closest && e.target.closest("button,a[href],summary,[role=button]")) return;   /* Spațiu activează butonul focalizat */
   if(e.code==="Space"){ e.preventDefault(); isPlaying?pauseTone():playTone(); }
   else if(e.key==="g"||e.key==="G") strikeGong();
   else if(e.key==="ArrowUp"){ e.preventDefault(); applyChakra(current-1,true); }
@@ -1832,14 +1834,14 @@ document.addEventListener("visibilitychange",()=>{
 function restoreState(){
   let v;
   v=loadPref("bin"); if(v!=null) binauralOn=(v==="1");
-  v=loadPref("beat"); if(v!=null&&!isNaN(+v)) beatHz=+v;
+  v=loadPref("beat"); if(v!=null&&[2,6,10].indexOf(+v)>=0) beatHz=+v;
   v=loadPref("breath"); if(v&&Object.prototype.hasOwnProperty.call(PATTERNS,v)) breathKey=v;
   v=loadPref("journey"); if(v!=null) journeyOn=(v==="1");
   v=loadPref("trans"); if(v!=null) includeTrans=(v==="1");
   v=loadPref("dur"); if(v!=null&&[5,10,15,20,30,45].indexOf(+v)>=0) durMin=+v;
   v=loadPref("custom"); if(v){ const a=v.split(",").map(x=>parseInt(x,10)); if(a.length===4&&a.every(n=>!isNaN(n))){ for(let i=0;i<4;i++){ const lo=(i===0||i===2)?1:0; customPat[i]=Math.max(lo,Math.min(20,a[i])); } } }
   v=loadPref("cue"); if(v!=null) breathCues=(v==="1");
-  v=loadPref("chakra"); if(v!=null&&!isNaN(+v)) current=(((+v)%CHAKRAS.length)+CHAKRAS.length)%CHAKRAS.length;
+  v=loadPref("chakra"); if(v!=null&&Number.isInteger(+v)) current=(((+v)%CHAKRAS.length)+CHAKRAS.length)%CHAKRAS.length;
   document.getElementById("binOn").checked=binauralOn; document.getElementById("binSub").classList.toggle("on",binauralOn);
   document.getElementById("jOn").checked=journeyOn; document.getElementById("jSub").classList.toggle("on",journeyOn);
   document.getElementById("transOn").checked=includeTrans;
@@ -1866,6 +1868,8 @@ applyVisual();
 booting=false;
 if(bootHash){ if(!applyHashValue(bootHash)) updateHash(chakraHash()); } else { updateHash(chakraHash()); }
 requestAnimationFrame(loop);
+/* rAF nu rulează în fundal: fără acest ceas, sesiunea (gong final, schimbarea chakrelor) nu s-ar încheia cu ecranul stins */
+setInterval(function(){ if(document.hidden) tickSession(performance.now()); },1000);
 </script>
 </body>
 </html>
