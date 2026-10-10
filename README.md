@@ -36,6 +36,10 @@ Aurora este un instrument contemplativ de sunet și meditație: alegi o chakră,
 9. Escape închide ferestrele și iese din modul zen.
 10. Salvarea datelor: „Export settings” descarcă `aurora-settings.json`; „Import settings” îl reîncarcă; „Reset to defaults” revine la valorile implicite.
 
+## Avertisment
+
+Conținut contemplativ/de relaxare, nu medical. Chakrele, frecvențele asociate și „sunetele vindecătoare" provin din tradiții spirituale și nu au validare științifică; nu există dovezi solide că anumite frecvențe tratează afecțiuni sau că bătăile binaurale schimbă fiabil starea creierului. Nu înlocuiește sfatul medical. Aplicația afișează acest avertisment la prima rulare, în „About" și în subsolul paginii.
+
 ## Confidențialitate și rețea
 
 - **Stocare locală:** `localStorage`, toate cheile cu prefixul `aurora.` (limbă, temă, volume, preferințe de sesiune, presetări, istoric, marcaje că notele au fost văzute). Dacă stocarea este blocată, aplicația afișează un avertisment.
@@ -49,6 +53,10 @@ Descarcă `index.html` și deschide-l în browser. Nu necesită internet pentru 
 ## Licență
 
 Licența nu este încă declarată explicit în acest repository; vezi nota din aplicație.
+
+## Audit
+
+Audit: 2026-10-10 — verificat cu Playwright și axe-core; CSP `default-src 'none'` confirmat; fără `fetch`/CDN. Corectate: depășire orizontală pe mobil, nume accesibile pentru butoanele de chakre; adăugat avertisment permanent în subsol.
 
 ## Autor
 
