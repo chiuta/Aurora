@@ -6,6 +6,8 @@ Chakra Sound & Meditation — tonuri, bătăi binaurale, ghid de respirație și
 
 ![Captura de ecran](screenshot.png)
 
+**Ultima actualizare:** 11 octombrie 2026
+
 ## Ce este
 
 Aurora este un instrument contemplativ de sunet și meditație: alegi o chakră, iar aplicația generează în browser un ton (Web Audio API) cu frecvența asociată, o mandala animată, opțional bătăi binaurale, gong, clopoțel la interval și un ghid de respirație. Aplicația precizează în interfață că este pentru relaxare și contemplare, iar frecvențele și chakrele provin din tradiții spirituale, nu din medicină.
@@ -69,6 +71,12 @@ Declarația apare și în antetul `index.html` și în subsolul aplicației (RO 
 ## Audit
 
 Audit: 2026-10-10 — verificat cu Playwright și axe-core; CSP `default-src 'none'` confirmat; fără `fetch`/CDN. Rundă 3 (2026-10-11): declarație de licență nedeclarată + „Drepturi și atribuire” în aplicație și README. Corectate: depășire orizontală pe mobil, nume accesibile pentru butoanele de chakre; adăugat avertisment permanent în subsol. Rundă 2 (2026-10-11): meta description reformulată (fără „healing”: instrument de relaxare, nu tratament); `<html lang>` se actualizează deja la schimbarea limbii.
+
+## Istoric / Changelog
+
+### 11 octombrie 2026
+- Reparat: conținutul este acum încadrat în repere (`<main>`, `<footer>`), astfel încât regula axe-core „region” trece; 0 violări la 1280 și 360 px.
+- Notă (neschimbată): asocierile chakră–frecvență/element/„sense” provin din tradiții spirituale, nu din surse științifice, așa cum spune nota afișată în aplicație; sunetul nu a putut fi evaluat auditiv în testele automate.
 
 ## Autor
 
