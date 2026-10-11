@@ -23,6 +23,8 @@ Aurora este un instrument contemplativ de sunet și meditație: alegi o chakră,
 - Istoric al sesiunilor recente, presetări, temă.
 - Fereastră „Gateway practices”, fereastră de scurtături și tutorial de respirație.
 - Export / import / resetare a setărilor (fișier JSON).
+- Titlul filei arată „▶ chakră · frecvență” cât timp sună tonul, iar metadatele Media Session (titlu, play/pauză) sunt setate local pentru controalele sistemului, unde browserul le afișează.
+- Tipărire: foaia de stil de print păstrează doar titlul, afirmația și fișa chakrei selectate, plus notele de drepturi și avertisment, fără butoane.
 - Interfață în 9 limbi: engleză, română, spaniolă, franceză, italiană, portugheză, catalană, hindi, arabă.
 
 ## Manual de utilizare
@@ -73,6 +75,10 @@ Declarația apare și în antetul `index.html` și în subsolul aplicației (RO 
 Audit: 2026-10-10 — verificat cu Playwright și axe-core; CSP `default-src 'none'` confirmat; fără `fetch`/CDN. Rundă 3 (2026-10-11): declarație de licență nedeclarată + „Drepturi și atribuire” în aplicație și README. Corectate: depășire orizontală pe mobil, nume accesibile pentru butoanele de chakre; adăugat avertisment permanent în subsol. Rundă 2 (2026-10-11): meta description reformulată (fără „healing”: instrument de relaxare, nu tratament); `<html lang>` se actualizează deja la schimbarea limbii.
 
 ## Istoric / Changelog
+
+### 11 octombrie 2026 (runda 6)
+- Securitate: CSP `script-src` pe hash sha256 al scriptului unic, fără `'unsafe-inline'` pentru scripturi (stilurile inline rămân permise).
+- Adăugat: titlul filei și Media Session reflectă chakra și starea redării; foaie de stil pentru tipărire.
 
 ### 11 octombrie 2026
 - Reparat: conținutul este acum încadrat în repere (`<main>`, `<footer>`), astfel încât regula axe-core „region” trece; 0 violări la 1280 și 360 px.

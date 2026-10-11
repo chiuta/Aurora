@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <!-- Offline guarantee: no network of any kind is permitted (no fetch/XHR/WebSocket, no remote scripts/styles/fonts/images). -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-9uEd7+Ofkhcf/Xm3jSNvSVdUpdvUSU5PMXqVReL0fZA='; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
 <title>Aurora · Chakra Sound & Meditation</title>
 <meta name="theme-color" content="#0c0717">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -417,6 +417,15 @@
     .brand .tag{display:none}
     .center{gap:11px}
     .stage{gap:14px}
+  }
+  @media print{
+    #bg,#atmos,.blob,.head-ctl,.notice,.storewarn,.zen-exit,.rail,#column,#onboard,button,select,input,canvas{display:none!important}
+    html,body{background:#fff!important;height:auto!important;overflow:visible!important}
+    .mandala-wrap{display:none!important}
+    *{color:#000!important;text-shadow:none!important;box-shadow:none!important;backdrop-filter:none!important;animation:none!important}
+    .panel,.modal{background:none!important;border:1px solid #888!important}
+    .app,.stage{display:block!important;max-width:none!important;padding:0!important;height:auto!important;overflow:visible!important}
+    .brand h1{letter-spacing:.1em}
   }
 </style>
 </head>
@@ -1120,7 +1129,7 @@ function applyChakra(i,fromUser){
   document.documentElement.style.setProperty("--accent",c.col);
   document.documentElement.style.setProperty("--accent-soft",hexA(c.col,0.16));
   document.documentElement.style.setProperty("--accent-glow",hexA(c.col,0.42));
-  refreshInfo(); refreshColumn();
+  refreshInfo(); refreshColumn(); syncMeta();
   const mEl=document.getElementById("mandala"); if(mEl) mEl.setAttribute("aria-label", cName(c)+" \u00b7 "+c.sk+" \u00b7 "+c.freq+" Hz");
   const act=document.querySelector('.ckbtn[data-i="'+current+'"]');
   if(act&&act.scrollIntoView){ try{ act.scrollIntoView({block:"nearest",inline:"center",behavior:reduce?"auto":"smooth"}); }catch(e){} }
@@ -1508,10 +1517,26 @@ function refreshInfo(){
   if(reduce){ aff.textContent=cAff(c); aff.style.opacity=1; }
   else { aff.style.opacity=0; setTimeout(()=>{ if(showAff){ aff.textContent=cAff(c); aff.style.opacity=1; } },180); }
 }
+/* tab title + lock-screen metadata (local only) */
+function syncMeta(){
+  try{
+    const c=CHAKRAS[current], nm=cName(c)+" \u00b7 "+c.freq+" Hz";
+    document.title=(isPlaying?"\u25b6 "+nm+" \u2014 Aurora":T[lang].titleDoc);
+    if("mediaSession" in navigator && window.MediaMetadata){
+      navigator.mediaSession.metadata=new MediaMetadata({title:nm,artist:"Aurora"});
+      navigator.mediaSession.playbackState=isPlaying?"playing":"paused";
+    }
+  }catch(e){}
+}
+try{ if("mediaSession" in navigator){
+  navigator.mediaSession.setActionHandler("play",()=>{ if(!isPlaying) playTone(); });
+  navigator.mediaSession.setActionHandler("pause",()=>{ if(isPlaying) pauseTone(); });
+} }catch(e){}
 function refreshPlayBtn(){
   document.getElementById("playTxt").textContent=isPlaying?T[lang].pause:T[lang].play;
   document.getElementById("playIco").innerHTML=isPlaying?'<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';
   const be=document.getElementById("beginBtn"); if(be) be.style.display=isPlaying?"none":"";
+  syncMeta();
 }
 function refreshSessBtn(){
   document.getElementById("sessTxt").textContent=session.active?T[lang].stop:T[lang].start;
