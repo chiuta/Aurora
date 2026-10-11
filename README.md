@@ -76,6 +76,10 @@ Audit: 2026-10-10 — verificat cu Playwright și axe-core; CSP `default-src 'no
 
 ## Istoric / Changelog
 
+### 11 octombrie 2026 (runda 7)
+- Îmbunătățit: la prima deschidere (fără temă salvată) aplicația respectă preferințele sistemului: tema „light” dacă sistemul cere schema luminoasă, „contrast” dacă cere contrast mărit (`prefers-color-scheme` / `prefers-contrast`); alegerea manuală are prioritate și se păstrează. Verificat: 0 violări axe-core în temele light și contrast.
+- Verificat, nu defect: butonul „Begin” se ascunde cât timp sună tonul (comportament intenționat; Play/Pauză rămâne vizibil) și reapare la pauză.
+
 ### 11 octombrie 2026 (runda 6)
 - Securitate: CSP `script-src` pe hash sha256 al scriptului unic, fără `'unsafe-inline'` pentru scripturi (stilurile inline rămân permise).
 - Adăugat: titlul filei și Media Session reflectă chakra și starea redării; foaie de stil pentru tipărire.
