@@ -52,11 +52,23 @@ Descarcă `index.html` și deschide-l în browser. Nu necesită internet pentru 
 
 ## Licență
 
-Licența nu este încă declarată explicit în acest repository; vezi nota din aplicație.
+**Licență: nedeclarată de autor; toate drepturile rezervate până la o declarație contrară. Contact: alexio@trom.tf**
+*License: not declared by the author; all rights reserved until stated otherwise. Contact: alexio@trom.tf*
+
+Declarația apare și în antetul `index.html` și în subsolul aplicației (RO + EN).
+
+## Drepturi și atribuire
+
+- **Partea autorului:** codul, textele și designul aplicației (Alexio — Alexandru-Ionuț Chiuță). Orice licență declarată ulterior se va aplica doar acestei părți.
+- **Terți / inspirație:** aplicația este inspirată de practica sunetelor pentru relaxare (de ex. Centrul AmaneSer, amaneser.ro — nu se încarcă resurse de acolo) și menționează practica „Gateway” (Institutul Monroe). Este un proiect independent; nu implică afiliere sau aprobare din partea lor și nu reprezintă poziția oficială a niciunei organizații.
+- Drepturile asupra materialelor și numelor terților aparțin titularilor lor.
+- **Rectificare / retragere:** dacă ești titular de drepturi sau persoană menționată și dorești corectarea sau retragerea, scrie la alexio@trom.tf; răspundem în 7 zile.
+
+*Rights and attribution:* code, texts and design are the author's; any license declared later applies only to that part. Inspiration/mentions (Centrul AmaneSer, Monroe Institute "Gateway") imply no affiliation or endorsement; rights in third-party materials and names belong to their owners. Rights holders or mentioned persons: write to alexio@trom.tf for correction or removal; we reply within 7 days.
 
 ## Audit
 
-Audit: 2026-10-10 — verificat cu Playwright și axe-core; CSP `default-src 'none'` confirmat; fără `fetch`/CDN. Corectate: depășire orizontală pe mobil, nume accesibile pentru butoanele de chakre; adăugat avertisment permanent în subsol. Rundă 2 (2026-10-11): meta description reformulată (fără „healing”: instrument de relaxare, nu tratament); `<html lang>` se actualizează deja la schimbarea limbii.
+Audit: 2026-10-10 — verificat cu Playwright și axe-core; CSP `default-src 'none'` confirmat; fără `fetch`/CDN. Rundă 3 (2026-10-11): declarație de licență nedeclarată + „Drepturi și atribuire” în aplicație și README. Corectate: depășire orizontală pe mobil, nume accesibile pentru butoanele de chakre; adăugat avertisment permanent în subsol. Rundă 2 (2026-10-11): meta description reformulată (fără „healing”: instrument de relaxare, nu tratament); `<html lang>` se actualizează deja la schimbarea limbii.
 
 ## Autor
 
