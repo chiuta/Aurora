@@ -72,8 +72,7 @@ Descarcă `index.html` și deschide-l în browser. Nu necesită internet pentru 
 
 ## Licență
 
-**Licență: nedeclarată de autor; toate drepturile rezervate până la o declarație contrară. Contact: alexio@trom.tf**
-*License: not declared by the author; all rights reserved until stated otherwise. Contact: alexio@trom.tf*
+CC0 1.0 Universal (domeniu public) pentru codul și structura aplicației — vezi fișierul `LICENSE`. Eventualele biblioteci terțe incluse în fișier își păstrează licențele proprii.
 
 Declarația apare și în antetul `index.html` și în subsolul aplicației (RO + EN).
 
