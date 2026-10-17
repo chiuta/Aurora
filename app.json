@@ -15,8 +15,8 @@
     "aurora.",
     "aurora.__t"
   ],
-  "sizeBytes": 398520,
-  "sha256": "64a01749bcca0c6cbc517dbce0da8660e6f60dc415f700fa7ca78bd9a5ea520b",
+  "sizeBytes": 400121,
+  "sha256": "3f80114702e566bbe3e1df61307504abdfafdf17fafd08ff7c5377195c1b9c27",
   "csp": {
     "present": true,
     "directives": {
