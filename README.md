@@ -72,7 +72,7 @@ Descarcă `index.html` și deschide-l în browser. Nu necesită internet pentru 
 
 ## Licență
 
-CC0 1.0 Universal (domeniu public) pentru codul și structura aplicației — vezi fișierul `LICENSE`. Eventualele biblioteci terțe incluse în fișier își păstrează licențele proprii.
+MIT pentru codul și structura aplicației — vezi fișierul `LICENSE`. Eventualele biblioteci terțe incluse în fișier își păstrează licențele proprii.
 
 Declarația apare și în antetul `index.html` și în subsolul aplicației (RO + EN).
 
