@@ -6,7 +6,7 @@ Chakra Sound & Meditation — tonuri, bătăi binaurale, ghid de respirație și
 
 ![Captura de ecran](screenshot.png)
 
-**Versiune:** 1.1.0 · **Ultima actualizare:** 14 octombrie 2026
+**Versiune:** 1.2.0 · **Ultima actualizare:** 2026-10-19
 
 ## Ce este
 
@@ -90,6 +90,9 @@ Declarația apare și în antetul `index.html` și în subsolul aplicației (RO 
 Audit: 2026-10-10 — verificat cu Playwright și axe-core; CSP `default-src 'none'` confirmat; fără `fetch`/CDN. Rundă 3 (2026-10-11): declarație de licență nedeclarată + „Drepturi și atribuire” în aplicație și README. Corectate: depășire orizontală pe mobil, nume accesibile pentru butoanele de chakre; adăugat avertisment permanent în subsol. Rundă 2 (2026-10-11): meta description reformulată (fără „healing”: instrument de relaxare, nu tratament); `<html lang>` se actualizează deja la schimbarea limbii.
 
 ## Istoric / Changelog
+
+### 19 octombrie 2026 (v1.2.0)
+- Buton „Versiune ambientală în CalmWaves” (filă nouă): trece scopul (somn/relaxare/concentrare după bătaia binaurală, „meditație” fără binaural), durata și frecvența chakrei în adresa CalmWaves (`?v=…&from=aurora`). Doar link, fără cereri de rețea.
 
 ### 14 octombrie 2026 (v1.1.0)
 - Nou: tonul curent ca WAV, cod QR al scenei (chakră + bătăi binaurale + respirație) și hash extins `#chakră&beat=…&breath=…`, fereastra „Transparență” (fff-kit: core, label, bundle, qr); `tests/fff-r8.test.mjs`. CSP: hash-ul scriptului recalculat.
