@@ -2,7 +2,9 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 1.2.0 · **Last updated:** 2026-10-19
+**Version:** 1.3.0 · **Last updated:** 2026-10-19
+
+Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
 Chakra Sound & Meditation — tones, binaural beats, a breathing guide and a journey through the chakras, in a single HTML file.
 
@@ -27,7 +29,7 @@ Aurora is a contemplative sound and meditation tool: you choose a chakra, and th
 - Export / import / reset of the settings (JSON file).
 - The tab title shows "▶ chakra · frequency" while the tone is playing, and the Media Session metadata (title, play/pause) is set locally for the system controls, where the browser displays them.
 - Printing: the print stylesheet keeps only the title, the affirmation and the sheet of the selected chakra, plus the rights and warning notes, without buttons.
-- Interface in 9 languages: English, Romanian, Spanish, French, Italian, Portuguese, Catalan, Hindi, Arabic.
+- Interface in 11 languages: English, Romanian, Spanish, French, Italian, Portuguese, German, Hungarian, Catalan, Hindi, Arabic.
 
 ## New features (1.1.0)
 
@@ -35,7 +37,7 @@ Aurora is a contemplative sound and meditation tool: you choose a chakra, and th
 - **QR code of the scene** ("Session" panel, "QR code of this scene"): the code contains the public address (`https://chiuta.github.io/Aurora/`, or that of the current page if it is served over HTTPS) and a hash `#<chakra>&beat=<2|6|10>&breath=<pattern>`. On opening, the chakra, the binaural beats (if the link asks for them) and the breathing pattern are applied; unknown values are ignored. The link can also be copied. The "custom" pattern is not included in the link (it cannot be represented). Generated locally; it appears only with the QR module.
 - **Transparency** and **`.fff.json` backup** (press the version in the "About" window): the standard "without borders" window with the network (0 external requests), the `aurora.*` keys, the permissions and the SHA-256; the encryptable backup covers all settings.
 
-The new texts are in the application's 9 languages (EN, RO, ES, FR, IT, PT, CA, HI, AR); the translations other than EN/RO are machine-made and **not native-checked**. The application has no German or Hungarian, so I did not add them partially.
+The new texts are in the application's 11 languages (EN, RO, ES, FR, IT, PT, DE, HU, CA, HI, AR); the translations other than EN/RO are machine-made and **not native-checked**.
 
 ## The "fff-kit" kit
 
@@ -100,7 +102,7 @@ Audit: 2026-10-10 — verified with Playwright and axe-core; CSP `default-src 'n
 - New: the current tone as WAV, QR code of the scene (chakra + binaural beats + breathing) and the extended hash `#chakra&beat=…&breath=…`, the "Transparency" window (fff-kit: core, label, bundle, qr); `tests/fff-r8.test.mjs`. CSP: the script hash recomputed.
 
 ### 1.0.0 — 2026-10-12
-- The version and the date of the last update are shown in the application ("About" window, in the 9 languages).
+- The version and the date of the last update are shown in the application ("About" window, in the 11 languages).
 
 ### 11 October 2026 (round 7)
 - Improved: on first opening (with no saved theme) the application respects the system preferences: the "light" theme if the system asks for the light scheme, "contrast" if it asks for increased contrast (`prefers-color-scheme` / `prefers-contrast`); the manual choice takes priority and is kept. Verified: 0 axe-core violations in the light and contrast themes.
@@ -120,6 +122,6 @@ Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf
 
 ## Summary
 
-Aurora is a single-file chakra sound and meditation tool: synthesized tones (Web Audio), binaural beats, gong, breathing guide, automatic chakra journey, session history, settings export/import and a 9-language UI. Preferences are kept in localStorage under the `aurora.` prefix; the app makes no network requests. It is for relaxation, not medicine.
+Aurora is a single-file chakra sound and meditation tool: synthesized tones (Web Audio), binaural beats, gong, breathing guide, automatic chakra journey, session history, settings export/import and an 11-language UI. Preferences are kept in localStorage under the `aurora.` prefix; the app makes no network requests. It is for relaxation, not medicine.
 
 New in 1.1.0: save the current tone as a stereo 16-bit WAV (1–5 min, rendered offline in the browser; no gong, bells or breathing cues), a QR code/link for the current scene (chakra + binaural beat + breathing pattern), and the "Transparency" dialog. Non-EN/RO translations of the new strings are machine-made and not native-checked.

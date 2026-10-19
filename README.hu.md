@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.2.0 · **Utolsó frissítés:** 2026-10-19
+**Verzió:** 1.3.0 · **Utolsó frissítés:** 2026-10-19
+
+A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
 Chakra Sound & Meditation — hangok, binaurális ütemek, légzésvezető és utazás a csakrákon át, egyetlen HTML-fájlban.
 
@@ -27,7 +29,7 @@ Az Aurora egy szemlélődő hang- és meditációs eszköz: kiválasztasz egy cs
 - A beállítások exportálása / importálása / visszaállítása (JSON-fájl).
 - A lap címe „▶ csakra · frekvencia” szöveget mutat, amíg a hang szól, a Media Session metaadatai (cím, lejátszás/szünet) pedig helyben vannak beállítva a rendszervezérlőkhöz, ahol a böngésző megjeleníti őket.
 - Nyomtatás: a nyomtatási stíluslap csak a címet, a megerősítést és a kiválasztott csakra lapját tartja meg, valamint a jogi és figyelmeztető megjegyzéseket, gombok nélkül.
-- Felület 9 nyelven: angol, román, spanyol, francia, olasz, portugál, katalán, hindi, arab.
+- Felület 11 nyelven: angol, román, spanyol, francia, olasz, portugál, német, magyar, katalán, hindi, arab.
 
 ## Újdonságok (1.1.0)
 
@@ -35,7 +37,7 @@ Az Aurora egy szemlélődő hang- és meditációs eszköz: kiválasztasz egy cs
 - **A jelenet QR-kódja** („Session” panel, „QR code of this scene”): a kód tartalmazza a nyilvános címet (`https://chiuta.github.io/Aurora/`, vagy az aktuális oldalét, ha HTTPS-en szolgálják ki) és egy `#<csakra>&beat=<2|6|10>&breath=<minta>` hash-t. Megnyitáskor érvénybe lép a csakra, a binaurális ütemek (ha a hivatkozás kéri őket) és a légzési minta; az ismeretlen értékeket figyelmen kívül hagyja. A hivatkozás másolható is. A „custom” minta nem része a hivatkozásnak (nem ábrázolható). Helyben előállított; csak a QR-modullal jelenik meg.
 - **Átláthatóság** és **`.fff.json` biztonsági mentés** (nyomd meg a verziót a „About” ablakban): a szokásos „határok nélküli” ablak a hálózattal (0 külső kérés), az `aurora.*` kulcsokkal, az engedélyekkel és az SHA-256 értékkel; a titkosítható biztonsági mentés az összes beállításra kiterjed.
 
-Az új szövegek az alkalmazás 9 nyelvén megvannak (EN, RO, ES, FR, IT, PT, CA, HI, AR); az EN/RO-tól eltérő fordítások gépiek, és **anyanyelvi beszélők nem ellenőrizték őket**. Az alkalmazásban nincs német és magyar nyelv, ezért nem adtam hozzá őket részlegesen.
+Az új szövegek az alkalmazás 11 nyelvén megvannak (EN, RO, ES, FR, IT, PT, DE, HU, CA, HI, AR); az EN/RO-tól eltérő fordítások gépiek, és **anyanyelvi beszélők nem ellenőrizték őket**.
 
 ## Az „fff-kit” készlet
 
@@ -100,7 +102,7 @@ Audit: 2026-10-10 — Playwrighttal és axe-core-ral ellenőrizve; a CSP `defaul
 - Új: az aktuális hang WAV-ként, a jelenet QR-kódja (csakra + binaurális ütemek + légzés) és a kibővített `#csakra&beat=…&breath=…` hash, „Átláthatóság” ablak (fff-kit: core, label, bundle, qr); `tests/fff-r8.test.mjs`. CSP: a szkript hash-e újraszámolva.
 
 ### 1.0.0 — 2026-10-12
-- A verzió és az utolsó frissítés dátuma megjelenik az alkalmazásban („Névjegy” ablak, a 9 nyelven).
+- A verzió és az utolsó frissítés dátuma megjelenik az alkalmazásban („Névjegy” ablak, a 11 nyelven).
 
 ### 2026. október 11. (7. kör)
 - Továbbfejlesztve: az első megnyitáskor (mentett téma nélkül) az alkalmazás tiszteletben tartja a rendszerbeállításokat: „light” téma, ha a rendszer a világos sémát kéri, „contrast”, ha növelt kontrasztot kér (`prefers-color-scheme` / `prefers-contrast`); a kézi választás elsőbbséget élvez, és megmarad. Ellenőrizve: 0 axe-core szabálysértés a light és a contrast témában.
@@ -120,6 +122,6 @@ Alexio — Alexandru-Ionuț Chiuță, kapcsolat: alexio@trom.tf
 
 ## Összefoglaló
 
-Az Aurora egy egyfájlos csakra-hang- és meditációs eszköz: szintetizált hangok (Web Audio), binaurális ütemek, gong, légzésvezető, automatikus utazás a csakrákon át, alkalmi előzmények, a beállítások exportálása/importálása és 9 nyelvű felület. A beállítások a localStorage-ban tárolódnak az `aurora.` előtaggal; az alkalmazás nem küld hálózati kéréseket. Relaxációra szolgál, nem orvosi célra.
+Az Aurora egy egyfájlos csakra-hang- és meditációs eszköz: szintetizált hangok (Web Audio), binaurális ütemek, gong, légzésvezető, automatikus utazás a csakrákon át, alkalmi előzmények, a beállítások exportálása/importálása és 11 nyelvű felület. A beállítások a localStorage-ban tárolódnak az `aurora.` előtaggal; az alkalmazás nem küld hálózati kéréseket. Relaxációra szolgál, nem orvosi célra.
 
 Újdonság az 1.1.0-ban: az aktuális hang mentése 16 bites sztereó WAV-ként (1–5 perc, offline, a böngészőben előállítva; gong, csengők és légzési útmutatások nélkül), QR-kód/hivatkozás az aktuális jelenethez (csakra + binaurális ütem + légzési minta) és az „Átláthatóság” párbeszédablak. Az új szövegek EN/RO-tól eltérő fordításai gépiek, és anyanyelvi beszélők nem ellenőrizték őket.
