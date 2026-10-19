@@ -15,8 +15,8 @@
     "aurora.",
     "aurora.__t"
   ],
-  "sizeBytes": 401853,
-  "sha256": "125af1a2dc14badbf7ef3634b4aa0271b771ace7c1475916c8cd3968070fea3b",
+  "sizeBytes": 402489,
+  "sha256": "1de0df6fe884b0d1f9ee808ce2b2c8e659caeac148b9305f15114de3e69cdbd4",
   "csp": {
     "present": true,
     "directives": {
@@ -55,7 +55,7 @@
     ]
   },
   "kit": {
-    "version": "1.1.0",
+    "version": "1.1.1",
     "modules": [
       "core",
       "label",
