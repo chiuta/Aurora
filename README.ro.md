@@ -120,8 +120,8 @@ Audit: 2026-10-10 — verificat cu Playwright și axe-core; CSP `default-src 'no
 
 Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf
 
-## English summary
+## Rezumat
 
-Aurora is a single-file chakra sound and meditation tool: synthesized tones (Web Audio), binaural beats, gong, breathing guide, automatic chakra journey, session history, settings export/import and an 11-language UI. Preferences are kept in localStorage under the `aurora.` prefix; the app makes no network requests. It is for relaxation, not medicine.
+Aurora este un instrument de sunete pentru chakre și meditație într-un singur fișier: tonuri sintetizate (Web Audio), bătăi binaurale, gong, ghid de respirație, călătorie automată prin chakre, istoric de sesiuni, export/import de setări și interfață în 11 limbi. Preferințele se păstrează în localStorage sub prefixul `aurora.`; aplicația nu face cereri de rețea. Este pentru relaxare, nu pentru medicină.
 
-New in 1.1.0: save the current tone as a stereo 16-bit WAV (1–5 min, rendered offline in the browser; no gong, bells or breathing cues), a QR code/link for the current scene (chakra + binaural beat + breathing pattern), and the "Transparency" dialog. Non-EN/RO translations of the new strings are machine-made and not native-checked.
+Noutăți în 1.1.0: salvarea tonului curent ca WAV stereo pe 16 biți (1–5 min, randat offline în browser; fără gong, clopoței sau indicații de respirație), cod QR/link pentru scena curentă (chakră + bătaie binaurală + tipar de respirație) și dialogul „Transparență”. Traducerile noilor texte în alte limbi decât EN/RO sunt făcute automat și nu au fost verificate de vorbitori nativi.
