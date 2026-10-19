@@ -1,0 +1,125 @@
+# Aurora
+
+[English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
+
+**Versiune:** 1.2.0 · **Ultima actualizare:** 2026-10-19
+
+Chakra Sound & Meditation — tonuri, bătăi binaurale, ghid de respirație și călătorie prin chakre, într-un singur fișier HTML.
+
+**Live:** https://chiuta.github.io/Aurora/
+
+![Captura de ecran](screenshot.png)
+
+## Ce este
+
+Aurora este un instrument contemplativ de sunet și meditație: alegi o chakră, iar aplicația generează în browser un ton (Web Audio API) cu frecvența asociată, o mandala animată, opțional bătăi binaurale, gong, clopoțel la interval și un ghid de respirație. Aplicația precizează în interfață că este pentru relaxare și contemplare, iar frecvențele și chakrele provin din tradiții spirituale, nu din medicină.
+
+## Funcții
+
+- Selecție de chakre cu informații despre frecvență, element, mantră, petale, solfeggio, „sense” și ton.
+- Generare de ton, reglaj de volum, reverb, volume separate pentru indicații, ton și gong; gong la cerere.
+- Bătăi binaurale (recomandat cu căști), cu presetări Delta 2 Hz, Theta 6 Hz, Alpha 10 Hz și altele.
+- Sesiune cu durată setabilă; „Chakra journey” (călătorie automată prin chakre), opțiuni: echilibrare automată, includere transpersonală (9 chakre în loc de 7), parcurgere descendentă (de la coroană la rădăcină), clopoțel la interval.
+- Ghid de respirație cu modele selectabile și indicații la schimbarea fazelor.
+- Afirmații afișate sub mandala (opțional), mod simplu (ascunde controalele avansate), mod zen/ecran complet, ecran care rămâne aprins (Wake Lock, unde este suportat).
+- Istoric al sesiunilor recente, presetări, temă.
+- Fereastră „Gateway practices”, fereastră de scurtături și tutorial de respirație.
+- Export / import / resetare a setărilor (fișier JSON).
+- Titlul filei arată „▶ chakră · frecvență” cât timp sună tonul, iar metadatele Media Session (titlu, play/pauză) sunt setate local pentru controalele sistemului, unde browserul le afișează.
+- Tipărire: foaia de stil de print păstrează doar titlul, afirmația și fișa chakrei selectate, plus notele de drepturi și avertisment, fără butoane.
+- Interfață în 9 limbi: engleză, română, spaniolă, franceză, italiană, portugheză, catalană, hindi, arabă.
+
+## Funcții noi (1.1.0)
+
+- **Tonul curent ca fișier WAV** (panoul „Tone”, secțiunea „Audio file”, ascunsă în modul simplu): alegi durata (1, 2, 3 sau 5 minute) și aplicația generează, cu `OfflineAudioContext`, același ton ca cel redat (aceleași oscilatoare, filtru și LFO-uri), plus bătăile binaurale dacă sunt active, cu reverbul curent. Rezultat: WAV stereo, 16 biți, 32 kHz, normalizat la −1 dBFS, cu fade-in de 1,5 s și fade-out de ~2,5 s; nume de forma `aurora-heart-639hz-binaural6.wav`. **Nu include** gongul, clopoțelul la interval și indicațiile de respirație. Cele 5 minute ocupă ~38 MB și se generează în memorie (pe telefoane vechi poate eșua: aplicația spune atunci că browserul nu a putut genera fișierul). Reverbul folosește un impuls aleator, deci două fișiere generate succesiv nu sunt identice bit cu bit.
+- **Cod QR al scenei** (panoul „Session”, „QR code of this scene”): codul conține adresa publică (`https://chiuta.github.io/Aurora/`, sau a paginii curente dacă e servită de pe HTTPS) și un hash `#<chakră>&beat=<2|6|10>&breath=<model>`. La deschidere se aplică chakra, bătăile binaurale (dacă linkul le cere) și modelul de respirație; valorile necunoscute sunt ignorate. Se poate copia și linkul. Modelul „custom” nu este inclus în link (nu se poate reprezenta). Generat local; apare doar cu modulul QR.
+- **Transparență** și **copie de siguranță `.fff.json`** (apasă versiunea din fereastra „About”): fereastra standard „fără frontiere” cu rețeaua (0 cereri externe), cheile `aurora.*`, permisiunile și SHA-256; copia de siguranță criptabilă acoperă toate setările.
+
+Textele noi sunt în cele 9 limbi ale aplicației (EN, RO, ES, FR, IT, PT, CA, HI, AR); traducerile în afară de EN/RO sunt automate și **neverificate nativ**. Aplicația nu are germană sau maghiară, deci nu le-am adăugat parțial.
+
+## Kit „fff-kit”
+
+Module lipite în `index.html`: `core`, `label`, `bundle`, `qr`. Fereastra „Transparență” a kitului are 8 limbi (RO, EN, FR, IT, ES, PT, HU, DE); când aplicația e în CA, HI sau AR, ea apare în engleză. Fără kit, aplicația funcționează la fel, dar fără butonul QR.
+
+## Teste
+
+`node tests/fff-r8.test.mjs` (Playwright, rețea blocată): fișierul WAV este descărcat și analizat spectral în test (antet, durată, nivel, vârf la frecvența chakrei, L=220 Hz și R=220+beat Hz la binaural), scena este codificată în QR, decodată înapoi și redeschisă într-o pagină curată, 9 limbi (inclusiv arabă RTL), axe-core 0 violări pe cele 3 teme și în modal, 360 px, fără kit.
+
+## Manual de utilizare
+
+1. Deschide pagina și citește nota inițială; apasă „Got it” (sau echivalentul în limba aleasă). La prima rulare apare un ghid de întâmpinare („Welcome” / „Begin”).
+2. Alege limba cu butonul de limbă din antet sau apasă `L` pentru a trece la următoarea.
+3. Selectează o chakră (săgeți Sus/Jos schimbă chakra).
+4. Apasă Spațiu pentru a porni/opri tonul; `G` lovește gongul.
+5. Reglează volumul cu `+` / `-` sau din controalele „Volume”, „Reverb”, „Tone volume”, „Gong volume”.
+6. Pentru bătăi binaurale, deschide secțiunea „Binaural beats”, alege „Beat” și folosește căști.
+7. Pentru respirație, alege un model din „Breathing”; `B` trece la modelul următor; `?` deschide ghidul de respirație.
+8. În „Session” setează „Duration” și, dacă dorești, „Chakra journey”.
+9. Escape închide ferestrele și iese din modul zen.
+10. Salvarea datelor: „Export settings” descarcă `aurora-settings.json`; „Import settings” îl reîncarcă; „Reset to defaults” revine la valorile implicite.
+
+## Avertisment
+
+Conținut contemplativ/de relaxare, nu medical. Chakrele, frecvențele asociate și „sunetele vindecătoare" provin din tradiții spirituale și nu au validare științifică; nu există dovezi solide că anumite frecvențe tratează afecțiuni sau că bătăile binaurale schimbă fiabil starea creierului. Nu înlocuiește sfatul medical. Aplicația afișează acest avertisment la prima rulare, în „About" și în subsolul paginii.
+
+## Confidențialitate și rețea
+
+- **Stocare locală:** `localStorage`, toate cheile cu prefixul `aurora.` (limbă, temă, volume, preferințe de sesiune, presetări, istoric, marcaje că notele au fost văzute). Dacă stocarea este blocată, aplicația afișează un avertisment.
+- **Rețea:** în codul aplicației nu există `fetch`, CDN, scripturi sau resurse externe încărcate automat; nu am găsit analytics. Sunetul este sintetizat local.
+- Aplicația conține o referință text către Centrul AmaneSer (amaneser.ro) în nota „About”, fără încărcare de resurse de acolo.
+
+## Rulare locală / offline
+
+Descarcă `index.html` și deschide-l în browser. Nu necesită internet pentru funcționare. Nu este nevoie de server.
+
+## Licență
+
+MIT pentru codul și structura aplicației — vezi fișierul `LICENSE`. Eventualele biblioteci terțe incluse în fișier își păstrează licențele proprii.
+
+Declarația apare și în antetul `index.html` și în subsolul aplicației (RO + EN).
+
+## Drepturi și atribuire
+
+- **Partea autorului:** codul, textele și designul aplicației (Alexio — Alexandru-Ionuț Chiuță). Orice licență declarată ulterior se va aplica doar acestei părți.
+- **Terți / inspirație:** aplicația este inspirată de practica sunetelor pentru relaxare (de ex. Centrul AmaneSer, amaneser.ro — nu se încarcă resurse de acolo) și menționează practica „Gateway” (Institutul Monroe). Este un proiect independent; nu implică afiliere sau aprobare din partea lor și nu reprezintă poziția oficială a niciunei organizații.
+- Drepturile asupra materialelor și numelor terților aparțin titularilor lor.
+- **Rectificare / retragere:** dacă ești titular de drepturi sau persoană menționată și dorești corectarea sau retragerea, scrie la alexio@trom.tf; răspundem în 7 zile.
+
+*Rights and attribution:* code, texts and design are the author's; any license declared later applies only to that part. Inspiration/mentions (Centrul AmaneSer, Monroe Institute "Gateway") imply no affiliation or endorsement; rights in third-party materials and names belong to their owners. Rights holders or mentioned persons: write to alexio@trom.tf for correction or removal; we reply within 7 days.
+
+## Audit
+
+Audit: 2026-10-10 — verificat cu Playwright și axe-core; CSP `default-src 'none'` confirmat; fără `fetch`/CDN. Rundă 3 (2026-10-11): declarație de licență nedeclarată + „Drepturi și atribuire” în aplicație și README. Corectate: depășire orizontală pe mobil, nume accesibile pentru butoanele de chakre; adăugat avertisment permanent în subsol. Rundă 2 (2026-10-11): meta description reformulată (fără „healing”: instrument de relaxare, nu tratament); `<html lang>` se actualizează deja la schimbarea limbii.
+
+## Istoric / Changelog
+
+### 19 octombrie 2026 (v1.2.0)
+- Buton „Versiune ambientală în CalmWaves” (filă nouă): trece scopul (somn/relaxare/concentrare după bătaia binaurală, „meditație” fără binaural), durata și frecvența chakrei în adresa CalmWaves (`?v=…&from=aurora`). Doar link, fără cereri de rețea.
+
+### 14 octombrie 2026 (v1.1.0)
+- Nou: tonul curent ca WAV, cod QR al scenei (chakră + bătăi binaurale + respirație) și hash extins `#chakră&beat=…&breath=…`, fereastra „Transparență” (fff-kit: core, label, bundle, qr); `tests/fff-r8.test.mjs`. CSP: hash-ul scriptului recalculat.
+
+### 1.0.0 — 2026-10-12
+- Versiunea și data ultimei actualizări sunt afișate în aplicație (fereastra „Despre”, în cele 9 limbi).
+
+### 11 octombrie 2026 (runda 7)
+- Îmbunătățit: la prima deschidere (fără temă salvată) aplicația respectă preferințele sistemului: tema „light” dacă sistemul cere schema luminoasă, „contrast” dacă cere contrast mărit (`prefers-color-scheme` / `prefers-contrast`); alegerea manuală are prioritate și se păstrează. Verificat: 0 violări axe-core în temele light și contrast.
+- Verificat, nu defect: butonul „Begin” se ascunde cât timp sună tonul (comportament intenționat; Play/Pauză rămâne vizibil) și reapare la pauză.
+
+### 11 octombrie 2026 (runda 6)
+- Securitate: CSP `script-src` pe hash sha256 al scriptului unic, fără `'unsafe-inline'` pentru scripturi (stilurile inline rămân permise).
+- Adăugat: titlul filei și Media Session reflectă chakra și starea redării; foaie de stil pentru tipărire.
+
+### 11 octombrie 2026
+- Reparat: conținutul este acum încadrat în repere (`<main>`, `<footer>`), astfel încât regula axe-core „region” trece; 0 violări la 1280 și 360 px.
+- Notă (neschimbată): asocierile chakră–frecvență/element/„sense” provin din tradiții spirituale, nu din surse științifice, așa cum spune nota afișată în aplicație; sunetul nu a putut fi evaluat auditiv în testele automate.
+
+## Autor
+
+Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf
+
+## English summary
+
+Aurora is a single-file chakra sound and meditation tool: synthesized tones (Web Audio), binaural beats, gong, breathing guide, automatic chakra journey, session history, settings export/import and a 9-language UI. Preferences are kept in localStorage under the `aurora.` prefix; the app makes no network requests. It is for relaxation, not medicine.
+
+New in 1.1.0: save the current tone as a stereo 16-bit WAV (1–5 min, rendered offline in the browser; no gong, bells or breathing cues), a QR code/link for the current scene (chakra + binaural beat + breathing pattern), and the "Transparency" dialog. Non-EN/RO translations of the new strings are machine-made and not native-checked.
