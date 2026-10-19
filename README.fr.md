@@ -10,7 +10,7 @@ Chakra Sound & Meditation — sons, battements binauraux, guide de respiration e
 
 **Application en ligne :** https://chiuta.github.io/Aurora/
 
-![Capture d'écran](screenshot.png)
+![Capture d'écran](screenshot.fr.png)
 
 ## Présentation
 

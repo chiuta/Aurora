@@ -10,7 +10,7 @@ Chakra Sound & Meditation — hangok, binaurális ütemek, légzésvezető és u
 
 **Online alkalmazás:** https://chiuta.github.io/Aurora/
 
-![Képernyőkép](screenshot.png)
+![Képernyőkép](screenshot.hu.png)
 
 ## Mi ez
 

@@ -10,7 +10,7 @@ Chakra Sound & Meditation — Töne, binaurale Beats, Atemführung und Reise dur
 
 **Online-App:** https://chiuta.github.io/Aurora/
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot.de.png)
 
 ## Was es ist
 

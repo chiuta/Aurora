@@ -10,7 +10,7 @@ Chakra Sound & Meditation — tons, batimentos binaurais, guia de respiração e
 
 **Aplicação online:** https://chiuta.github.io/Aurora/
 
-![Captura de ecrã](screenshot.png)
+![Captura de ecrã](screenshot.pt.png)
 
 ## O que é
 

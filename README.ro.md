@@ -10,7 +10,7 @@ Chakra Sound & Meditation — tonuri, bătăi binaurale, ghid de respirație și
 
 **Live:** https://chiuta.github.io/Aurora/
 
-![Captura de ecran](screenshot.png)
+![Captura de ecran](screenshot.ro.png)
 
 ## Ce este
 

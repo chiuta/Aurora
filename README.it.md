@@ -10,7 +10,7 @@ Chakra Sound & Meditation — toni, battiti binaurali, guida alla respirazione e
 
 **App online:** https://chiuta.github.io/Aurora/
 
-![Schermata](screenshot.png)
+![Schermata](screenshot.it.png)
 
 ## Che cos'è
 
