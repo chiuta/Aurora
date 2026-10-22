@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · **Français** · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version :** 1.3.2 · **Dernière mise à jour :** 2026-10-22
+**Version :** 1.3.3 · **Dernière mise à jour :** 2026-10-22
 
 Langues de l'interface : **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -94,6 +94,8 @@ La déclaration figure aussi dans l'en-tête de `index.html` et dans le pied de 
 Audit : 2026-10-10 — vérifié avec Playwright et axe-core ; CSP `default-src 'none'` confirmée ; pas de `fetch`/CDN. Tour 3 (2026-10-11) : déclaration de licence non déclarée + « Droits et attribution » dans l'application et le README. Corrigés : débordement horizontal sur mobile, noms accessibles pour les boutons de chakras ; ajout d'un avertissement permanent dans le pied de page. Tour 2 (2026-10-11) : meta description reformulée (sans « healing » : outil de détente, pas un traitement) ; `<html lang>` est déjà mis à jour au changement de langue.
 
 ## Historique / Journal des modifications
+
+- 1.3.3 — 2026-10-22: Les libellés des chakras, les indications des panneaux et les libellés de métadonnées utilisent un texte d'au moins 12 px; cibles tactiles d'au moins 24 px (cases à cocher, liens du pied de page).
 
 - 1.3.2 — 2026-10-22: **correctif** : le nom accessible du sélecteur de chakras suit désormais la langue de l’interface.
 ### 1.3.1 — 2026-10-22

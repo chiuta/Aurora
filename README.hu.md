@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.3.2 · **Utolsó frissítés:** 2026-10-22
+**Verzió:** 1.3.3 · **Utolsó frissítés:** 2026-10-22
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -94,6 +94,8 @@ A nyilatkozat az `index.html` fejlécében és az alkalmazás láblécében is m
 Audit: 2026-10-10 — Playwrighttal és axe-core-ral ellenőrizve; a CSP `default-src 'none'` megerősítve; nincs `fetch`/CDN. 3. kör (2026-10-11): a meg nem adott licencről szóló nyilatkozat + „Jogok és forrásmegjelölés” az alkalmazásban és a README-ben. Javítva: vízszintes túlcsordulás mobilon, elérhető nevek a csakragombokhoz; állandó figyelmeztetés a láblécben. 2. kör (2026-10-11): a meta description átfogalmazva („healing” nélkül: relaxációs eszköz, nem kezelés); a `<html lang>` már frissül a nyelv váltásakor.
 
 ## Előzmények / Változásnapló
+
+- 1.3.3 — 2026-10-22: A csakracímkék, a panelek súgói és a metaadat-címkék legalább 12 px-es szöveget használnak; legalább 24 px-es érintési célpontok (jelölőnégyzetek, lábléclinkek).
 
 - 1.3.2 — 2026-10-22: **javítás**: a csakraválasztó hozzáférhető neve mostantól a felület nyelvét követi.
 ### 1.3.1 — 2026-10-22

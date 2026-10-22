@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.3.2 · **Ultima actualizare:** 2026-10-22
+**Versiune:** 1.3.3 · **Ultima actualizare:** 2026-10-22
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -94,6 +94,8 @@ Declarația apare și în antetul `index.html` și în subsolul aplicației (RO 
 Audit: 2026-10-10 — verificat cu Playwright și axe-core; CSP `default-src 'none'` confirmat; fără `fetch`/CDN. Rundă 3 (2026-10-11): declarație de licență nedeclarată + „Drepturi și atribuire” în aplicație și README. Corectate: depășire orizontală pe mobil, nume accesibile pentru butoanele de chakre; adăugat avertisment permanent în subsol. Rundă 2 (2026-10-11): meta description reformulată (fără „healing”: instrument de relaxare, nu tratament); `<html lang>` se actualizează deja la schimbarea limbii.
 
 ## Istoric / Changelog
+
+- 1.3.3 — 2026-10-22: Etichetele chakrelor, indiciile panourilor și etichetele de metadate folosesc text de minimum 12 px; ținte tactile de minimum 24 px (căsuțe de bifat, linkuri din subsol).
 
 - 1.3.2 — 2026-10-22: **remediere**: numele accesibil al selectorului de chakre urmează acum limba interfeței.
 ### 1.3.1 — 2026-10-22
