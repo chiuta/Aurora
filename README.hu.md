@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.3.0 · **Utolsó frissítés:** 2026-10-19
+**Verzió:** 1.3.1 · **Utolsó frissítés:** 2026-10-22
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -94,6 +94,9 @@ A nyilatkozat az `index.html` fejlécében és az alkalmazás láblécében is m
 Audit: 2026-10-10 — Playwrighttal és axe-core-ral ellenőrizve; a CSP `default-src 'none'` megerősítve; nincs `fetch`/CDN. 3. kör (2026-10-11): a meg nem adott licencről szóló nyilatkozat + „Jogok és forrásmegjelölés” az alkalmazásban és a README-ben. Javítva: vízszintes túlcsordulás mobilon, elérhető nevek a csakragombokhoz; állandó figyelmeztetés a láblécben. 2. kör (2026-10-11): a meta description átfogalmazva („healing” nélkül: relaxációs eszköz, nem kezelés); a `<html lang>` már frissül a nyelv váltásakor.
 
 ## Előzmények / Változásnapló
+
+### 1.3.1 — 2026-10-22
+- A német és a magyar nyelvben mostantól le vannak fordítva a csakrák nevei, elemei, megerősítései, leírásai és érzékei (korábban angolul jelentek meg).
 
 ### 2026. október 19. (v1.2.0)
 - „Ambient változat a CalmWavesben” gomb (új lap): a célt (alvás/relaxáció/koncentráció a binaurális ütem szerint, binaurális nélkül „meditáció”), az időtartamot és a csakra frekvenciáját átadja a CalmWaves címében (`?v=…&from=aurora`). Csak hivatkozás, hálózati kérések nélkül.

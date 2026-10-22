@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · **Deutsch** · [Magyar](README.hu.md)
 
-**Version:** 1.3.0 · **Zuletzt aktualisiert:** 2026-10-19
+**Version:** 1.3.1 · **Zuletzt aktualisiert:** 2026-10-22
 
 Oberflächensprachen: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -94,6 +94,9 @@ Die Erklärung steht auch im Kopf von `index.html` und in der Fußzeile der Anwe
 Audit: 2026-10-10 — geprüft mit Playwright und axe-core; CSP `default-src 'none'` bestätigt; kein `fetch`/CDN. Runde 3 (2026-10-11): Erklärung zur nicht festgelegten Lizenz + „Rechte und Quellenangabe“ in Anwendung und README. Korrigiert: horizontaler Überlauf auf Mobilgeräten, zugängliche Namen für die Chakra-Schaltflächen; dauerhafte Warnung in der Fußzeile ergänzt. Runde 2 (2026-10-11): Meta-Description umformuliert (ohne „healing“: ein Entspannungswerkzeug, keine Behandlung); `<html lang>` wird bereits beim Sprachwechsel aktualisiert.
 
 ## Verlauf / Changelog
+
+### 1.3.1 — 2026-10-22
+- Deutsch und Ungarisch zeigen jetzt übersetzte Chakra-Namen, Elemente, Affirmationen, Beschreibungen und Sinne (sie waren noch englisch).
 
 ### 19. Oktober 2026 (v1.2.0)
 - Schaltfläche „Ambient-Version in CalmWaves“ (neuer Tab): übergibt den Zweck (Schlaf/Entspannung/Konzentration je nach binauralem Beat, „Meditation“ ohne Binaural), die Dauer und die Chakra-Frequenz in der CalmWaves-Adresse (`?v=…&from=aurora`). Nur ein Link, keine Netzwerkanfragen.

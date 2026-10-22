@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · **Italiano** · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versione:** 1.3.0 · **Ultimo aggiornamento:** 2026-10-19
+**Versione:** 1.3.1 · **Ultimo aggiornamento:** 2026-10-22
 
 Lingue dell'interfaccia: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -94,6 +94,9 @@ La dichiarazione compare anche nell'intestazione di `index.html` e nel piè di p
 Audit: 2026-10-10 — verificato con Playwright e axe-core; CSP `default-src 'none'` confermata; nessun `fetch`/CDN. Giro 3 (2026-10-11): dichiarazione di licenza non dichiarata + «Diritti e attribuzione» nell'applicazione e nel README. Corretti: overflow orizzontale su mobile, nomi accessibili per i pulsanti dei chakra; aggiunta un'avvertenza permanente nel piè di pagina. Giro 2 (2026-10-11): meta description riformulata (senza «healing»: strumento di rilassamento, non un trattamento); `<html lang>` si aggiorna già al cambio di lingua.
 
 ## Cronologia / Changelog
+
+### 1.3.1 — 2026-10-22
+- Tedesco e ungherese hanno ora nomi, elementi, affermazioni, descrizioni e sensi dei chakra tradotti (erano rimasti in inglese).
 
 ### 19 ottobre 2026 (v1.2.0)
 - Pulsante «Versione ambientale in CalmWaves» (nuova scheda): passa lo scopo (sonno/rilassamento/concentrazione in base al battito binaurale, «meditazione» senza binaurale), la durata e la frequenza del chakra nell'indirizzo di CalmWaves (`?v=…&from=aurora`). Solo link, senza richieste di rete.

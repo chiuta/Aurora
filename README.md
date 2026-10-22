@@ -2,7 +2,7 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 1.3.0 · **Last updated:** 2026-10-19
+**Version:** 1.3.1 · **Last updated:** 2026-10-22
 
 Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -94,6 +94,9 @@ The declaration also appears in the header of `index.html` and in the applicatio
 Audit: 2026-10-10 — verified with Playwright and axe-core; CSP `default-src 'none'` confirmed; no `fetch`/CDN. Round 3 (2026-10-11): undeclared-license statement + "Rights and attribution" in the application and README. Fixed: horizontal overflow on mobile, accessible names for the chakra buttons; added a permanent warning in the footer. Round 2 (2026-10-11): meta description reworded (without "healing": a relaxation tool, not a treatment); `<html lang>` is already updated when the language changes.
 
 ## History / Changelog
+
+### 1.3.1 — 2026-10-22
+- German and Hungarian now have translated chakra names, elements, affirmations, descriptions and senses (they were still showing English).
 
 ### 19 October 2026 (v1.2.0)
 - Button "Ambient version in CalmWaves" (new tab): passes the purpose (sleep/relaxation/focus according to the binaural beat, "meditation" without binaural), the duration and the chakra frequency into the CalmWaves address (`?v=…&from=aurora`). Link only, no network requests.
