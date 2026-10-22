@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · **Italiano** · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versione:** 1.3.3 · **Ultimo aggiornamento:** 2026-10-22
+**Versione:** 1.3.4 · **Ultimo aggiornamento:** 2026-10-22
 
 Lingue dell'interfaccia: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -33,6 +33,7 @@ Aurora è uno strumento contemplativo di suono e meditazione: scegli un chakra, 
 
 ## Novità (1.1.0)
 
+- 1.3.4 — 2026-10-22: fff-kit 1.1.2: PBKDF2 600.000 iterazioni, protezione anti-clickjacking
 - **Il tono corrente come file WAV** (pannello «Tone», sezione «Audio file», nascosta nella modalità semplice): scegli la durata (1, 2, 3 o 5 minuti) e l'applicazione genera, con `OfflineAudioContext`, lo stesso tono di quello riprodotto (stessi oscillatori, filtro e LFO), più i battiti binaurali se attivi, con il riverbero corrente. Risultato: WAV stereo, 16 bit, 32 kHz, normalizzato a −1 dBFS, con dissolvenza in entrata di 1,5 s e in uscita di ~2,5 s; nome del tipo `aurora-heart-639hz-binaural6.wav`. **Non include** il gong, la campanella a intervalli e le indicazioni di respirazione. I 5 minuti occupano ~38 MB e vengono generati in memoria (sui telefoni vecchi può fallire: l'applicazione dice allora che il browser non è riuscito a generare il file). Il riverbero usa un impulso casuale, quindi due file generati in successione non sono identici bit a bit.
 - **Codice QR della scena** (pannello «Session», «QR code of this scene»): il codice contiene l'indirizzo pubblico (`https://chiuta.github.io/Aurora/`, o quello della pagina corrente se servita su HTTPS) e un hash `#<chakra>&beat=<2|6|10>&breath=<schema>`. All'apertura vengono applicati il chakra, i battiti binaurali (se il link li richiede) e lo schema di respirazione; i valori sconosciuti vengono ignorati. Si può copiare anche il link. Lo schema «custom» non è incluso nel link (non può essere rappresentato). Generato localmente; compare solo con il modulo QR.
 - **Trasparenza** e **copia di riserva `.fff.json`** (premi la versione nella finestra «About»): la finestra standard «senza frontiere» con la rete (0 richieste esterne), le chiavi `aurora.*`, i permessi e lo SHA-256; la copia di riserva, cifrabile, copre tutte le impostazioni.

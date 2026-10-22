@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · **Français** · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version :** 1.3.3 · **Dernière mise à jour :** 2026-10-22
+**Version :** 1.3.4 · **Dernière mise à jour :** 2026-10-22
 
 Langues de l'interface : **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -95,6 +95,7 @@ Audit : 2026-10-10 — vérifié avec Playwright et axe-core ; CSP `default-src 
 
 ## Historique / Journal des modifications
 
+- 1.3.4 — 2026-10-22 : fff-kit 1.1.2 : PBKDF2 600 000 itérations, protection anti-clickjacking
 - 1.3.3 — 2026-10-22: Les libellés des chakras, les indications des panneaux et les libellés de métadonnées utilisent un texte d'au moins 12 px; cibles tactiles d'au moins 24 px (cases à cocher, liens du pied de page).
 
 - 1.3.2 — 2026-10-22: **correctif** : le nom accessible du sélecteur de chakras suit désormais la langue de l’interface.
