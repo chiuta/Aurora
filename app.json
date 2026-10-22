@@ -2,7 +2,7 @@
   "schema": 1,
   "slug": "aurora",
   "name": "Aurora · Chakra Sound & Meditation",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "updated": "2026-10-22",
   "description": "Aurora — chakra tones, binaural beats and a breathing guide for relaxation and meditation, synthesised live in your browser. Not medicine or treatment. No accounts, no tracking, no network requests.",
   "egress": [],
@@ -15,8 +15,8 @@
     "aurora.",
     "aurora.__t"
   ],
-  "sizeBytes": 433534,
-  "sha256": "edfddef6478a294ce96fdc4442b316fcae6a16de65ae25305d45a61c982e1e72",
+  "sizeBytes": 433904,
+  "sha256": "2285205508fbed8bf63592da2c1af30f3273d69c131e944acf96936c7296da05",
   "csp": {
     "present": true,
     "directives": {

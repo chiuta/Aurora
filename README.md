@@ -2,7 +2,7 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 1.3.1 · **Last updated:** 2026-10-22
+**Version:** 1.3.2 · **Last updated:** 2026-10-22
 
 Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -95,6 +95,7 @@ Audit: 2026-10-10 — verified with Playwright and axe-core; CSP `default-src 'n
 
 ## History / Changelog
 
+- 1.3.2 — 2026-10-22: **fix**: the accessible name of the chakra selector now follows the interface language.
 ### 1.3.1 — 2026-10-22
 - German and Hungarian now have translated chakra names, elements, affirmations, descriptions and senses (they were still showing English).
 

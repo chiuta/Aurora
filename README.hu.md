@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.3.1 · **Utolsó frissítés:** 2026-10-22
+**Verzió:** 1.3.2 · **Utolsó frissítés:** 2026-10-22
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -95,6 +95,7 @@ Audit: 2026-10-10 — Playwrighttal és axe-core-ral ellenőrizve; a CSP `defaul
 
 ## Előzmények / Változásnapló
 
+- 1.3.2 — 2026-10-22: **javítás**: a csakraválasztó hozzáférhető neve mostantól a felület nyelvét követi.
 ### 1.3.1 — 2026-10-22
 - A német és a magyar nyelvben mostantól le vannak fordítva a csakrák nevei, elemei, megerősítései, leírásai és érzékei (korábban angolul jelentek meg).
 
