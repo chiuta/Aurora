@@ -2,7 +2,7 @@
   "schema": 1,
   "slug": "aurora",
   "name": "Aurora · Chakra Sound & Meditation",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "updated": "2026-10-23",
   "description": "Aurora — chakra tones, binaural beats and a breathing guide for relaxation and meditation, synthesised live in your browser. Not medicine or treatment. No accounts, no tracking, no network requests.",
   "egress": [],
@@ -15,8 +15,8 @@
     "aurora.",
     "aurora.__t"
   ],
-  "sizeBytes": 487099,
-  "sha256": "682d22132779b0c83cda3c344784bff95cbcdc93082213e11e130792aaa8c729",
+  "sizeBytes": 487491,
+  "sha256": "b144290926500dbb09958fbae1a16aec7a85f0aa684414afec59cce978ae81b1",
   "csp": {
     "present": true,
     "directives": {
@@ -69,5 +69,11 @@
       "qr"
     ]
   },
-  "selfSerializing": false
+  "selfSerializing": false,
+  "exceptions": [
+    {
+      "rule": "i18n-parity",
+      "reason": "Fals pozitiv: cheia cwBtn se completează la rulare pentru toate limbile prin Object.assign din CWX (T[l].cwBtn=CWX[l]); de și hu o au inline. Paritatea (inclusiv chakraNav) a fost verificată la rulare în Chromium."
+    }
+  ]
 }

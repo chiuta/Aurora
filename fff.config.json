@@ -1,0 +1,5 @@
+{
+  "exceptions": [
+    {"rule": "i18n-parity", "reason": "Fals pozitiv: cheia cwBtn se completează la rulare pentru toate limbile prin Object.assign din CWX (T[l].cwBtn=CWX[l]); de și hu o au inline. Paritatea (inclusiv chakraNav) a fost verificată la rulare în Chromium."}
+  ]
+}
