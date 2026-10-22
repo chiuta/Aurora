@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · **Italiano** · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versione:** 1.3.4 · **Ultimo aggiornamento:** 2026-10-22
+**Versione:** 1.3.5 · **Ultimo aggiornamento:** 2026-10-22
 
 Lingue dell'interfaccia: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -96,6 +96,7 @@ Audit: 2026-10-10 — verificato con Playwright e axe-core; CSP `default-src 'no
 
 ## Cronologia / Changelog
 
+- 1.3.5 — 2026-10-22: fff-kit 1.1.4: target touch e dimensione minima del testo; target touch/testo corretti
 - 1.3.3 — 2026-10-22: Le etichette dei chakra, i suggerimenti dei pannelli e le etichette dei metadati usano testo di almeno 12 px; aree di tocco di almeno 24 px (caselle di spunta, link a piè di pagina).
 
 - 1.3.2 — 2026-10-22: **correzione**: il nome accessibile del selettore dei chakra segue ora la lingua dell’interfaccia.
