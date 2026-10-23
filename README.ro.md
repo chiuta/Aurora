@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.3.7 · **Ultima actualizare:** 2026-10-23
+**Versiune:** 1.3.8 · **Ultima actualizare:** 2026-10-23
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -95,6 +95,7 @@ Audit: 2026-10-10 — verificat cu Playwright și axe-core; CSP `default-src 'no
 
 ## Istoric / Changelog
 
+- 1.3.8 — 2026-10-23: **corecție**: importul de setări acceptă doar cheile pe care le scrie Aurora însăși (valori primitive, cel mult 4000 de caractere), nu mai copiază orice cheie în localStorage; o valoare coruptă `bellMin` revine la 5 minute
 - 1.3.7 — 2026-10-23: Paritate i18n: s-a adăugat eticheta `chakraNav` lipsă pentru catalană, hindi și arabă; cheia `cwBtn` (completată la rulare pentru toate limbile) este documentată ca excepție în `fff.config.json`
 - 1.3.5 — 2026-10-22: fff-kit 1.1.4: ținte tactile și text minim; ținte tactile/text corectate
 - 1.3.4 — 2026-10-22: fff-kit 1.1.2: PBKDF2 600 000 iterații, protecție anti-clickjacking
