@@ -96,5 +96,17 @@ await ctx.close();
 { const html = fs.readFileSync(path.join(HERE, '..', 'index.html'), 'utf8').replace(/<!--fff:kit:start[\s\S]*?<!--fff:kit:end-->/, '');
   const tmp = path.join(HERE, '_nokit.tmp.html'); fs.writeFileSync(tmp, html); const m = await mk(1280, 800, 'dark', '', 'file://' + tmp);
   const w = await dlWav(m.p); t('fără kit: fără erori, QR ascuns, WAV se generează', m.errs.length === 0 && !(await m.p.isVisible('#qrBtn')) && w.buf.length > 1e6, m.errs); await m.ctx.close(); fs.unlinkSync(tmp); }
+// 1.3.8: importul de setări acceptă doar cheile cunoscute, valori primitive și scurte
+{
+  const {ctx, p, errs} = await mk(1280, 800, 'dark', '');
+  const payload = {app: 'aurora', v: 1, prefs: {vol: '73', 'evil.key': 'x', __proto__x: 'y', theme: {a: 1}, presets: 'z'.repeat(5000), 'fff.aurora.x': '1'}};
+  await p.setInputFiles('#importFile', {name: 's.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(payload))});
+  await p.waitForTimeout(3600);
+  const ls = await p.evaluate(() => Object.keys(localStorage).filter(k => k.indexOf('aurora.') === 0 && k.indexOf('aurora.__') !== 0).sort());
+  t('import: se păstrează cheia cunoscută (vol)', await p.evaluate(() => localStorage.getItem('aurora.vol')) === '73', ls.join());
+  t('import: chei necunoscute, obiecte și valori peste 4000 ignorate', ls.indexOf('aurora.evil.key') < 0 && ls.indexOf('aurora.__proto__x') < 0 && (await p.evaluate(() => localStorage.getItem('aurora.theme'))) !== '[object Object]' && (await p.evaluate(() => (localStorage.getItem('aurora.presets') || '').length)) < 4000 && ls.indexOf('aurora.fff.aurora.x') < 0, ls.join());
+  t('import: 0 erori', errs.length === 0, errs);
+  await ctx.close();
+}
 await b.close();
 console.log(`\n${ok} ok / ${bad} eșuate`); process.exit(bad ? 1 : 0);

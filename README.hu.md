@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.3.7 · **Utolsó frissítés:** 2026-10-23
+**Verzió:** 1.3.8 · **Utolsó frissítés:** 2026-10-23
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -95,6 +95,7 @@ Audit: 2026-10-10 — Playwrighttal és axe-core-ral ellenőrizve; a CSP `defaul
 
 ## Előzmények / Változásnapló
 
+- 1.3.8 — 2026-10-23: **fix**: settings import now accepts only the keys Aurora itself writes (primitive values, at most 4000 characters) instead of copying any key into localStorage; a corrupt `bellMin` value falls back to 5 minutes
 - 1.3.7 — 2026-10-23: i18n-egyenlőség: pótoltuk a hiányzó `chakraNav` feliratot katalánul, hindiül és arabul; a `cwBtn` kulcs (futásidőben minden nyelvre kiegészül) kivételként szerepel az `fff.config.json`-ban
 - 1.3.5 — 2026-10-22: fff-kit 1.1.4: érintési célpontok és minimális szövegméret; érintési célpontok/szöveg javítva
 - 1.3.4 — 2026-10-22: fff-kit 1.1.2: PBKDF2 600 000 iteráció, clickjacking elleni védelem

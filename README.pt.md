@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · **Português** · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versão:** 1.3.7 · **Última atualização:** 2026-10-23
+**Versão:** 1.3.8 · **Última atualização:** 2026-10-23
 
 Idiomas da interface: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -95,6 +95,7 @@ Auditoria: 2026-10-10 — verificado com Playwright e axe-core; CSP `default-src
 
 ## Histórico / Registo de alterações
 
+- 1.3.8 — 2026-10-23: **fix**: settings import now accepts only the keys Aurora itself writes (primitive values, at most 4000 characters) instead of copying any key into localStorage; a corrupt `bellMin` value falls back to 5 minutes
 - 1.3.7 — 2026-10-23: Paridade i18n: adicionada a etiqueta `chakraNav` em falta para catalão, hindi e árabe; a chave `cwBtn` (preenchida em execução para todos os idiomas) está documentada como exceção em `fff.config.json`
 - 1.3.5 — 2026-10-22: fff-kit 1.1.4: alvos de toque e tamanho mínimo do texto; alvos de toque/texto corrigidos
 - 1.3.4 — 2026-10-22: fff-kit 1.1.2: PBKDF2 600 000 iterações, proteção anti-clickjacking
