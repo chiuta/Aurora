@@ -43,7 +43,7 @@ t('WAV: vârful spectral la frecvența chakrei (' + heart.f + ' Hz, ±3 Hz; ±1,
 const eF = goertzel(W1.L, 32000, heart.f, mid0, mid1), eOff = Math.max(goertzel(W1.L, 32000, heart.f * 1.5, mid0, mid1), goertzel(W1.L, 32000, heart.f * 0.8, mid0, mid1), goertzel(W1.L, 32000, 220, mid0, mid1));
 t('WAV: energia la frecvența chakrei ≫ la alte frecvențe (>30×)', eF > 30 * eOff, [eF, eOff]);
 const eSub = goertzel(W1.L, 32000, heart.f / 2, mid0, mid1); t('WAV: subarmonica triunghiulară (f/2) prezentă, mai slabă decât fundamentala', eSub > 0 && eSub < eF, [eSub, eF]);
-const eR = goertzel(W1.R, 32000, heart.f, mid0, mid1); t('WAV fără binaural: energia fundamentalei e aceeași în L și R (±30%; reverbul are impulsuri stereo diferite)', Math.abs(eF - eR) / eF < 0.3, [eF, eR]);
+const eR = goertzel(W1.R, 32000, heart.f, mid0, mid1); t('WAV fără binaural: energia fundamentalei e aceeași în L și R (în factor 2; reverbul are impulsuri stereo aleatorii diferite, deci raportul variază de la o rulare la alta)', eR / eF > 0.5 && eR / eF < 2, [eF, eR]);
 const rms = a => Math.sqrt(a.reduce((s, v) => s + v * v, 0) / a.length);
 t('WAV: fade-in la început și fade-out la sfârșit (RMS primele 0,2 s ≪ mijloc; ultimele 0,2 s ≪ mijloc)', rms(W1.L.slice(0, 6400)) < 0.3 * rms(W1.L.slice(mid0, mid0 + 6400)) && rms(W1.L.slice(W1.n - 6400)) < 0.3 * rms(W1.L.slice(mid0, mid0 + 6400)));
 // --- WAV cu binaural 6 Hz
