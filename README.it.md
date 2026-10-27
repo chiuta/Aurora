@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · **Italiano** · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versione:** 1.3.8 · **Ultimo aggiornamento:** 2026-10-26
+**Versione:** 1.3.9 · **Ultimo aggiornamento:** 2026-10-27
+
+**Stato:** stabile; link «vedi anche» ai generatori di frequenze · **Offline:** completo (nessuna richiesta di rete)
 
 Lingue dell'interfaccia: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 

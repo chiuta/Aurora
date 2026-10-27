@@ -2,7 +2,9 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 1.3.8 · **Last updated:** 2026-10-26
+**Version:** 1.3.9 · **Last updated:** 2026-10-27
+
+**Status:** stable; see-also link to the frequency generators · **Offline:** complete (no network requests)
 
 Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -73,6 +75,10 @@ Contemplative/relaxation content, not medical. The chakras, the associated frequ
 ## Running locally / offline
 
 Download `index.html` and open it in a browser. It needs no internet to work. No server is needed.
+
+## See also: frequency generators (2026-10-27)
+
+In Settings, below the CalmWaves button, a short "See also" line (8 languages; ca/hi/ar show the English text) links to [Frequency Laboratory](https://chiuta.github.io/FrequencyLaboratory/) and [generator-frecvente](https://chiuta.github.io/generator-frecvente/): they generate any frequency, while Aurora offers the chakra tones, binaural beats and the breathing guide. Links only; no network requests. The apps were **not merged** and no module was added.
 
 ## License
 

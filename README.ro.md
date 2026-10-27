@@ -2,7 +2,9 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.3.8 · **Ultima actualizare:** 2026-10-26
+**Versiune:** 1.3.9 · **Ultima actualizare:** 2026-10-27
+
+**Stare:** stabil; notă „vezi și” către generatoarele de frecvențe · **Offline:** complet (fără cereri de rețea)
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
@@ -73,6 +75,10 @@ Conținut contemplativ/de relaxare, nu medical. Chakrele, frecvențele asociate 
 ## Rulare locală / offline
 
 Descarcă `index.html` și deschide-l în browser. Nu necesită internet pentru funcționare. Nu este nevoie de server.
+
+## Vezi și: generatoarele de frecvențe (2026-10-27)
+
+În Setări, sub butonul CalmWaves, o linie scurtă „Vezi și” (8 limbi; ca/hi/ar afișează textul englez) trimite la [Frequency Laboratory](https://chiuta.github.io/FrequencyLaboratory/) și [generator-frecvente](https://chiuta.github.io/generator-frecvente/): ele generează orice frecvență, iar Aurora oferă tonurile chakrelor, bătăile binaurale și ghidul de respirație. Doar linkuri; fără cereri de rețea. Aplicațiile **nu au fost fuzionate** și nu s-a adăugat niciun modul.
 
 ## Licență
 

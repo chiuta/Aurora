@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · **Português** · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versão:** 1.3.8 · **Última atualização:** 2026-10-26
+**Versão:** 1.3.9 · **Última atualização:** 2026-10-27
+
+**Estado:** estável; ligação «veja também» aos geradores de frequências · **Offline:** completo (sem pedidos de rede)
 
 Idiomas da interface: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar, Català, हिन्दी, العربية**
 
