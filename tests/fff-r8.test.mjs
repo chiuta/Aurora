@@ -46,7 +46,7 @@ t('WAV: vârful spectral la frecvența chakrei (' + heart.f + ' Hz, ±3 Hz; ±1,
 const eF = goertzel(W1.L, 32000, heart.f, mid0, mid1), eOff = Math.max(goertzel(W1.L, 32000, heart.f * 1.5, mid0, mid1), goertzel(W1.L, 32000, heart.f * 0.8, mid0, mid1), goertzel(W1.L, 32000, 220, mid0, mid1));
 t('WAV: energia la frecvența chakrei ≫ la alte frecvențe (>30×)', eF > 30 * eOff, [eF, eOff]);
 const eSub = goertzel(W1.L, 32000, heart.f / 2, mid0, mid1); t('WAV: subarmonica triunghiulară (f/2) prezentă, mai slabă decât fundamentala', eSub > 0 && eSub < eF, [eSub, eF]);
-const eR = goertzel(W1.R, 32000, heart.f, mid0, mid1); t('WAV fără binaural: energia fundamentalei e aceeași în L și R (±30%; reverbul are impulsuri stereo diferite)', Math.abs(eF - eR) / eF < 0.3, [eF, eR]);
+const eR = goertzel(W1.R, 32000, heart.f, mid0, mid1); t('WAV fără binaural: energia fundamentalei e aceeași în L și R (în factor 2; reverbul are impulsuri stereo aleatorii diferite, deci raportul variază de la o rulare la alta)', eR / eF > 0.5 && eR / eF < 2, [eF, eR]);
 const rms = a => Math.sqrt(a.reduce((s, v) => s + v * v, 0) / a.length);
 t('WAV: fade-in la început și fade-out la sfârșit (RMS primele 0,2 s ≪ mijloc; ultimele 0,2 s ≪ mijloc)', rms(W1.L.slice(0, 6400)) < 0.3 * rms(W1.L.slice(mid0, mid0 + 6400)) && rms(W1.L.slice(W1.n - 6400)) < 0.3 * rms(W1.L.slice(mid0, mid0 + 6400)));
 // --- WAV cu binaural 6 Hz
@@ -99,5 +99,17 @@ await ctx.close();
 { const html = fs.readFileSync(path.join(HERE, '..', 'index.html'), 'utf8').replace(/<!--fff:kit:start[\s\S]*?<!--fff:kit:end-->/, '');
   const tmp = path.join(HERE, '_nokit.tmp.html'); fs.writeFileSync(tmp, html); const m = await mk(1280, 800, 'dark', '', 'file://' + tmp);
   const w = await dlWav(m.p); t('fără kit: fără erori, QR ascuns, WAV se generează', m.errs.length === 0 && !(await m.p.isVisible('#qrBtn')) && w.buf.length > 1e6, m.errs); await m.ctx.close(); fs.unlinkSync(tmp); }
+// 1.3.8: importul de setări acceptă doar cheile cunoscute, valori primitive și scurte
+{
+  const {ctx, p, errs} = await mk(1280, 800, 'dark', '');
+  const payload = {app: 'aurora', v: 1, prefs: {vol: '73', 'evil.key': 'x', __proto__x: 'y', theme: {a: 1}, presets: 'z'.repeat(5000), 'fff.aurora.x': '1'}};
+  await p.setInputFiles('#importFile', {name: 's.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(payload))});
+  await p.waitForTimeout(3600);
+  const ls = await p.evaluate(() => Object.keys(localStorage).filter(k => k.indexOf('aurora.') === 0 && k.indexOf('aurora.__') !== 0).sort());
+  t('import: se păstrează cheia cunoscută (vol)', await p.evaluate(() => localStorage.getItem('aurora.vol')) === '73', ls.join());
+  t('import: chei necunoscute, obiecte și valori peste 4000 ignorate', ls.indexOf('aurora.evil.key') < 0 && ls.indexOf('aurora.__proto__x') < 0 && (await p.evaluate(() => localStorage.getItem('aurora.theme'))) !== '[object Object]' && (await p.evaluate(() => (localStorage.getItem('aurora.presets') || '').length)) < 4000 && ls.indexOf('aurora.fff.aurora.x') < 0, ls.join());
+  t('import: 0 erori', errs.length === 0, errs);
+  await ctx.close();
+}
 await b.close();
 console.log(`\n${ok} ok / ${bad} eșuate`); process.exit(bad ? 1 : 0);

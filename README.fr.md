@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · **Français** · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version :** 1.3.9 · **Dernière mise à jour :** 2026-10-27
+**Version :** 1.3.10 · **Dernière mise à jour :** 2026-11-02
 
 **Statut :** stable; lien « voir aussi » vers les générateurs de fréquences · **Hors ligne :** complet (aucune requête réseau)
 
