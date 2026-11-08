@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.3.11 · **Utolsó frissítés:** 2026-11-07
+**Verzió:** 1.3.12 · **Utolsó frissítés:** 2026-11-08
 
 **Állapot:** stabil; „lásd még” hivatkozás a frekvenciageneratorokra · **Offline:** teljes (nincs hálózati kérés)
 
