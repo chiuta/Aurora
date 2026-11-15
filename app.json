@@ -9,19 +9,20 @@
   "permissions": [
     "clipboard",
     "serviceWorker",
-    "localStorage"
+    "localStorage",
+    "WebGL"
   ],
   "storageKeys": [
     "aurora.",
     "aurora.__t"
   ],
-  "sizeBytes": 640441,
-  "sha256": "a6fd0e603315ce08ff58465d116451646595510e341f41f7303156b692f399ab",
+  "sizeBytes": 692452,
+  "sha256": "aaf3557d99d91fc9c5149eec79ec3121bb55f4712812ca19019cf748a407fc8f",
   "csp": {
     "present": true,
     "directives": {
       "default-src": "'none'",
-      "script-src": "sha256×3",
+      "script-src": "sha256×4",
       "style-src": "'unsafe-inline'",
       "img-src": "'self' data:",
       "base-uri": "'none'",
